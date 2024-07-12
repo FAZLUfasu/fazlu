@@ -1,22 +1,36 @@
 
 from django.contrib import admin
-from .models import ContactInfo, Expense, HomePageData, InvestorProfile, JoinRequest, MyProject, NewProject, OtherProject 
+from .models import AboutUs, ContactInfo, InvestorProfile, MyProjects, NewsUpdate, Notification,Summary
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import InvestorProfile,AboutUsPage,Image,Projectpage, Revenue, TeamMember, video
+from .models import InvestorProfile,Images,Projectpage, TeamMember, video
+from django.contrib import admin
+from .models import Join
 
-admin.site.register(NewProject)
-admin.site.register(OtherProject)
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.utils.translation import gettext_lazy as _
+
+admin.site.site_header = "INVESTERS APP"  # default: "Django Administration"
+admin.site.site_title = "UNIX"  # default: "Django site admin"
+admin.site.index_title = "Admin"  # default: "Site administration"
+
+
+
+admin.site.register(Join)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 admin.site.register(video)
-admin.site.register(Revenue)
-admin.site.register(Expense)
-admin.site.register(JoinRequest)
-admin.site.register(HomePageData)
-admin.site.register(AboutUsPage)
+admin.site.register(AboutUs)
 admin.site.register(ContactInfo)
 admin.site.register(TeamMember)
-admin.site.register(Image)
+admin.site.register(Summary)
+admin.site.register(Images)
+admin.site.register(Notification)
 
+@admin.register(NewsUpdate)
+class NewsUpdateAdmin(admin.ModelAdmin):
+    list_display = ['title', 'date_published']
+    search_fields = ['title', 'description']
 
 class InvestorProfileInline(admin.StackedInline):
     model = InvestorProfile
@@ -24,8 +38,9 @@ class InvestorProfileInline(admin.StackedInline):
     verbose_name_plural = 'Investor Profiles'
     extra = 1
     max_num = 1
-class MyProjectInline(admin.StackedInline):
-    model = MyProject
+
+class MyProjectsInline(admin.StackedInline):
+    model = MyProjects
     can_delete =False
     verbose_name_plural = 'My Project'
     extra = 6
@@ -36,10 +51,10 @@ class CustomUserAdmin(UserAdmin):
     inlines = (InvestorProfileInline,)
 
 class CustomProjectpageAdmin(Projectpage):
-    inlines = (MyProjectInline,)
+    inlines = (MyProjectsInline,)
 
 
-admin.site.register(MyProject)
+
 admin.site.register(Projectpage)
 
 admin.site.unregister(User)
@@ -94,8 +109,39 @@ class InvestorProfileAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class UserAdmin(BaseUserAdmin):
+    # The fields to be used in displaying the User model.
+    # These override the definitions on the base UserAdmin
+    # that reference specific fields on auth.User.
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'password1', 'password2'),
+        }),
+    )
+    search_fields = ('username', 'first_name', 'last_name', 'email')
+    ordering = ('username',)
+    filter_horizontal = ('groups', 'user_permissions',)
 
-# @admin.register(NewProject)
-# class NewProjectAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'description', 'location', 'start_date', 'end_date', 'date_of_establishment')
+# Re-register UserAdmin
+class ProjectpageInline(admin.StackedInline):
+    model = Projectpage
+    fields = ['proname']  # List of fields from Projectpage to display
 
+
+admin.site.register(MyProjects)
+class MyProjectsAdmin(admin.ModelAdmin):
+    inlines = [ProjectpageInline]
+    list_display = ['user', 'projectlogoname', 'projectlogo', 'get_proname']
+
+    def get_proname(self, obj):
+        return obj.name.proname if obj.name else ''  # Custom method to display proname
+    get_proname.short_description = 'Project Name'

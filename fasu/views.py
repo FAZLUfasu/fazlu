@@ -1,5 +1,7 @@
+import json
+import logging
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,55 +13,70 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import viewsets
 from .forms import ImageUploadForm
-from .serializers import JoinRequestSerializer,ProjectpageSerializer
-from .serializers import AboutUsPageSerializer, ContactInfoSerializer, InvestorsProfileSerializer, MyProjectSerializer
-from .serializers import RevenueSerializer, ExpenseSerializer,HomePageDataSerializer
-from .serializers import NewProjectSerializer, OtherProjectSerializer, TeamMemberSerializer, VideoSerializer
-from .models import Revenue, Expense,HomePageData,AboutUsPage
-from .models import JoinRequest,Projectpage
+from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer, MyImageSerializer, MyProjectsSerializer, NewsUpdateSerializer, NotificationSerializer,ProjectpageSerializer, SummarySerializer, UserSerializer, WhatsappchatSerializer
+from .serializers import  ContactInfoSerializer, InvestorsProfileSerializer
+from .serializers import HomePageDataSerializer
+from .serializers import  TeamMemberSerializer, VideoSerializer
+from .models import  AboutUs, MyProjects, NewsUpdate, HomePageData, Notification, Summary, Whatsappchat
+from .models import Join,Projectpage
 from .models import ContactInfo, InvestorProfile, TeamMember, video
-from .models import Image
-from .models import MyProject
+from .models import Images,video
+# from .models import MyProject
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.views.decorators.http import require_http_methods
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
+
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+
+class CustomObtainAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data['token'])
+        # Customize the response as needed
+        return Response({'token': token.key})
+
+
+
+# Generate token for authenticated user
+def generate_token(user):
+    token = AccessToken.for_user(user)
+    return str(token)
 
 
 
 
 
 
-# class InvestorProfileAPIView(generics.ListCreateAPIView):
-#     queryset = InvestorProfile.objects.all()
-#     serializer_class = InvestorsProfileSerializer
-   
-#     @api_view(['GET'])
-#     @permission_classes([IsAuthenticated])
-#     def view_investor_profile(request):
-#         try:
-#             user_id = request.user.id  # Get user ID dynamically
-#             investor_profile = InvestorProfile.objects.get(user_id=user_id)
-#             serializer = InvestorsProfileSerializer(investor_profile)
-#             return Response({"profile": serializer.data}, status=200)
-#         except InvestorProfile.DoesNotExist:
-#             return Response({"error": "Investor profile does not exist for this user"}, status=404)
-#         except Exception as e:
-#             return Response({"error": str(e)}, status=500)
+def join_table_list(request):
+    # Query the join table to retrieve all entries
+    join_table_entries = Join.objects.all()
 
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def create_investor_profile(request):
-#     try:
-#         user = request.user
-#         if InvestorProfile.objects.filter(user=user).exists():
-#             return Response({"error": "Investor profile already exists for this user"}, status=400)
-#         profile = InvestorProfile(user=user)
-#         profile.save()
-#         return Response({"success": "Investor profile created successfully"}, status=201)
-#     except Exception as e:
-#         return Response({"error": str(e)}, status=500)
+    # Serialize the data
+    serializer = JoinSerializer(join_table_entries, many=True)
+
+    # Return the serialized data as a JSON response
+    return JsonResponse(serializer.data, safe=False)
+class WhatsappchatView(generics.RetrieveAPIView):
+    queryset = Whatsappchat.objects.all()
+    serializer_class = WhatsappchatSerializer
+
+    def get_object(self):
+        return Whatsappchat.objects.first()
 
 
-class MyProjectAPIView(generics.ListCreateAPIView):
-    queryset = MyProject.objects.all()
-    serializer_class = MyProjectSerializer
+class MyProjectsAPIView(generics.ListCreateAPIView):
+    queryset = MyProjects.objects.all()
+    serializer_class = MyProjectsSerializer
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -67,13 +84,13 @@ class MyProjectAPIView(generics.ListCreateAPIView):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def view_myproject(request):
+def view_myprojects(request):
     try:
         user = request.user
-        project = MyProject.objects.filter(user=user)
-        serializer = MyProjectSerializer(project, many=True)
+        project = MyProjects.objects.filter(user=user)
+        serializer = MyProjectsSerializer(project, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    except MyProject.DoesNotExist:
+    except MyProjects.DoesNotExist:
         return Response({"error": "Project does not exist for this user"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -81,10 +98,10 @@ def view_myproject(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def create_myproject(request):
+def create_myprojects(request):
     try:
         user = request.user
-        serializer = MyProjectSerializer(data=request.data)
+        serializer = MyProjectsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=user)
             return Response({"success": "Project created successfully"}, status=status.HTTP_201_CREATED)
@@ -93,51 +110,96 @@ def create_myproject(request):
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class SummaryAPIView(generics.ListCreateAPIView):
+    queryset = Summary.objects.all()
+    serializer_class = SummarySerializer
+
+class NewsUpdateListCreateView(generics.ListCreateAPIView):
+    queryset = NewsUpdate.objects.all().order_by('-date_published')
+    serializer_class = NewsUpdateSerializer
 
 
 
-class ImageView(APIView):
-    def post(self, request, format=None):
-        form = ImageUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            image_instance = form.save()
-            return Response({'image_url': image_instance.image.url}, status=status.HTTP_201_CREATED)
+
+class ImageListView(generics.ListAPIView):
+    queryset = Images.objects.all()
+    serializer_class = ImagesSerializer
+
+class ImageUploadView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, *args, **kwargs):
+        serializer = ImagesSerializer(data=request.data)
+        if serializer.is_valid():
+            image_instance = serializer.save()
+            # Create or update the notification
+            notification, created = Notification.objects.get_or_create(
+                defaults={'message': 'New image uploaded!'},
+                last_uploaded_image_id=image_instance.id
+            )
+            if not created:
+                notification.last_uploaded_image_id = image_instance.id
+                notification.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class NotificationListView(APIView):
+    def get(self, request, format=None):
+        notifications = Notification.objects.all()
+        serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+def get_notifications(request):
+    notifications = Notification.objects.all()
+    data = {
+    'notifications': list(notifications.values())
+    }
+    return JsonResponse(data)
+
+def my_projects_view(request, username):
+    try:
+        # Retrieve the user based on the provided username
+        user = User.objects.get(username=username)
+        
+        # Fetch projects associated with the user
+        projects = MyProjects.objects.filter(user=user)
+        
+        # Serialize the projects data
+        serialized_projects = MyProjectsSerializer(projects, many=True)
+        
+        return JsonResponse(serialized_projects.data, safe=False)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+def profile_view(request, username):
+    try:
+        user = User.objects.get(username=username)
+        profile = InvestorProfile.objects.get(user=user)
+        
+        # Serialize the profile data as needed
+        profile_data = {
+            'username': profile.user.username,
+            'email': profile.user.email,
+            # Add other profile fields as needed...
+        }
+        
+        # Add all profile fields to profile_data
+        profile_data.update(profile.__dict__)
+        
+        # Remove unnecessary fields
+        profile_data.pop('_state', None)  # Remove _state field
+        
+        return JsonResponse(profile_data)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)
+    except InvestorProfile.DoesNotExist:
+        return JsonResponse({'error': 'Profile not found'}, status=404)
 
 
 
-def get_images(request):
-    images = Image.objects.all()
-    image_urls = [image.image.url for image in images]
-    return JsonResponse({'image_urls': image_urls})
-
-
-
-
-def my_view(request):
-    instance = HomePageData.objects.get(pk=1)  # Retrieve a model instance
-    image_url = instance.banner_image.url  # Access the URL of the image field
-    # Other code...
-    return render(request, 'my_template.html', {'instance': instance, 'image_url': image_url})
-
-
-
-
-
-
-class InvestorProfileAPIView(generics.ListCreateAPIView):
-    queryset = InvestorProfile.objects.all()
-    serializer_class = InvestorsProfileSerializer
-
-    def list(self, request, *args, **kwargs):
-        user = request.user
-        try:
-            profile = InvestorProfile.objects.get(user=user)
-            serializer = self.get_serializer(profile)
-            return Response(serializer.data)
-        except InvestorProfile.DoesNotExist:
-            return Response({"error": "Investor profile does not exist for this user"}, status=404)
 
 
 
@@ -182,7 +244,14 @@ def create_investor_profile(request):
         return Response({"error": str(e)}, status=500)
 
 
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request, username):
+        user = get_object_or_404(User, username=username)
+        profile = get_object_or_404(InvestorProfile, user=user)
+        serializer = InvestorsProfileSerializer(profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class LoginView(APIView):
 
@@ -248,91 +317,21 @@ class AboutUsPageAPIView(APIView):
 
     def get(self, request):
         try:
-            about_us = AboutUsPage.objects.first()
+            about_us = AboutUs.objects.first()
             serializer = AboutUsPageSerializer(about_us)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except AboutUsPage.DoesNotExist:
+        except AboutUs.DoesNotExist:
             return Response({'error': 'About us page not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+class NotificationListView(APIView):
+    permission_classes = [IsAuthenticated]
 
-class NewProject(APIView):
-    def get(self, request, format=None):
-        try:
-            new_projects = NewProject.objects.all()
-            serializer = NewProjectSerializer(new_projects, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# class MyProject(APIView):
-#     def get(self, request, format=None):
-#         try:
-#             my_projects = MyProject.objects.all()
-#             serializer = MyProjectSerializer(my_projects, many=True)
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         except Exception as e:
-#             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class OtherProject(APIView):
-    def get(self, request, format=None):
-        try:
-            other_projects = OtherProject.objects.all()
-            serializer = OtherProjectSerializer(other_projects, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-
-
-
-class RevenueListCreateAPIView(APIView):
     def get(self, request):
-        revenues = Revenue.objects.all()
-        serializer = RevenueSerializer(revenues, many=True)
+        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+        serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data)
-
-    def post(self, request):
-        serializer = RevenueSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class ExpenseListCreateAPIView(APIView):
-    def get(self, request):
-        expenses = Expense.objects.all()
-        serializer = ExpenseSerializer(expenses, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = ExpenseSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-class JoinRequestListCreateAPIView(APIView):
-    def get(self, request):
-        try:
-            join_requests = JoinRequest.objects.all()
-            serializer = JoinRequestSerializer(join_requests, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def post(self, request):
-        serializer = JoinRequestSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 
@@ -348,6 +347,39 @@ class ProjectpageListAPIView(APIView):
 
 
 
-# class ProjectViewSet(viewsets.ModelViewSet):
-#     queryset = Project.objects.all()
-#     serializer_class = ProjectSerializer
+
+
+
+def gallery_data(request):
+    # Retrieve all images and videos from the database
+    images = Images.objects.all()
+    videos = video.objects.all()
+
+    # Extract URLs from images and videos
+    image_urls = [image.image.url for image in images]
+    video_urls = [video.video.url for video in videos]
+
+    # Return the URLs as JSON response
+    return JsonResponse({'images': image_urls, 'videos': video_urls})
+
+
+
+
+@api_view(['POST'])
+def create_join_request(request):
+    serializer = JoinSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+
+

@@ -43,10 +43,13 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'djongo',
-  
+    'rest_framework_simplejwt',
+    'channels',
+    'grappelli',
     
     
 ]
+ASGI_APPLICATION = 'fazlu.asgi.application'
 
 MIDDLEWARE = [
     # 'corsheaders.middleware.CorsMiddleware',
@@ -94,13 +97,17 @@ WSGI_APPLICATION = 'fazlu.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'investors',
-        'USER': 'root',
-        'PASSWORD': 'fazlu',
-        'HOST': 'localhost',  # or '127.0.0.1' if MySQL is running locally
-        'PORT': '3306',       # default MySQL port
+        'NAME': 'investors',  # Replace with your database name
+        'USER': 'root',       # Replace with your MySQL username
+        'PASSWORD': 'fazlu',  # Replace with your MySQL password
+        'HOST': 'localhost',  # Replace with your MySQL host (usually 'localhost')
+        'PORT': '3306',       # Replace with your MySQL port (usually '3306')
+        'OPTIONS': {
+            'charset': 'utf8mb4',  # Adjust charset as per your MySQL settings
+        },
     }
 }
+
 
 # DATABASES = {
 #     'default': {
@@ -171,3 +178,30 @@ CORS_ALLOWED_ORIGINS = [
     "http://example.com",
     "https://example.com",
 ]
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}

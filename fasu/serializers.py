@@ -1,10 +1,24 @@
 from tkinter import Image
-from .models import  ContactInfo, JoinRequest, Projectpage, TeamMember, video
+from .models import  AboutUs, ContactInfo, Images, Join, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, Whatsappchat, video,Summary
 from rest_framework import serializers
-from .models import AboutUsPage, Expense, HomePageData, Login,InvestorProfile, MyProject, NewProject, OtherProject, Revenue
+from .models import HomePageData, Login,InvestorProfile
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
+class WhatsappchatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Whatsappchat
+        fields = ['phone_number', 'message']
 
+class SummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Summary
+        fields = '__all__'
+
+class NewsUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsUpdate
+        fields = ['id', 'title', 'description', 'date_published']
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,7 +29,10 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = Login
         fields = '__all__' # Fields to include in the serializer
-
+class ImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Images
+        fields = '__all__'
 
 class InvestorsProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,45 +41,32 @@ class InvestorsProfileSerializer(serializers.ModelSerializer):
 
 class AboutUsPageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AboutUsPage
+        model = AboutUs
         fields = '__all__'
 
 
-class RevenueSerializer(serializers.ModelSerializer):
+class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Revenue
+        model = Notification
         fields = '__all__'
-
-class ExpenseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Expense
-        fields = '__all__'
-
-
-class AboutUsPageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AboutUsPage
-        fields = '__all__'
-
         
-class NewProjectSerializer(serializers.ModelSerializer):
+class MyProjectsSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    email = serializers.EmailField(source='user.email')
+
     class Meta:
-        model = NewProject
+        model = MyProjects
         fields = '__all__'
 
-        
-class MyProjectSerializer(serializers.ModelSerializer):
+class JoinSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MyProject
+        model = Join
         fields = '__all__'
 
-
-
-class JoinRequestSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = JoinRequest
-        fields = '__all__'
-
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']  # Include other fields as needed
 
 
 class ProjectpageSerializer(serializers.ModelSerializer):
@@ -71,12 +75,6 @@ class ProjectpageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
-
-class OtherProjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OtherProject
-        fields = '__all__'
 
 class HomePageDataSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
