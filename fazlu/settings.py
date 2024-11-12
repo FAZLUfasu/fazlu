@@ -28,6 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['10.0.2.2','127.0.0.1','*']
 
+CSRF_TRUSTED_ORIGINS = ['https://unix-aquatics.com']
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
@@ -165,7 +169,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # # Specify the directory for media files
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
 
 # Use forward slashes in file paths
 
@@ -176,8 +181,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://example.com",
-    "https://example.com",
+    "http://unix-aquatics.com",
+    "https://unix-aquatics.com",
 ]
 
 CHANNEL_LAYERS = {
