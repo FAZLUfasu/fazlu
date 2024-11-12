@@ -73,7 +73,7 @@ ROOT_URLCONF = 'fazlu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')], 
+        'DIRS': [os.path.join(BASE_DIR, 'fasu/templates')], 
         # 'DIRS': ['images'],
         'APP_DIRS': True,
         'OPTIONS': {
