@@ -11,7 +11,12 @@ router.register(r'team_photos', views.TeamMemberViewSet)
 
 
 urlpatterns = [
-  
+    path('', views.home, name='home'),
+    # path('home', views.home, name='home'),
+    path('about/', views.about, name='about'),
+    path('privacy/', views.privacy, name='privacy'),
+    path('support/', views.support, name='support'),
+    path('team/', views.team, name='team'),
     path('get_notifications/',views.get_notifications,name='get_notifications'),
     path('notifications/', views.NotificationListView.as_view(), name='notification_list'),
     path('Whatsappchat/', views.WhatsappchatView.as_view(), name='Whatsappchat'),
