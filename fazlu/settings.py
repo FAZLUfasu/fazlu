@@ -108,11 +108,30 @@ DATABASES = {
         'PASSWORD': 'pass@123.com',  # Replace with your MySQL password
         'HOST': 'localhost',  # Replace with your MySQL host (usually 'localhost')
         'PORT': '3306',       # Replace with your MySQL port (usually '3306')
-        'OPTIONS': {
+       'OPTIONS': {
+            'ssl_mode': 'DISABLED',  # Disable SSL
             'charset': 'utf8mb4',  # Adjust charset as per your MySQL settings
         },
     }
 }
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'investors',  # Replace with your database name
+#         'USER': 'root',       # Replace with your MySQL username
+#         'PASSWORD': 'pass@123.com',  # Replace with your MySQL password
+#         'HOST': 'localhost',  # Replace with your MySQL host (usually 'localhost')
+#         'PORT': '3306',       # Replace with your MySQL port (usually '3306')
+#         'OPTIONS': {
+            
+#             'charset': 'utf8mb4',  # Adjust charset as per your MySQL settings
+#         },
+#     }
+# }
+
 
 
 # DATABASES = {
