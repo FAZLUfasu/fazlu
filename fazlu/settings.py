@@ -69,12 +69,12 @@ MIDDLEWARE = [
    
 ]
 
-ROOT_URLCONF = 'fazlu.urls'
+ROOT_URLCONF = 'fazlu.urls,landpageapp.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'fasu/templates')], 
+        'DIRS': [os.path.join(BASE_DIR, 'landpageapp/templates')], 
         # 'DIRS': ['images'],
         'APP_DIRS': True,
         'OPTIONS': {
