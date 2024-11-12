@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'channels',
     'grappelli',
+    'landpageapp',
     
     
 ]
@@ -133,22 +134,6 @@ DATABASES = {
 # }
 
 
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'fasufazlu81',
-#         'ENFORCE_SCHEMA': False,
-#         'CLIENT': {
-#             'host': 'mongodb+srv://fasufazlu81:<aparachithan>@cluster0.ly9cvbc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
-#             'port': 27017,
-#             'username': 'fasufazlu81',  # If authentication is enabled
-#             'password': 'aparachithan',  # If authentication is enabled
-#             'authSource': 'admin',  # If authentication is enabled
-#             # Add other MongoDB client options as needed fasufazlu81:aparachithan
-#         }
-#     }
-# }
 
 
 # Password validation
