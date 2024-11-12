@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3old66y+#9@!zfa%pu@70jao5u+a5zxkwe)8xg39_i(jg!4$%a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['10.0.2.2','127.0.0.1','*']
 
@@ -73,7 +73,8 @@ ROOT_URLCONF = 'fazlu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['images'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], 
+        # 'DIRS': ['images'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
