@@ -215,6 +215,12 @@ class TeamMember(models.Model):
     role = models.CharField(max_length=100)
     photo = models.ImageField(upload_to='team_photos/')
     photoname = models.TextField(blank=True, null=True)
+    facebook_url = models.URLField(blank=True, null=True)
+    twitter_url = models.URLField(blank=True, null=True)
+    linkedin_url = models.URLField(blank=True, null=True)
+    instagram_url = models.URLField(blank=True, null=True)
+    youtube_url = models.URLField(blank=True, null=True)
+
 
     def __str__(self):
         return "Team members"

@@ -210,7 +210,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support1.png' %}" alt="24/7 Support">
+          <img src="{% static 'landpageapp/images/support1.png' %}" alt="24/7 Support"width="200" height="200">
         </div>
         <div class="detail-box">
           <h5>
@@ -224,7 +224,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support2.png' %}" alt="Secure Transactions">
+          <img src="{% static 'landpageapp/images/support2.png' %}" alt="Secure Transactions"width="200" height="200">
         </div>
         <div class="detail-box">
           <h5>
@@ -238,7 +238,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support3.png' %}" alt="Fast Responses">
+          <img src="{% static 'landpageapp/images/support3.png' %}" alt="Fast Responses"width="200" height="200">
         </div>
         <div class="detail-box">
           <h5>
@@ -252,7 +252,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support4.png' %}" alt="Customer Satisfaction">
+          <img src="{% static 'landpageapp/images/support4.png' %}" alt="Customer Satisfaction"width="200" height="200">
         </div>
         <div class="detail-box">
           <h5>
@@ -291,11 +291,11 @@
       <div class="col-md-6">
         <div class="detail-box">
           <h3>Unix Aquatics</h3>
-          <p id="unix_aqutics">Loading...</p>
+          <p>Unix Aquatics is a leading provider of aquatic products and services, dedicated to promoting the joy and benefits of aquatic activities.</p>
           <h3>Our Vision</h3>
-          <p id="vision">Loading...</p>
+          <p>Our vision is to create a world where everyone has access to safe and enjoyable aquatic experiences, fostering a healthier and happier community.</p>
           <h3>Our Mission</h3>
-          <p id="mission">Loading...</p>
+          <p>Our mission is to deliver top-quality aquatic products and services, provide comprehensive education and support, and advocate for the importance of aquatic activities for physical and mental well-being.</p>
           <a href="#">
             Read More
           </a>
@@ -305,7 +305,7 @@
   </div>
 </section>
 <!-- end about section -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 fetch('/fasu/app/AboutUs/')
   .then(response => {
@@ -332,7 +332,7 @@ fetch('/fasu/app/AboutUs/')
     document.getElementById('mission').innerText = 'Error loading data.';
   });
 
-</script>
+</script> {% endcomment %}
 
 <!-- privacy policy section -->
 <section class="privacy_policy_section layout_padding">
@@ -423,7 +423,7 @@ fetch('/fasu/app/AboutUs/')
 </section>
 <!-- end privacy policy section -->
 
-
+{% comment %} 
 
 <!-- team section -->
 <section class="team_section layout_padding">
@@ -476,9 +476,210 @@ fetch('/fasu/app/AboutUs/')
     </div>
   </div>
 </section>
+<!-- end team section --> {% endcomment %}
+
+
+
+
+
+<!-- team section -->
+<section class="team_section layout_padding">
+  <div class="container-fluid">
+    <div class="heading_container heading_center">
+      <h2>
+        Our <span>Team</span>
+      </h2>
+    </div>
+
+    <div class="team_container">
+      <div class="row">
+        <!-- Team member 1 -->
+        <div class="col-lg-3 col-sm-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="https://via.placeholder.com/150" class="img1" alt="John Doe">
+            </div>
+            <div class="detail-box">
+              <h5>John Doe</h5>
+              <p>CEO</p>
+            </div>
+            <div class="social_box">
+              <a href="https://facebook.com/johndoe">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="https://twitter.com/johndoe">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="https://linkedin.com/in/johndoe">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="https://instagram.com/johndoe">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="https://youtube.com/johndoe">
+                <i class="fa fa-youtube-play" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team member 2 -->
+        <div class="col-lg-3 col-sm-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="https://via.placeholder.com/150" class="img1" alt="Jane Smith">
+            </div>
+            <div class="detail-box">
+              <h5>Jane Smith</h5>
+              <p>COO</p>
+            </div>
+            <div class="social_box">
+              <a href="https://facebook.com/janesmith">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="https://twitter.com/janesmith">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="https://linkedin.com/in/janesmith">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="https://instagram.com/janesmith">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="https://youtube.com/janesmith">
+                <i class="fa fa-youtube-play" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team member 3 -->
+        <div class="col-lg-3 col-sm-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="https://via.placeholder.com/150" class="img1" alt="Emily Brown">
+            </div>
+            <div class="detail-box">
+              <h5>Emily Brown</h5>
+              <p>CTO</p>
+            </div>
+            <div class="social_box">
+              <a href="https://facebook.com/emilybrown">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="https://twitter.com/emilybrown">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="https://linkedin.com/in/emilybrown">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="https://instagram.com/emilybrown">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="https://youtube.com/emilybrown">
+                <i class="fa fa-youtube-play" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team member 4 -->
+        <div class="col-lg-3 col-sm-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="https://via.placeholder.com/150" class="img1" alt="Michael White">
+            </div>
+            <div class="detail-box">
+              <h5>Michael White</h5>
+              <p>CFO</p>
+            </div>
+            <div class="social_box">
+              <a href="https://facebook.com/michaelwhite">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="https://twitter.com/michaelwhite">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="https://linkedin.com/in/michaelwhite">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="https://instagram.com/michaelwhite">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="https://youtube.com/michaelwhite">
+                <i class="fa fa-youtube-play" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team member 5 -->
+        <div class="col-lg-3 col-sm-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="https://via.placeholder.com/150" class="img1" alt="Sara Lee">
+            </div>
+            <div class="detail-box">
+              <h5>Sara Lee</h5>
+              <p>Marketing Head</p>
+            </div>
+            <div class="social_box">
+              <a href="https://facebook.com/saralee">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="https://twitter.com/saralee">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="https://linkedin.com/in/saralee">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="https://instagram.com/saralee">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="https://youtube.com/saralee">
+                <i class="fa fa-youtube-play" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team member 6 -->
+        <div class="col-lg-3 col-sm-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="https://via.placeholder.com/150" class="img1" alt="David King">
+            </div>
+            <div class="detail-box">
+              <h5>David King</h5>
+              <p>HR Manager</p>
+            </div>
+            <div class="social_box">
+              <a href="https://facebook.com/davidking">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="https://twitter.com/davidking">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="https://linkedin.com/in/davidking">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="https://instagram.com/davidking">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="https://youtube.com/davidking">
+                <i class="fa fa-youtube-play" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 <!-- end team section -->
 
-<!-- footer section -->
+
+{% comment %} <!-- footer section -->
 <section class="footer_section">
   <div class="container">
     <p>
@@ -487,7 +688,69 @@ fetch('/fasu/app/AboutUs/')
     </p>
   </div>
 </section>
+<!-- footer section --> {% endcomment %}
+
+
+
+
 <!-- footer section -->
+<section class="footer_section">
+  <div class="container">
+    <div class="row">
+      <!-- Footer Column 1: About Us -->
+      <div class="col-md-4">
+        <div class="footer_about">
+          <h5>About Us</h5>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel ligula vel augue vehicula viverra.</p>
+        </div>
+      </div>
+      
+      <!-- Footer Column 2: Contact Information -->
+      <div class="col-md-4">
+        <div class="footer_contact">
+          <h5>Contact Us</h5>
+          <p><strong>Phone:</strong> +123 456 7890</p>
+          <p><strong>Email:</strong> info@company.com</p>
+          <p><strong>Address:</strong> 1234 Main St, City, Country</p>
+        </div>
+      </div>
+      
+      <!-- Footer Column 3: Social Media Links -->
+      <div class="col-md-4">
+        <div class="footer_social">
+          <h5>Follow Us</h5>
+          <a href="https://facebook.com" target="_blank">
+            <i class="fa fa-facebook"></i> Facebook
+          </a>
+          <a href="https://twitter.com" target="_blank">
+            <i class="fa fa-twitter"></i> Twitter
+          </a>
+          <a href="https://linkedin.com" target="_blank">
+            <i class="fa fa-linkedin"></i> LinkedIn
+          </a>
+          <a href="https://instagram.com" target="_blank">
+            <i class="fa fa-instagram"></i> Instagram
+          </a>
+          <a href="https://youtube.com" target="_blank">
+            <i class="fa fa-youtube"></i> YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Copyright -->
+    <div class="footer_copy">
+      <p>&copy; <span id="displayYear"></span> All Rights Reserved By <a href="https://yourwebsite.com" target="_blank">Your Company Name</a></p>
+    </div>
+  </div>
+</section>
+<!-- end footer section -->
+
+<script>
+  // Display the current year in the footer
+  document.getElementById("displayYear").innerText = new Date().getFullYear();
+</script>
+
 
 <!-- jQuery -->
 <script type="text/javascript" src="{% static 'landpageapp/js/jquery-3.4.1.min.js' %}"></script>
