@@ -89,7 +89,7 @@
     </div>
     
 
-    <!-- service section -->
+    {% comment %} <!-- service section -->
     <section class="service_section layout_padding">
       <div class="service_container">
         <div class="container ">
@@ -160,85 +160,224 @@
       </div>
     </section>
     <!-- end service section -->
-    
-    <!-- info section -->
-    <section class="info_section layout_padding2">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 col-lg-3 info_col">
-            <div class="info_contact">
-              <h4>Address</h4>
-              <div class="contact_link_box">
-                <a href="">
-                  <i class="fa fa-map-marker" aria-hidden="true"></i>
-                  <span>Location</span>
-                </a>
-                <a href="">
-                  <i class="fa fa-phone" aria-hidden="true"></i>
-                  <span>Call +01 1234567890</span>
-                </a>
-                <a href="">
-                  <i class="fa fa-envelope" aria-hidden="true"></i>
-                  <span>demo@gmail.com</span>
-                </a>
-              </div>
-            </div>
-            <div class="info_social">
-              <a href="">
-                <i class="fa fa-facebook" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-twitter" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-linkedin" aria-hidden="true"></i>
-              </a>
-              <a href="">
-                <i class="fa fa-instagram" aria-hidden="true"></i>
-              </a>
-            </div>
+     {% endcomment %}
+
+
+
+<!-- privacy policy section -->
+<section class="privacy_policy_section layout_padding">
+  <div class="container">
+    <div class="heading_container heading_center">
+      <h2>
+        Privacy <span>Policy</span> - Unix Aquatics Pvt Ltd
+      </h2>
+    </div>
+    <div class="policy_container">
+      <div class="box">
+        <div class="img-box">
+          <!-- Use the static tag for image path -->
+          <img src="{% static 'landpageapp/images/privacy1.png' %}" alt="">
+        </div>
+        <div class="detail-box">
+          <h5>
+            Data Collection
+          </h5>
+          <p>
+            Unix Aquatics Pvt Ltd collects personal information such as your name, email address, and usage data when you use our services or interact with our content. This information helps us improve our products and services, and provide a personalized experience. As a leading provider of aquatic products and services, we prioritize the joy and benefits of aquatic activities for all our users.
+          </p>
+        </div>
+      </div>
+      <div class="box">
+        <div class="img-box">
+          <!-- Use the static tag for image path -->
+          <img src="{% static 'landpageapp/images/privacy.png' %}" alt="">
+        </div>
+        <div class="detail-box">
+          <h5>
+            Data Usage
+          </h5>
+          <p>
+            The information we collect is used to provide, maintain, and improve our services. We use your data for purposes such as customer support, transactional purposes, and for sending important notifications related to your account. Our mission is to deliver top-quality aquatic products and services, which is why we aim to create a seamless experience for all users through our data-driven approach.
+          </p>
+        </div>
+      </div>
+      <div class="box">
+        <div class="img-box">
+          <!-- Use the static tag for image path -->
+          <img src="{% static 'landpageapp/images/privacy2.png' %}" alt="">
+        </div>
+        <div class="detail-box">
+          <h5>
+            Data Sharing
+          </h5>
+          <p>
+            We do not share or sell your personal data to third parties. However, we may disclose your data to third-party service providers that assist us in operating our services. These third parties are bound by confidentiality agreements and are not permitted to use your data for any other purposes. As part of our vision to create a world where everyone has access to safe and enjoyable aquatic experiences, we ensure that our data-sharing practices are transparent and secure.
+          </p>
+        </div>
+      </div>
+      <div class="box">
+        <div class="img-box">
+          <!-- Use the static tag for image path -->
+          <img src="{% static 'landpageapp/images/privacy3.png' %}" alt="">
+        </div>
+        <div class="detail-box">
+          <h5>
+            Data Security
+          </h5>
+          <p>
+            Unix Aquatics Pvt Ltd takes the security of your personal information seriously. We implement industry-standard encryption and security measures to protect your data from unauthorized access or disclosure. In line with our commitment to physical and mental well-being, we ensure that your information remains secure and confidential, allowing you to enjoy our services without concern.
+          </p>
+        </div>
+      </div>
+      <div class="box">
+        <div class="img-box">
+          <!-- Use the static tag for image path -->
+          <img src="{% static 'landpageapp/images/privacy4.png' %}" alt="">
+        </div>
+        <div class="detail-box">
+          <h5>
+            User Rights
+          </h5>
+          <p>
+            You have the right to access, update, and delete your personal information. You can also request a copy of your data, or withdraw consent for its use at any time by contacting us through our support team. We advocate for the importance of transparency and user control in the handling of personal information, ensuring that your rights are always respected.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="btn-box">
+      <a href="">
+        Read Full Privacy Policy
+      </a>
+    </div>
+  </div>
+</section>
+<!-- end privacy policy section -->
+
+
+<!-- info section -->
+
+<section class="info_section layout_padding2">
+  <div class="container">
+    <div class="row">
+      <!-- Contact Information Column -->
+      <div class="col-md-6 col-lg-3 info_col">
+        <div class="info_contact">
+          <h4>Contact Us</h4>
+          <div class="contact_link_box">
+            <a href="https://goo.gl/maps/XYZ123" target="_blank">
+              <i class="fa fa-map-marker" aria-hidden="true"></i>
+              <span>123 Ocean Avenue, Aquatic City, AQ 54321</span>
+            </a>
+            <a href="tel:+01234567890">
+              <i class="fa fa-phone" aria-hidden="true"></i>
+              <span>Call +01 234 567 890</span>
+            </a>
+            <a href="mailto:contact@unixaquatics.com">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+              <span>contact@unixaquatics.com</span>
+            </a>
           </div>
-          <div class="col-md-6 col-lg-3 info_col">
-            <div class="info_detail">
-              <h4>Info</h4>
-              <p>
-                Necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful.
-              </p>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-2 mx-auto info_col">
-            <div class="info_link_box">
-              <h4>Links</h4>
-              <div class="info_links">
-                <a class="active" href="">Home</a>
-                <a href="/about' ">About</a>
-                <a href="/privacy">Privacy</a>
-                <a href="/support">Support</a>
-                <a href="/team">Team</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3 info_col">
-            <h4>Subscribe</h4>
-            <form action="#">
-              <input type="text" placeholder="Enter email" />
-              <button type="submit">Subscribe</button>
-            </form>
+        </div>
+        <div class="info_social">
+          <a href="https://www.facebook.com/UnixAquatics" target="_blank">
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+          </a>
+          <a href="https://twitter.com/UnixAquatics" target="_blank">
+            <i class="fa fa-twitter" aria-hidden="true"></i>
+          </a>
+          <a href="https://www.linkedin.com/company/unixaquatics" target="_blank">
+            <i class="fa fa-linkedin" aria-hidden="true"></i>
+          </a>
+          <a href="https://www.instagram.com/unixaquatics" target="_blank">
+            <i class="fa fa-instagram" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Company Information Column -->
+      <div class="col-md-6 col-lg-3 info_col">
+        <div class="info_detail">
+          <h4>About Unix Aquatics</h4>
+          <p>
+            Unix Aquatics is dedicated to providing sustainable aquatic solutions for homes and businesses. From aquariums to water filtration systems, we help you create the perfect aquatic environment. Our expert team offers top-tier products and services, ensuring the health and beauty of your aquatic space.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Links Column -->
+      <div class="col-md-6 col-lg-2 mx-auto info_col">
+        <div class="info_link_box">
+          <h4>Quick Links</h4>
+          <div class="info_links">
+            <a class="active" href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="services.html">Services</a>
+            <a href="support.html">Support</a>
+            <a href="team.html">Meet the Team</a>
           </div>
         </div>
       </div>
+
+
     </section>
+
     <!-- end info section -->
-    <!-- footer section -->
+
+
+
+
+<!-- footer section -->
 <section class="footer_section">
   <div class="container">
-    <p>
-      &copy; <span id="displayYear"></span> All Rights Reserved By
-      <a href="https://html.design/">Free Html Templates</a>
-    </p>
+    <div class="row">
+      <!-- Footer Column 1: About Us -->
+      <div class="col-md-4">
+        <div class="footer_about">
+          <h5>About Us</h5>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel ligula vel augue vehicula viverra.</p>
+        </div>
+      </div>
+      
+      <!-- Footer Column 2: Contact Information -->
+      <div class="col-md-4">
+        <div class="footer_contact">
+          <h5>Contact Us</h5>
+          <p><strong>Phone:</strong> +123 456 7890</p>
+          <p><strong>Email:</strong> info@company.com</p>
+          <p><strong>Address:</strong> 1234 Main St, City, Country</p>
+        </div>
+      </div>
+      
+      <!-- Footer Column 3: Social Media Links -->
+      <div class="col-md-4">
+        <div class="footer_social">
+          <h5>Follow Us</h5>
+          <a href="https://facebook.com" target="_blank">
+            <i class="fa fa-facebook"></i> Facebook
+          </a>
+          <a href="https://twitter.com" target="_blank">
+            <i class="fa fa-twitter"></i> Twitter
+          </a>
+          <a href="https://linkedin.com" target="_blank">
+            <i class="fa fa-linkedin"></i> LinkedIn
+          </a>
+          <a href="https://instagram.com" target="_blank">
+            <i class="fa fa-instagram"></i> Instagram
+          </a>
+          <a href="https://youtube.com" target="_blank">
+            <i class="fa fa-youtube"></i> YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Copyright -->
+    <div class="footer_copy">
+      <p>&copy; <span id="displayYear"></span> All Rights Reserved By <a href="https://yourwebsite.com" target="_blank">Your Company Name</a></p>
+    </div>
   </div>
 </section>
-<!-- footer section -->
+<!-- end footer section -->
 
 <!-- jQuery -->
 <script type="text/javascript" src="{% static 'landpageapp/js/jquery-3.4.1.min.js' %}"></script>

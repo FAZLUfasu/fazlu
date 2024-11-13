@@ -84,7 +84,7 @@
                   <i class="fa fa-user" aria-hidden="true"></i> ADMIN Login
               </a>
               
-]              </li>
+              </li>
               <form class="form-inline">
                 <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
                   <i class="fa fa-search" aria-hidden="true"></i>
@@ -210,7 +210,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support1.png' %}" alt="24/7 Support"width="200" height="200">
+          <img src="{% static 'landpageapp/images/support1.png' %}" alt="24/7 Support" width="200" height="200">
         </div>
         <div class="detail-box">
           <h5>
@@ -224,7 +224,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support2.png' %}" alt="Secure Transactions"width="200" height="200">
+          <img src="{% static 'landpageapp/images/support2.png' %}" alt="Secure Transactions" width="200" height="200">
         </div>
         <div class="detail-box">
           <h5>
@@ -238,7 +238,8 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support3.png' %}" alt="Fast Responses"width="200" height="200">
+          <img src="{% static 'landpageapp/images/support3.png' %}" alt="Fast Responses" width="200" height="200">
+
         </div>
         <div class="detail-box">
           <h5>
@@ -252,7 +253,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support4.png' %}" alt="Customer Satisfaction"width="200" height="200">
+          <img src="{% static 'landpageapp/images/support4.png' %}" alt="Customer Satisfaction" width="200" height="200">
         </div>
         <div class="detail-box">
           <h5>
@@ -273,8 +274,10 @@
 </section>
 <!-- end support section -->
 
+
+
  <!-- about section -->
-<section class="about_section layout_padding">
+ <section class="about_section layout_padding">
   <div class="container">
     <div class="heading_container heading_center">
       <h2>
@@ -305,34 +308,7 @@
   </div>
 </section>
 <!-- end about section -->
-{% comment %} <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-fetch('/fasu/app/AboutUs/')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(data => {
-    if (data.unix_aquatics && data.vision && data.mission) {
-      document.getElementById('unix_aquatics').innerText = data.unix_aquatics;
-      document.getElementById('vision').innerText = data.vision;
-      document.getElementById('mission').innerText = data.mission;
-    } else {
-      document.getElementById('unix_aquatics').innerText = 'Error loading data.';
-      document.getElementById('vision').innerText = 'Error loading data.';
-      document.getElementById('mission').innerText = 'Error loading data.';
-    }
-  })
-  .catch(error => {
-    console.error('Error fetching About Us data:', error);
-    document.getElementById('unix_aquatics').innerText = 'Error loading data.';
-    document.getElementById('vision').innerText = 'Error loading data.';
-    document.getElementById('mission').innerText = 'Error loading data.';
-  });
 
-</script> {% endcomment %}
 
 <!-- privacy policy section -->
 <section class="privacy_policy_section layout_padding">
@@ -346,7 +322,7 @@ fetch('/fasu/app/AboutUs/')
       <div class="box">
         <div class="img-box">
           <!-- Use the static tag for image path -->
-          <img src="{% static 'landpageapp/images/privacy-icon1.png' %}" alt="">
+          <img src="{% static 'landpageapp/images/privacy1.png' %}" alt="">
         </div>
         <div class="detail-box">
           <h5>
@@ -360,7 +336,7 @@ fetch('/fasu/app/AboutUs/')
       <div class="box">
         <div class="img-box">
           <!-- Use the static tag for image path -->
-          <img src="{% static 'landpageapp/images/privacy-icon2.png' %}" alt="">
+          <img src="{% static 'landpageapp/images/privacy.png' %}" alt="">
         </div>
         <div class="detail-box">
           <h5>
@@ -374,7 +350,7 @@ fetch('/fasu/app/AboutUs/')
       <div class="box">
         <div class="img-box">
           <!-- Use the static tag for image path -->
-          <img src="{% static 'landpageapp/images/privacy-icon3.png' %}" alt="">
+          <img src="{% static 'landpageapp/images/privacy2.png' %}" alt="">
         </div>
         <div class="detail-box">
           <h5>
@@ -388,7 +364,7 @@ fetch('/fasu/app/AboutUs/')
       <div class="box">
         <div class="img-box">
           <!-- Use the static tag for image path -->
-          <img src="{% static 'landpageapp/images/privacy-icon4.png' %}" alt="">
+          <img src="{% static 'landpageapp/images/privacy3.png' %}" alt="">
         </div>
         <div class="detail-box">
           <h5>
@@ -402,7 +378,7 @@ fetch('/fasu/app/AboutUs/')
       <div class="box">
         <div class="img-box">
           <!-- Use the static tag for image path -->
-          <img src="{% static 'landpageapp/images/privacy-icon5.png' %}" alt="">
+          <img src="{% static 'landpageapp/images/privacy4.png' %}" alt="">
         </div>
         <div class="detail-box">
           <h5>
@@ -477,6 +453,7 @@ fetch('/fasu/app/AboutUs/')
   </div>
 </section>
 <!-- end team section --> {% endcomment %}
+
 
 
 
@@ -677,9 +654,8 @@ fetch('/fasu/app/AboutUs/')
   </div>
 </section>
 <!-- end team section -->
-
-
-{% comment %} <!-- footer section -->
+{% comment %} 
+<!-- footer section -->
 <section class="footer_section">
   <div class="container">
     <p>
@@ -689,6 +665,7 @@ fetch('/fasu/app/AboutUs/')
   </div>
 </section>
 <!-- footer section --> {% endcomment %}
+
 
 
 
@@ -750,7 +727,6 @@ fetch('/fasu/app/AboutUs/')
   // Display the current year in the footer
   document.getElementById("displayYear").innerText = new Date().getFullYear();
 </script>
-
 
 <!-- jQuery -->
 <script type="text/javascript" src="{% static 'landpageapp/js/jquery-3.4.1.min.js' %}"></script>

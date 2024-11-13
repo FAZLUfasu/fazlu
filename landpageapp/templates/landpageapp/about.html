@@ -93,9 +93,43 @@
 </header>
 <!-- end header section -->
 
+
+
+ <!-- about section -->
+ <section class="about_section layout_padding">
+  <div class="container">
+    <div class="heading_container heading_center">
+      <h2>
+        About <span>Us</span>
+      </h2>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="img-box">
+          <!-- Static image link -->
+          <img src="{% static 'landpageapp/images/asd.jpg' %}" alt="About Us Image">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="detail-box">
+          <h3>Unix Aquatics</h3>
+          <p>Unix Aquatics is a leading provider of aquatic products and services, dedicated to promoting the joy and benefits of aquatic activities.</p>
+          <h3>Our Vision</h3>
+          <p>Our vision is to create a world where everyone has access to safe and enjoyable aquatic experiences, fostering a healthier and happier community.</p>
+          <h3>Our Mission</h3>
+          <p>Our mission is to deliver top-quality aquatic products and services, provide comprehensive education and support, and advocate for the importance of aquatic activities for physical and mental well-being.</p>
+          <a href="#">
+            Read More
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end about section -->
   
 
-  
+{% comment %}   
 <!-- about section -->
 
 <section class="about_section layout_padding">
@@ -138,114 +172,135 @@
   </div>
 </section>
 
-<!-- end about section -->
+  {% endcomment %}
+
 <!-- info section -->
 
 <section class="info_section layout_padding2">
   <div class="container">
     <div class="row">
+      <!-- Contact Information Column -->
       <div class="col-md-6 col-lg-3 info_col">
         <div class="info_contact">
-          <h4>
-            Address
-          </h4>
+          <h4>Contact Us</h4>
           <div class="contact_link_box">
-            <a href="">
+            <a href="https://goo.gl/maps/XYZ123" target="_blank">
               <i class="fa fa-map-marker" aria-hidden="true"></i>
-              <span>
-                Location
-              </span>
+              <span>123 Ocean Avenue, Aquatic City, AQ 54321</span>
             </a>
-            <a href="">
+            <a href="tel:+01234567890">
               <i class="fa fa-phone" aria-hidden="true"></i>
-              <span>
-                Call +01 1234567890
-              </span>
+              <span>Call +01 234 567 890</span>
             </a>
-            <a href="">
+            <a href="mailto:contact@unixaquatics.com">
               <i class="fa fa-envelope" aria-hidden="true"></i>
-              <span>
-                demo@gmail.com
-              </span>
+              <span>contact@unixaquatics.com</span>
             </a>
           </div>
         </div>
         <div class="info_social">
-          <a href="">
+          <a href="https://www.facebook.com/UnixAquatics" target="_blank">
             <i class="fa fa-facebook" aria-hidden="true"></i>
           </a>
-          <a href="">
+          <a href="https://twitter.com/UnixAquatics" target="_blank">
             <i class="fa fa-twitter" aria-hidden="true"></i>
           </a>
-          <a href="">
+          <a href="https://www.linkedin.com/company/unixaquatics" target="_blank">
             <i class="fa fa-linkedin" aria-hidden="true"></i>
           </a>
-          <a href="">
+          <a href="https://www.instagram.com/unixaquatics" target="_blank">
             <i class="fa fa-instagram" aria-hidden="true"></i>
           </a>
         </div>
       </div>
+      
+      <!-- Company Information Column -->
       <div class="col-md-6 col-lg-3 info_col">
         <div class="info_detail">
-          <h4>
-            Info
-          </h4>
+          <h4>About Unix Aquatics</h4>
           <p>
-            necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful
+            Unix Aquatics is dedicated to providing sustainable aquatic solutions for homes and businesses. From aquariums to water filtration systems, we help you create the perfect aquatic environment. Our expert team offers top-tier products and services, ensuring the health and beauty of your aquatic space.
           </p>
         </div>
       </div>
+
+      <!-- Quick Links Column -->
       <div class="col-md-6 col-lg-2 mx-auto info_col">
         <div class="info_link_box">
-          <h4>
-            Links
-          </h4>
+          <h4>Quick Links</h4>
           <div class="info_links">
-            <a class="active" href="index.html">
-              Home
-            </a>
-            <a class="" href="about.html">
-              About
-            </a>
-            <a class="" href="service.html">
-              Services
-            </a>
-            <a class="" href="why.html">
-              Why Us
-            </a>
-            <a class="" href="team.html">
-              Team
-            </a>
+            <a class="active" href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="services.html">Services</a>
+            <a href="support.html">Support</a>
+            <a href="team.html">Meet the Team</a>
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-3 info_col ">
-        <h4>
-          Subscribe
-        </h4>
-        <form action="#">
-          <input type="text" placeholder="Enter email" />
-          <button type="submit">
-            Subscribe
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- end info section -->
+    </section>
+
+    <!-- end info section -->
+    
+     
+
+
+
+
 
 <!-- footer section -->
 <section class="footer_section">
   <div class="container">
-    <p>
-      &copy; <span id="displayYear"></span> All Rights Reserved By
-      <a href="https://html.design/">Free Html Templates</a>
-    </p>
+    <div class="row">
+      <!-- Footer Column 1: About Us -->
+      <div class="col-md-4">
+        <div class="footer_about">
+          <h5>About Us</h5>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel ligula vel augue vehicula viverra.</p>
+        </div>
+      </div>
+      
+      <!-- Footer Column 2: Contact Information -->
+      <div class="col-md-4">
+        <div class="footer_contact">
+          <h5>Contact Us</h5>
+          <p><strong>Phone:</strong> +123 456 7890</p>
+          <p><strong>Email:</strong> info@company.com</p>
+          <p><strong>Address:</strong> 1234 Main St, City, Country</p>
+        </div>
+      </div>
+      
+      <!-- Footer Column 3: Social Media Links -->
+      <div class="col-md-4">
+        <div class="footer_social">
+          <h5>Follow Us</h5>
+          <a href="https://facebook.com" target="_blank">
+            <i class="fa fa-facebook"></i> Facebook
+          </a>
+          <a href="https://twitter.com" target="_blank">
+            <i class="fa fa-twitter"></i> Twitter
+          </a>
+          <a href="https://linkedin.com" target="_blank">
+            <i class="fa fa-linkedin"></i> LinkedIn
+          </a>
+          <a href="https://instagram.com" target="_blank">
+            <i class="fa fa-instagram"></i> Instagram
+          </a>
+          <a href="https://youtube.com" target="_blank">
+            <i class="fa fa-youtube"></i> YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Copyright -->
+    <div class="footer_copy">
+      <p>&copy; <span id="displayYear"></span> All Rights Reserved By <a href="https://yourwebsite.com" target="_blank">Your Company Name</a></p>
+    </div>
   </div>
 </section>
-<!-- footer section -->
+<!-- end footer section -->
+
 
 <!-- jQuery -->
 <script type="text/javascript" src="{% static 'landpageapp/js/jquery-3.4.1.min.js' %}"></script>
