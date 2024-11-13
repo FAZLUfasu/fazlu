@@ -112,14 +112,9 @@ DATABASES = {
         'PORT': '3306',       # Replace with your MySQL port (usually '3306')
        'OPTIONS': {
 
-            'charset': 'utf8mb4',  # Adjust charset as per your MySQL settings
-<<<<<<< HEAD
-	},
-	},
-        }
-=======
-        },
+            'charset': 'utf8mb4',  # Adjust charset as per your MySQL settings        },
     }
+}
 }
 
 
@@ -141,8 +136,6 @@ DATABASES = {
 
 
 
-
->>>>>>> 834b48be413c4af8c1665e675b7668b8020b3871
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -174,20 +167,21 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_URL = 'static/' 
+import os
+
+# Base directory of your project
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# # Specify the directory for media files
-MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
 
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'landpageapp', 'static'),  # Ensure Django knows where to find static files
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Used for collecting static files for production
 
-
-# Use forward slashes in file paths
+# Media files (Uploaded files like images)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Where uploaded files are stored
 
 
 # Default primary key field type
