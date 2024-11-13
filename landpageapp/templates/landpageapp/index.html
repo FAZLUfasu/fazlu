@@ -210,7 +210,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support.png' %}" alt="24/7 Support">
+          <img src="{% static 'landpageapp/images/support1.png' %}" alt="24/7 Support">
         </div>
         <div class="detail-box">
           <h5>
@@ -224,7 +224,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support.png' %}" alt="Secure Transactions">
+          <img src="{% static 'landpageapp/images/support2.png' %}" alt="Secure Transactions">
         </div>
         <div class="detail-box">
           <h5>
@@ -238,7 +238,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support.png' %}" alt="Fast Responses">
+          <img src="{% static 'landpageapp/images/support3.png' %}" alt="Fast Responses">
         </div>
         <div class="detail-box">
           <h5>
@@ -252,7 +252,7 @@
       <div class="box">
         <div class="img-box">
           <!-- Replace image with a relevant support-related image -->
-          <img src="{% static 'landpageapp/images/support.png' %}" alt="Customer Satisfaction">
+          <img src="{% static 'landpageapp/images/support4.png' %}" alt="Customer Satisfaction">
         </div>
         <div class="detail-box">
           <h5>
@@ -285,7 +285,7 @@
       <div class="col-md-6">
         <div class="img-box">
           <!-- Static image link -->
-          <img src="{% static 'landpageapp/images/about-img.png' %}" alt="About Us Image">
+          <img src="{% static 'landpageapp/images/asd.jpg' %}" alt="About Us Image">
         </div>
       </div>
       <div class="col-md-6">
@@ -305,8 +305,34 @@
   </div>
 </section>
 <!-- end about section -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+fetch('/fasu/app/AboutUs/')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.unix_aquatics && data.vision && data.mission) {
+      document.getElementById('unix_aquatics').innerText = data.unix_aquatics;
+      document.getElementById('vision').innerText = data.vision;
+      document.getElementById('mission').innerText = data.mission;
+    } else {
+      document.getElementById('unix_aquatics').innerText = 'Error loading data.';
+      document.getElementById('vision').innerText = 'Error loading data.';
+      document.getElementById('mission').innerText = 'Error loading data.';
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching About Us data:', error);
+    document.getElementById('unix_aquatics').innerText = 'Error loading data.';
+    document.getElementById('vision').innerText = 'Error loading data.';
+    document.getElementById('mission').innerText = 'Error loading data.';
+  });
 
-
+</script>
 
 <!-- privacy policy section -->
 <section class="privacy_policy_section layout_padding">

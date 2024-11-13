@@ -30,12 +30,12 @@ def subscribe(request):
 
 
 
-def about_view(request):
-    url = "https://unix-aquatics.com/app/AboutUs/"
-    response = request.get(url)
-    about_data = response.json() if response.status_code == 200 else {}
+# def about_view(request):
+#     url = "https://unix-aquatics.com/app/AboutUs/"
+#     response = request.get(url)
+#     about_data = response.json() if response.status_code == 200 else {}
 
-    return render(request, 'about.html', {'about_data': about_data})
+#     return render(request, 'about.html', {'about_data': about_data})
 
 
 def team_page(request):
@@ -43,3 +43,5 @@ def team_page(request):
     team_members = response.json()  # Assuming the API returns the team data in JSON format
 
     return render(request, 'team_page.html', {'team_members': team_members})
+
+
