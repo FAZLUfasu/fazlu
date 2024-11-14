@@ -174,16 +174,22 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+
+# Ensure Django knows where to find static files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'landpageapp', 'static'),  # Ensure Django knows where to find static files
+    os.path.join(BASE_DIR, 'landpageapp', 'static'),  # Add your static files here
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Used for collecting static files for production
+
+# Directory where static files will be collected for production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is used when running `collectstatic` in production
 
 # Media files (Uploaded files like images)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Where uploaded files are stored
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Where uploaded files are stored (e.g., images, videos)
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+# Configure static files storage for production (recommended for caching)
+# For production, consider using ManifestStaticFilesStorage for cache-busting
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 
 # Default primary key field type
