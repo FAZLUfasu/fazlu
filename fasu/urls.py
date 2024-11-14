@@ -10,7 +10,7 @@ router = routers.DefaultRouter()
 router.register(r'team_photos', views.TeamMemberViewSet)
 
 
-urlpatterns = [
+urlpatterns =([
     path('get_notifications/',views.get_notifications,name='get_notifications'),
     path('notifications/', views.NotificationListView.as_view(), name='notification_list'),
     path('Whatsappchat/', views.WhatsappchatView.as_view(), name='Whatsappchat'),
@@ -35,7 +35,5 @@ urlpatterns = [
     path('myprojects/username/<str:username>/', views. my_projects_view),
     path('create-join-request/', views.create_join_request, name='create_join_request'),
     path('user-details/', views.UserDetailView.as_view(), name='user-details'),
-    ]
-if settings.DEBUG:   
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+)

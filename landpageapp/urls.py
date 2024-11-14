@@ -5,7 +5,7 @@ from django.conf import settings
 from landpageapp import views
 from django.db import router
 
-urlpatterns = [
+urlpatterns =([
    
     path('', views.home, name='home'),
     # path('home', views.home, name='home'),
@@ -14,8 +14,6 @@ urlpatterns = [
     path('support/', views.support, name='support'),
     path('team/', views.team, name='team'),
     # path('subscribe/', views.subscribe, name='subscribe'),
-]
-if settings.DEBUG:  
-     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
+    
 
