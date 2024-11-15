@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-3old66y+#9@!zfa%pu@70jao5u+a5zxkwe)8xg39_i(jg!4$%a
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['unix-aquatics.com','www.unixaquatics,com','13.210.211.177']
+ALLOWED_HOSTS = ['unix-aquatics.com','www.unixaquatics,com','13.210.211.177','*']
 
 
 CSRF_TRUSTED_ORIGINS = ['https://unix-aquatics.com']
@@ -120,7 +120,6 @@ DATABASES = {
         'HOST': 'localhost',  # Replace with your MySQL host (usually 'localhost')
         'PORT': '3306',       # Replace with your MySQL port (usually '3306')
        'OPTIONS': {
-
             'ssl_mode': 'DISABLED',  # Disable SSL
             'charset': 'utf8mb4',  # Adjust charset as per your MySQL settings
         },
