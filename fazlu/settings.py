@@ -26,11 +26,9 @@ SECRET_KEY = 'django-insecure-3old66y+#9@!zfa%pu@70jao5u+a5zxkwe)8xg39_i(jg!4$%a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-<<<<<<< HEAD
+
 ALLOWED_HOSTS = ['unix-aquatics.com','www.unixaquatics,com','13.210.211.177']
-=======
-ALLOWED_HOSTS = ['10.0.2.2','127.0.0.1','*']
->>>>>>> ca87fcd3052e845678370e87f4e4e2f577cb6287
+
 
 CSRF_TRUSTED_ORIGINS = ['https://unix-aquatics.com']
 
@@ -73,21 +71,20 @@ MIDDLEWARE = [
    
 ]
 
-<<<<<<< HEAD
 
-ROOT_URLCONF = 'fazlu.urls'
-=======
+
+# ROOT_URLCONF = 'fazlu.urls'
+
 ROOT_URLCONF = 'fazlu.urls,landpageapp.urls'
->>>>>>> ca87fcd3052e845678370e87f4e4e2f577cb6287
+
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-<<<<<<< HEAD
-        'DIRS': [], 
-=======
+        # 'DIRS': [], 
+
         'DIRS': [os.path.join(BASE_DIR, 'landpageapp/templates')], 
->>>>>>> ca87fcd3052e845678370e87f4e4e2f577cb6287
+
         # 'DIRS': ['images'],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -123,19 +120,13 @@ DATABASES = {
         'HOST': 'localhost',  # Replace with your MySQL host (usually 'localhost')
         'PORT': '3306',       # Replace with your MySQL port (usually '3306')
        'OPTIONS': {
-<<<<<<< HEAD
 
-            'charset': 'utf8mb4',  # Adjust charset as per your MySQL settings        },
-    }
-}
-}
-=======
             'ssl_mode': 'DISABLED',  # Disable SSL
             'charset': 'utf8mb4',  # Adjust charset as per your MySQL settings
         },
     }
 }
->>>>>>> ca87fcd3052e845678370e87f4e4e2f577cb6287
+
 
 
 
@@ -156,10 +147,6 @@ DATABASES = {
 
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ca87fcd3052e845678370e87f4e4e2f577cb6287
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -191,31 +178,31 @@ USE_I18N = True
 USE_TZ = True
 
 
-<<<<<<< HEAD
-import os
 
-# Base directory of your project
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
 
-# Ensure Django knows where to find static files
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'landpageapp', 'static'),  # Add your static files here
-]
+# # Base directory of your project
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Directory where static files will be collected for production
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is used when running `collectstatic` in production
+# # Static files (CSS, JavaScript, Images)
+# STATIC_URL = '/static/'
 
-# Media files (Uploaded files like images)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Where uploaded files are stored (e.g., images, videos)
+# # Ensure Django knows where to find static files
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'landpageapp', 'static'),  # Add your static files here
+# ]
 
-# Configure static files storage for production (recommended for caching)
-# For production, consider using ManifestStaticFilesStorage for cache-busting
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-=======
+# # Directory where static files will be collected for production
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is used when running `collectstatic` in production
+
+# # Media files (Uploaded files like images)
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Where uploaded files are stored (e.g., images, videos)
+
+# # Configure static files storage for production (recommended for caching)
+# # For production, consider using ManifestStaticFilesStorage for cache-busting
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 STATIC_URL = 'static/' 
@@ -230,7 +217,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
 
 
 # Use forward slashes in file paths
->>>>>>> ca87fcd3052e845678370e87f4e4e2f577cb6287
+
 
 
 # Default primary key field type
