@@ -6,8 +6,8 @@ from django.db import router
 
 urlpatterns =( [
    
+    
     path('', views.home, name='home'),
-
     path('about/', views.about, name='about'),
     path('privacy/', views.privacy, name='privacy'),
     path('support/', views.support, name='support'),

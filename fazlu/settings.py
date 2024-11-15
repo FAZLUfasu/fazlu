@@ -188,9 +188,9 @@ USE_TZ = True
 # STATIC_URL = '/static/'
 
 # # Ensure Django knows where to find static files
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'landpageapp', 'static'),  # Add your static files here
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'landpageapp', 'static'),  # Add your static files here
+]
 
 # # Directory where static files will be collected for production
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is used when running `collectstatic` in production
@@ -205,11 +205,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_URL = 'static/' 
+STATIC_URL = '/static/' 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # # Specify the directory for media files
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
 
