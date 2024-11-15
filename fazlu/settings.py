@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3old66y+#9@!zfa%pu@70jao5u+a5zxkwe)8xg39_i(jg!4$%a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['unix-aquatics.com','www.unixaquatics,com','13.210.211.177']
@@ -73,9 +73,9 @@ MIDDLEWARE = [
 
 
 
-# ROOT_URLCONF = 'fazlu.urls'
+ROOT_URLCONF = 'fazlu.urls'
 
-ROOT_URLCONF = 'fazlu.urls,landpageapp.urls'
+
 
 
 TEMPLATES = [
@@ -210,7 +210,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # # Specify the directory for media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
 
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
