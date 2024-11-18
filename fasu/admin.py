@@ -27,6 +27,7 @@ admin.site.register(Summary)
 admin.site.register(Images)
 admin.site.register(Notification)
 
+
 @admin.register(NewsUpdate)
 class NewsUpdateAdmin(admin.ModelAdmin):
     list_display = ['title', 'date_published']
@@ -90,7 +91,7 @@ class InvestorProfileAdmin(admin.ModelAdmin):
         if not InvestorProfile.objects.filter(user=obj.user).exists():
             super().save_model(request, obj, form, change)
         else:
-            # Only allow updating existing profile
+            # Only allow updating existing profilez
             if change:
                 super().save_model(request, obj, form, change)
             else:

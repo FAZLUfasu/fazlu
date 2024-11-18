@@ -1,5 +1,4 @@
-import json
-import logging
+
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import authenticate
@@ -12,7 +11,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import viewsets
-from .forms import ImageUploadForm
+
 from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer, MyImageSerializer, MyProjectsSerializer, NewsUpdateSerializer, NotificationSerializer,ProjectpageSerializer, SummarySerializer, UserSerializer, WhatsappchatSerializer
 from .serializers import  ContactInfoSerializer, InvestorsProfileSerializer
 from .serializers import HomePageDataSerializer
@@ -23,15 +22,8 @@ from .models import ContactInfo, InvestorProfile, TeamMember, video
 from .models import Images,video
 # from .models import MyProject
 from rest_framework.parsers import MultiPartParser, FormParser
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 
-
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.views.decorators.http import require_http_methods
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 
 
 from rest_framework_simplejwt.tokens import AccessToken
@@ -51,8 +43,6 @@ class CustomObtainAuthToken(ObtainAuthToken):
 def generate_token(user):
     token = AccessToken.for_user(user)
     return str(token)
-
-
 
 
 
