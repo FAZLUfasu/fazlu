@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-3old66y+#9@!zfa%pu@70jao5u+a5zxkwe)8xg39_i(jg!4$%a
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['unix-aquatics.com','www.unixaquatics,com','13.210.211.177','*']
+ALLOWED_HOSTS = ['unix-aquatics.com','www.unixaquatics,com','13.210.211.177',]
 
 
 CSRF_TRUSTED_ORIGINS = ['https://unix-aquatics.com']
@@ -81,11 +81,10 @@ ROOT_URLCONF = 'fazlu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # 'DIRS': [], 
-
-        'DIRS': [os.path.join(BASE_DIR, 'landpageapp/templates')], 
-
-        # 'DIRS': ['images'],
+        'DIRS': [
+            BASE_DIR / "templates",  # Global templates directory
+            os.path.join(BASE_DIR, 'landpageapp/templates'),  # Templates specific to landpageapp
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,24 +124,6 @@ DATABASES = {
         },
     }
 }
-
-
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'investors',  # Replace with your database name
-#         'USER': 'root',       # Replace with your MySQL username
-#         'PASSWORD': 'pass@123.com',  # Replace with your MySQL password
-#         'HOST': 'localhost',  # Replace with your MySQL host (usually 'localhost')
-#         'PORT': '3306',       # Replace with your MySQL port (usually '3306')
-#         'OPTIONS': {
-            
-#             'charset': 'utf8mb4',  # Adjust charset as per your MySQL settings
-#         },
-#     }
-# }
 
 
 
@@ -191,16 +172,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'landpageapp', 'static'),  # Add your static files here
 ]
 
-# # Directory where static files will be collected for production
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is used when running `collectstatic` in production
-
-# # Media files (Uploaded files like images)
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Where uploaded files are stored (e.g., images, videos)
-
-# # Configure static files storage for production (recommended for caching)
-# # For production, consider using ManifestStaticFilesStorage for cache-busting
-# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

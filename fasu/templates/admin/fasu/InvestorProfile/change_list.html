@@ -1,0 +1,44 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+  <h1>Investor Profiles</h1>
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th>User</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Bank Name</th>
+              <th>Account Number</th>
+              <th>Profile Picture</th>
+              <th>Action</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for obj in cl.result_list %}
+              <tr>
+                  <td>{{ obj.user }}</td>
+                  <td>{{ obj.name }}</td>
+                  <td>{{ obj.email }}</td>
+                  <td>{{ obj.mobile_number }}</td>
+                  <td>{{ obj.bank_name }}</td>
+                  <td>{{ obj.account_number }}</td>
+                  <td>
+                      {% if obj.profilepic %}
+                          <img src="{{ obj.profilepic.url }}" width="50" height="50">
+                      {% else %}
+                          No Picture
+                      {% endif %}
+                  </td>
+                  <td>
+                      <a href="{% url 'admin:myapp_investorprofile_change' obj.pk %}">Edit</a>
+                  </td>
+              </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  <div class="pagination">
+      {{ cl.paginator }}
+  </div>
+{% endblock %}

@@ -145,6 +145,9 @@ class MyProjects(models.Model):
     def __str__(self):
       return f'{self.user.username} - {self.proname.proname}'
 
+
+
+
 class video(models.Model):
     video = models.FileField(upload_to='videos/', blank=True)
     videoname = models.CharField(max_length=50, blank=True, null=True)
@@ -264,3 +267,25 @@ class Whatsappchat(models.Model):
 
 #     def __str__(self):
 #         return self.message
+
+
+
+
+
+# # MyProjects Model
+# class MyProjects(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='projects')
+#     projectlogoname = models.CharField(max_length=255)
+#     projectlogo = models.ImageField(upload_to='project_logos/')
+
+#     def __str__(self):
+#         return self.projectlogoname
+
+
+# # Projectpage Model
+# class Projectpage(models.Model):
+#     my_project = models.ForeignKey(MyProjects, on_delete=models.CASCADE, related_name='project_pages')
+#     proname = models.CharField(max_length=255)
+
+#     def __str__(self):
+#         return self.proname
