@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from fasu.admin import custom_admin_site
-
 urlpatterns = ([
     path('', include('landpageapp.urls')),
     path('grappelli/', include('grappelli.urls')),  # Grappelli URLs
