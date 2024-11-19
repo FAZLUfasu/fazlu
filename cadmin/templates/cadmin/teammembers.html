@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Members</title>
+    {% load static %}
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <h2>Team Members</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Photo</th>
+                <th>Social Media Links</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in team_members %}
+            <tr>
+                <td>{{ member.name }}</td>
+                <td>{{ member.role }}</td>
+                <td>
+                    {% if member.photo %}
+                    <img src="{{ member.photo.url }}" alt="{{ member.name }}'s photo">
+                    {% else %}
+                    No Photo
+                    {% endif %}
+                </td>
+                <td>
+                    {% if member.facebook_url %}
+                    <a href="{{ member.facebook_url }}" target="_blank">Facebook</a><br>
+                    {% endif %}
+                    {% if member.twitter_url %}
+                    <a href="{{ member.twitter_url }}" target="_blank">Twitter</a><br>
+                    {% endif %}
+                    {% if member.linkedin_url %}
+                    <a href="{{ member.linkedin_url }}" target="_blank">LinkedIn</a><br>
+                    {% endif %}
+                    {% if member.instagram_url %}
+                    <a href="{{ member.instagram_url }}" target="_blank">Instagram</a><br>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No team members found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+</body>
+</html>

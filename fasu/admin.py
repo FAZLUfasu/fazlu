@@ -28,6 +28,7 @@ admin.site.register(Images)
 admin.site.register(Notification)
 
 
+
 @admin.register(NewsUpdate)
 class NewsUpdateAdmin(admin.ModelAdmin):
     list_display = ['title', 'date_published']
@@ -57,14 +58,8 @@ class CustomProjectpageAdmin(Projectpage):
 
 
 admin.site.register(Projectpage)
-
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
-
-
-
-
-
 admin.site.register(InvestorProfile)
 class InvestorProfileAdmin(admin.ModelAdmin):
 
@@ -111,9 +106,6 @@ class InvestorProfileAdmin(admin.ModelAdmin):
 
 
 class UserAdmin(BaseUserAdmin):
-    # The fields to be used in displaying the User model.
-    # These override the definitions on the base UserAdmin
-    # that reference specific fields on auth.User.
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     fieldsets = (
@@ -146,3 +138,7 @@ class MyProjectsAdmin(admin.ModelAdmin):
     def get_proname(self, obj):
         return obj.name.proname if obj.name else ''  # Custom method to display proname
     get_proname.short_description = 'Project Name'
+
+
+
+

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-3old66y+#9@!zfa%pu@70jao5u+a5zxkwe)8xg39_i(jg!4$%a
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['unix-aquatics.com','www.unixaquatics,com','13.210.211.177',]
+ALLOWED_HOSTS = ['unix-aquatics.com','www.unixaquatics,com','13.210.211.177','127.0.0.1']
 
 
 CSRF_TRUSTED_ORIGINS = ['https://unix-aquatics.com']
@@ -48,11 +48,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    ##'djongo',
     'rest_framework_simplejwt',
     'channels',
     'grappelli',
     'landpageapp',
+    'cadmin',
     
     
 ]
@@ -83,7 +83,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / "templates",  # Global templates directory
-            os.path.join(BASE_DIR, 'landpageapp/templates'),  # Templates specific to landpageapp
+            os.path.join(BASE_DIR, 'landpageapp/templates'),
+            os.path.join(BASE_DIR, 'cadmin/templates'),  # Templates specific to landpageapp
         ],
         'APP_DIRS': True,
         'OPTIONS': {
