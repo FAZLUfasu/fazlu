@@ -1,0 +1,120 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <title>Investor Profiles</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'cadmin/css/style.css' %}">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+  </head>
+  <body>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h2 class="heading-section">Investor Profiles</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Profile Picture</th>
+                                    <th>Email</th>
+                                    <th>Address</th>
+                                    <th>Mobile Number</th>
+                                    <th>WhatsApp</th>
+                                    <th>Aadhar Card</th>
+                                    <th>Election ID</th>
+                                    <th>Passport</th>
+                                    <th>PAN Card</th>
+                                    <th>Bank Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for profile in profiles %}
+                                <tr>
+                                    <td>{{ profile.name }}</td>
+                                    <td>
+                                        {% if profile.profilepic %}
+                                        <img src="{{ profile.profilepic }}" alt="Profile Picture" width="50">
+                                        {% else %}
+                                        N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ profile.email }}</td>
+                                    <td>{{ profile.address }}</td>
+                                    <td>{{ profile.mobile_number }}</td>
+                                    <td>{{ profile.whatsapp }}</td>
+                                    <td>
+                                        {{ profile.aadhar_card }}
+                                        {% if profile.aadhar_card_attachment %}
+                                        <a href="{{ profile.aadhar_card_attachment }}" target="_blank">View</a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ profile.election_id }}
+                                        {% if profile.election_id_attachment %}
+                                        <a href="{{ profile.election_id_attachment }}" target="_blank">View</a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ profile.passport_number }}
+                                        {% if profile.passport_attachment %}
+                                        <a href="{{ profile.passport_attachment }}" target="_blank">View</a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ profile.pan_card_number }}
+                                        {% if profile.pan_card_attachment %}
+                                        <a href="{{ profile.pan_card_attachment }}" target="_blank">View</a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <strong>Account Number:</strong> {{ profile.account_number }}<br>
+                                        <strong>IBAN:</strong> {{ profile.iban }}<br>
+                                        <strong>Bank Name:</strong> {{ profile.bank_name }}<br>
+                                        <strong>Branch:</strong> {{ profile.branch }}<br>
+                                        <strong>IFSC Code:</strong> {{ profile.ifsc_code }}<br>
+                                        {% if profile.bank_account_passbook_attachment %}
+                                        <a href="{{ profile.bank_account_passbook_attachment }}" target="_blank">View Passbook</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>	
+  </body>
+</html>

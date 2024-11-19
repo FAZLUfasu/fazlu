@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <title>Create Project Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'cadmin/css/style.css' %}">
+    <style>
+      /* Adding custom borders */
+      table {
+        border: 2px solid #000; /* Border around the whole table */
+        border-collapse: collapse; /* Ensures borders are not doubled */
+      }
+
+      th, td {
+        border: 1px solid #ddd; /* Lighter borders for table cells */
+        padding: 8px; /* Padding inside each cell */
+        text-align: center; /* Center-align text */
+      }
+
+      th {
+        background-color: #f8f9fa; /* Light background for table header */
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2; /* Zebra-striping for even rows */
+      }
+
+      tr:hover {
+        background-color: #ddd; /* Highlight row on hover */
+      }
+    </style>
+  </head>
+  <body>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h2 class="heading-section">Project</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Project Name</th>
+                                    <th>Project Logo</th>
+                                    <th>Description</th>
+                                    <th>Start Date</th>
+                                    <th>Date of Establishment</th>
+                                    <th>Location</th>
+                                    <th>Number of Ponds</th>
+                                    <th>Water Capacity</th>
+                                    <th>Annual Production Capacity</th>
+                                    <th>Capital</th>
+                                    <th>Number of Shares</th>
+                                    <th>Price Per Share</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for project in projects %}
+                                <tr>
+                                    <td>{{ project.proname }}</td>
+                                    <td>
+                                        {% if project.projectlogo %}
+                                        <img src="{{ project.projectlogo }}" alt="Project Logo" width="50">
+                                        {% else %}
+                                        N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ project.description }}</td>
+                                    <td>{{ project.start_date }}</td>
+                                    <td>{{ project.date_of_establishment }}</td>
+                                    <td>{{ project.location }}</td>
+                                    <td>{{ project.number_of_ponds }}</td>
+                                    <td>{{ project.water_capacity }}</td>
+                                    <td>{{ project.annual_production_capacity }}</td>
+                                    <td>{{ project.capital }}</td>
+                                    <td>{{ project.number_of_shares }}</td>
+                                    <td>{{ project.price_per_share }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="12">No project data available.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <script src="{% static 'cadmin/js/jquery.min.js' %}"></script>
+    <script src="{% static 'cadmin/js/popper.js' %}"></script>
+    <script src="{% static 'cadmin/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'cadmin/js/main.js' %}"></script>
+  </body>
+</html>

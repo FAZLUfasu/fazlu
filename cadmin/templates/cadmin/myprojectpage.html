@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <title>My Project Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'cadmin/css/style.css' %}">
+    <style>
+      /* Adding custom borders */
+      table {
+        border: 2px solid #000; /* Border around the whole table */
+        border-collapse: collapse; /* Ensures borders are not doubled */
+      }
+
+      th, td {
+        border: 1px solid #ddd; /* Lighter borders for table cells */
+        padding: 8px; /* Padding inside each cell */
+        text-align: center; /* Center-align text */
+      }
+
+      th {
+        background-color: #f8f9fa; /* Light background for table header */
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2; /* Zebra-striping for even rows */
+      }
+
+      tr:hover {
+        background-color: #ddd; /* Highlight row on hover */
+      }
+    </style>
+  </head>
+  <body>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h2 class="heading-section">My Project</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Project Name</th>
+                                    <th>Project Logo</th>
+                                    <th>Description</th>
+                                    <th>Start Date</th>
+                                    <th>Location</th>
+                                    <th>Capital</th>
+                                    <th>Shares</th>
+                                    <th>Investment Amount</th>
+                                    <th>Investment Date</th>
+                                    <th>Receipt</th>
+                                    <th>Share Certificate</th>
+                                    <th>Transfer Proof</th>
+                                    <th>Partnership Agreement</th>
+                                    <th>Other Agreements</th>
+                                    <th>Total Investment</th>
+                                    <th>Total Dividend</th>
+                                    <th>Dividend Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for myproject in myprojects %}
+                                <tr>
+                                    <td>{{ myproject.username }}</td>
+                                    <td>{{ myproject.project }}</td>
+                                    <td>
+                                        {% if myproject.projectlogo %}
+                                        <img src="{{ myproject.projectlogo }}" alt="Project Logo" width="50">
+                                        {% else %}
+                                        N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ myproject.description }}</td>
+                                    <td>{{ myproject.start_date }}</td>
+                                    <td>{{ myproject.location }}</td>
+                                    <td>{{ myproject.capital }}</td>
+                                    <td>{{ myproject.number_of_shares }}</td>
+                                    <td>{{ myproject.investment_amount }}</td>
+                                    <td>{{ myproject.investment_date }}</td>
+                                    <td><a href="{{ myproject.receipt }}" target="_blank">View </a></td>
+                                    <td><a href="{{ myproject.share_certificate }}" target="_blank">View</a></td>
+                                    <td><a href="{{ myproject.transfer_proof }}" target="_blank">View </a></td>
+                                    <td><a href="{{ myproject.partnership_agreement }}" target="_blank">View </a></td>
+                                    <td><a href="{{ myproject.other_agreements }}" target="_blank">View</a></td>
+                                    <td>{{ myproject.total_investment }}</td>
+                                    <td>{{ myproject.total_dividend }}</td>
+                                    <td>{{ myproject.dividend_date }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="17">No project data available.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="{% static 'cadmin/js/jquery.min.js' %}"></script>
+    <script src="{% static 'cadmin/js/popper.js' %}"></script>
+    <script src="{% static 'cadmin/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'cadmin/js/main.js' %}"></script>
+  </body>
+</html>

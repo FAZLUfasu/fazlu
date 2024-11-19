@@ -48,11 +48,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    ##'djongo',
     'rest_framework_simplejwt',
     'channels',
     'grappelli',
     'landpageapp',
+    'cadmin',
     
     
 ]
@@ -83,7 +83,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / "templates",  # Global templates directory
-            os.path.join(BASE_DIR, 'landpageapp/templates'),  # Templates specific to landpageapp
+            os.path.join(BASE_DIR, 'landpageapp/templates'),
+            os.path.join(BASE_DIR, 'cadmin/templates'),  # Templates specific to landpageapp
         ],
         'APP_DIRS': True,
         'OPTIONS': {
