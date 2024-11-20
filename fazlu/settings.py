@@ -82,6 +82,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'landpageapp/templates'),
             os.path.join(BASE_DIR, 'cadmin/templates'), 
             os.path.join(BASE_DIR, 'fasu/templates'), 
