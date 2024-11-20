@@ -8,7 +8,8 @@ urlpatterns = ([
     path('', include('landpageapp.urls')),
     path('grappelli/', include('grappelli.urls')),  # Grappelli URLs
     path('admin/', admin.site.urls), 
-    path('cadmin/', include('cadmin.urls')), # Your app's URLs (fasu)
+    path('cadmin/', include('cadmin.urls')),
+    path('app/',include('fasu.url')), # Your app's URLs (fasu)
 ]+ static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 +static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 )
