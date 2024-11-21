@@ -134,52 +134,51 @@
         </div>
       </header>
 
-<section>
-    <h2>Team Members</h2>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Role</th>
-                <th>Photo</th>
-                <th>Social Media Links</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for member in team_members %}
-            <tr>
-                <td>{{ member.name }}</td>
-                <td>{{ member.role }}</td>
-                <td>
-                    {% if member.photo %}
-                    <img src="{{ member.photo.url }}" alt="{{ member.name }}'s photo">
-                    {% else %}
-                    No Photo
-                    {% endif %}
-                </td>
-                <td>
-                    {% if member.facebook_url %}
-                    <a href="{{ member.facebook_url }}" target="_blank">Facebook</a><br>
-                    {% endif %}
-                    {% if member.twitter_url %}
-                    <a href="{{ member.twitter_url }}" target="_blank">Twitter</a><br>
-                    {% endif %}
-                    {% if member.linkedin_url %}
-                    <a href="{{ member.linkedin_url }}" target="_blank">LinkedIn</a><br>
-                    {% endif %}
-                    {% if member.instagram_url %}
-                    <a href="{{ member.instagram_url }}" target="_blank">Instagram</a><br>
-                    {% endif %}
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4">No team members found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</section>
+      <section class="team-section">
+        <h2>Team Members</h2>
+        <table class="team-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Photo</th>
+                    <th>Social Media Links</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in team_members %}
+                <tr>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.role }}</td>
+                    <td>
+                        {% if member.photo %}
+                            <img src="{{ member.photo }}" alt="pic" class="team-photo">
+                        {% else %}
+                            No Photo
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if member.facebook_url %}
+                        <a href="{{ member.facebook_url }}" target="_blank" class="social-link">Facebook</a><br>
+                        {% endif %}
+                        {% if member.twitter_url %}
+                        <a href="{{ member.twitter_url }}" target="_blank" class="social-link">Twitter</a><br>
+                        {% endif %}
+                        {% if member.linkedin_url %}
+                        <a href="{{ member.linkedin_url }}" target="_blank" class="social-link">LinkedIn</a><br>
+                        {% endif %}
+                        {% if member.instagram_url %}
+                        <a href="{{ member.instagram_url }}" target="_blank" class="social-link">Instagram</a><br>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No team members found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 </body>
 </html>
