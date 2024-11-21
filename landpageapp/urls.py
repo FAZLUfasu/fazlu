@@ -12,6 +12,6 @@ urlpatterns =( [
     path('privacy/', views.privacy, name='privacy'),
     path('support/', views.support, name='support'),
     path('team/', views.team, name='team'),
-    # path('subscribe/', views.subscribe, name='subscribe'),
+    
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
     

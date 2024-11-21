@@ -8,30 +8,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,700" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'cadmin/css/style.css' %}">
+   
+    
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
+           
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
         }
-        th, td {
-            border: 1px solid #333;
+  
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+          color: #333;
+        }
+  
+        /* Navbar container */
+        .navbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #007bff;
+          padding: 10px 20px;
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+        }
+  
+        /* Logo */
+        .navbar .logo {
+          font-size: 1.5em;
+          color: white;
+          font-weight: bold;
+          text-transform: uppercase;
+          text-decoration: none;
+        }
+  
+        /* Navbar links */
+        .navbar .nav-links {
+          display: flex;
+          gap: 15px;
+        }
+  
+        .navbar .nav-links a {
+          color: white;
+          text-decoration: none;
+          font-size: 1em;
+          transition: color 0.3s ease;
+        }
+  
+        .navbar .nav-links a:hover {
+          color: #ffcc00;
+        }
+  
+        /* Hamburger menu (hidden by default) */
+        .navbar .hamburger {
+          display: none;
+          flex-direction: column;
+          cursor: pointer;
+          gap: 5px;
+        }
+  
+        .navbar .hamburger div {
+          width: 25px;
+          height: 3px;
+          background-color: white;
+        }
+  
+        /* Responsive navbar */
+        @media (max-width: 768px) {
+          .navbar .nav-links {
+            display: none;
+            flex-direction: column;
+            background-color: #007bff;
+            position: absolute;
+            top: 60px;
+            right: 20px;
             padding: 10px;
-            text-align: left;
+            border-radius: 5px;
+          }
+  
+          .navbar .nav-links.active {
+            display: flex;
+          }
+  
+          .navbar .hamburger {
+            display: flex;
+          }
+
         }
-        th {
-            background-color: #343a40;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #ddd;
-        }
-    </style>
-  </head>
-  <body>
+        table {
+           border-collapse: collapse;
+           width: 100%;
+       }
+       th, td {
+           border: 1px solid #333;
+           padding: 10px;
+           text-align: left;
+       }
+       th {
+           background-color: #343a40;
+           color: white;
+       }
+       tr:nth-child(even) {
+           background-color: #f2f2f2;
+       }
+       tr:hover {
+           background-color: #ddd;
+       }
+      </style>
+    </head>
+    <body>
+      <!-- Navbar -->
+      <header class="navbar">
+        <a href="index.html" class="logo">Unix Aquatics</a>
+        <div class="hamburger" onclick="toggleNav()">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="nav-links">
+          <a href="/cadmin/index">Table View</a>
+          <a href="/cadmin/investor-profiles">Investor Profiles</a>
+          <a href="/cadmin/my-project">My Project</a>
+          <a href="/cadmin/project/">Project</a>
+          <a href="/cadmin/team">Team</a>
+          <a href="https://unix-aquatics.com/admin" class="btn btn-danger">Admin Login</a>
+        </div>
+      </header>
+
     <section class="ftco-section">
         <div class="container">
             <div class="row justify-content-center">

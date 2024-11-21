@@ -33,6 +33,10 @@ admin.site.register(Notification)
 class NewsUpdateAdmin(admin.ModelAdmin):
     list_display = ['title', 'date_published']
     search_fields = ['title', 'description']
+    class Media:
+        css = {'all': ('admin/custom.css',)  }
+        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
+
 
 class InvestorProfileInline(admin.StackedInline):
     model = InvestorProfile
@@ -40,6 +44,10 @@ class InvestorProfileInline(admin.StackedInline):
     verbose_name_plural = 'Investor Profiles'
     extra = 1
     max_num = 1
+    class Media:
+        css = {'all': ('admin/custom.css',)  }
+        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
+
 
 class MyProjectsInline(admin.StackedInline):
     model = MyProjects
@@ -47,13 +55,25 @@ class MyProjectsInline(admin.StackedInline):
     verbose_name_plural = 'My Project'
     extra = 6
     max_num = 6
-    
+    class Media:
+        css = {'all': ('admin/custom.css',)  }
+        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
+
+
 
 class CustomUserAdmin(UserAdmin):
     inlines = (InvestorProfileInline,)
+    class Media:
+        css = {'all': ('admin/custom.css',)  }
+        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
+
 
 class CustomProjectpageAdmin(Projectpage):
     inlines = (MyProjectsInline,)
+
+    class Media:
+        css = {'all': ('admin/custom.css',)  }
+        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
 
 
 
@@ -104,6 +124,10 @@ class InvestorProfileAdmin(admin.ModelAdmin):
             kwargs["queryset"] = User.objects.filter(is_staff=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    class Media:
+        css = {'all': ('admin/custom.css',)  }
+        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
+
 
 class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
@@ -123,11 +147,19 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('username', 'first_name', 'last_name', 'email')
     ordering = ('username',)
     filter_horizontal = ('groups', 'user_permissions',)
+    class Media:
+        css = {'all': ('admin/custom.css',)  }
+        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
+
 
 # Re-register UserAdmin
 class ProjectpageInline(admin.StackedInline):
     model = Projectpage
     fields = ['proname']  # List of fields from Projectpage to display
+    class Media:
+        css = {'all': ('admin/custom.css',)  }
+        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
+
 
 
 admin.site.register(MyProjects)
@@ -141,4 +173,9 @@ class MyProjectsAdmin(admin.ModelAdmin):
 
 
 
+
+
+    class Media:
+        css = {'all': ('admin/custom.css',)  }
+        js = {'all':('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')}  
 
