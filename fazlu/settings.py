@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fasu',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -53,13 +52,14 @@ INSTALLED_APPS = [
     'grappelli',
     'landpageapp',
     'cadmin',
+    'fasu.apps.FasuConfig',
     
     
 ]
 ASGI_APPLICATION = 'fazlu.asgi.application'
 
 MIDDLEWARE = [
-    # 'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -68,6 +68,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
    
 ]
 
@@ -196,6 +198,13 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 MB
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'OPTIONS',
+]
 
 CORS_ALLOWED_ORIGINS = [
     "http://unix-aquatics.com",

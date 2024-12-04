@@ -1,25 +1,95 @@
 import requests 
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from fasu.models import InvestorProfile
+from .forms import InvestorProfileForm  # We will create this form next
+from django.http import HttpResponse
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.contrib.auth.models import User
 
+
+
+# def investor_profiles_view(request):
+#     # Correct way to use requests.get for external API calls
+#     url = "https://unix-aquatics.com/app/investorprofile/"
+#     try:
+#         response = requests.get(url)  # Make the GET request
+#         if response.status_code == 200:
+#             profiles = response.json()  # Parse JSON response
+#         else:
+#             profiles = []  # Fallback if API returns an error
+#     except requests.RequestException as e:
+#         print(f"Error fetching investor profiles: {e}") 
+#         profiles = []  # Fallback in case of a network error
+
+#     # Pass profiles to the template
+#     return render(request, 'cadmin/investers_profile.html', {'profiles': profiles})
+
+
+
+
+# 1. List View (Read)
 def investor_profiles_view(request):
-    # Correct way to use requests.get for external API calls
-    url = "https://unix-aquatics.com/app/investorprofile/"
-    try:
-        response = requests.get(url)  # Make the GET request
-        if response.status_code == 200:
-            profiles = response.json()  # Parse JSON response
-        else:
-            profiles = []  # Fallback if API returns an error
-    except requests.RequestException as e:
-        print(f"Error fetching investor profiles: {e}") 
-        profiles = []  # Fallback in case of a network error
-
-    # Pass profiles to the template
+    profiles = InvestorProfile.objects.all()
     return render(request, 'cadmin/investers_profile.html', {'profiles': profiles})
 
 
-import requests
-from django.shortcuts import render
+def create_investor_profile(request):
+    if request.method == 'POST':
+        # Create user form (using built-in Django form for user creation)
+        user_form = UserCreationForm(request.POST)
+        profile_form = InvestorProfileForm(request.POST, request.FILES)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            email = profile_form.cleaned_data['email']
+
+            # Check if the email already exists in the InvestorProfile database
+            if InvestorProfile.objects.filter(email=email).exists():
+                profile_form.add_error('email', 'This email is already associated with an investor profile.')
+            else:
+                # Save User first
+                user = user_form.save()
+
+                # Save InvestorProfile with the user
+                profile = profile_form.save(commit=False)
+                profile.user = user  # Associate the new user with this profile
+                profile.save()
+
+                # Optionally log the user in after registration
+                login(request, user)
+
+                # Redirect to the list of investor profiles after successful creation
+                return redirect('cadmin:investor_profiles')
+
+    else:
+        user_form = UserCreationForm()
+        profile_form = InvestorProfileForm()
+
+    return render(request, 'cadmin/create_investor_profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
+
+
+# 3. Update View
+def update_investor_profile(request, pk):
+    profile = get_object_or_404(InvestorProfile, pk=pk)
+    if request.method == 'POST':
+        form = InvestorProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('cadmin:investor_profiles')
+    else:
+        form = InvestorProfileForm(instance=profile)
+    return render(request, 'cadmin/update_investor_profile.html', {'form': form, 'profile': profile})
+
+# 4. Delete View
+def delete_investor_profile(request, pk):
+    profile = get_object_or_404(InvestorProfile, pk=pk)
+    if request.method == 'POST':
+        profile.delete()
+        return redirect('cadmin:investor_profiles')
+    return render(request, 'cadmin/delete_investor_profile.html', {'profile': profile})
 
 def project_page_view(request):
     # Correct way to use requests.get for external API calls

@@ -6,6 +6,15 @@ from django.contrib.auth.models import User
 from .models import InvestorProfile,Images,Projectpage, TeamMember, video
 from django.contrib import admin
 from .models import Join
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.urls import reverse
+from django.conf import settings
+
 
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
@@ -17,8 +26,7 @@ admin.site.index_title = "Admin"  # default: "Site administration"
 
 
 admin.site.register(Join)
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+
 admin.site.register(video)
 admin.site.register(AboutUs)
 admin.site.register(ContactInfo)
@@ -29,13 +37,38 @@ admin.site.register(Notification)
 
 
 
+@admin.action(description='Reset selected user passwords')
+def reset_user_password(modeladmin, request, queryset):
+    # This action will send a reset password email to selected users
+    for user in queryset:
+        # Create a password reset link
+        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        reset_link = reverse('password_reset_confirm', kwargs={'uidb64': uidb64, 'token': token})
+
+        # Create the email message
+        reset_url = f"{settings.SITE_URL}{reset_link}"
+        subject = "Password Reset Request"
+        message = render_to_string('registration/password_reset_email.html', {
+            'user': user,
+            'reset_url': reset_url
+        })
+
+        # Send the reset password email
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff')
+    actions = [reset_user_password]  # Add the custom action here
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+
+
 @admin.register(NewsUpdate)
 class NewsUpdateAdmin(admin.ModelAdmin):
     list_display = ['title', 'date_published']
     search_fields = ['title', 'description']
-    class Media:
-        css = {'all': ('admin/custom.css',)  }
-        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
 
 
 class InvestorProfileInline(admin.StackedInline):
@@ -44,10 +77,7 @@ class InvestorProfileInline(admin.StackedInline):
     verbose_name_plural = 'Investor Profiles'
     extra = 1
     max_num = 1
-    class Media:
-        css = {'all': ('admin/custom.css',)  }
-        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
-
+ 
 
 class MyProjectsInline(admin.StackedInline):
     model = MyProjects
@@ -55,26 +85,16 @@ class MyProjectsInline(admin.StackedInline):
     verbose_name_plural = 'My Project'
     extra = 6
     max_num = 6
-    class Media:
-        css = {'all': ('admin/custom.css',)  }
-        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
-
 
 
 class CustomUserAdmin(UserAdmin):
     inlines = (InvestorProfileInline,)
-    class Media:
-        css = {'all': ('admin/custom.css',)  }
-        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
 
 
 class CustomProjectpageAdmin(Projectpage):
     inlines = (MyProjectsInline,)
 
-    class Media:
-        css = {'all': ('admin/custom.css',)  }
-        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
-
+    
 
 
 admin.site.register(Projectpage)
@@ -124,10 +144,7 @@ class InvestorProfileAdmin(admin.ModelAdmin):
             kwargs["queryset"] = User.objects.filter(is_staff=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    class Media:
-        css = {'all': ('admin/custom.css',)  }
-        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
-
+   
 
 class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
@@ -147,20 +164,13 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('username', 'first_name', 'last_name', 'email')
     ordering = ('username',)
     filter_horizontal = ('groups', 'user_permissions',)
-    class Media:
-        css = {'all': ('admin/custom.css',)  }
-        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
-
+  
 
 # Re-register UserAdmin
 class ProjectpageInline(admin.StackedInline):
     model = Projectpage
     fields = ['proname']  # List of fields from Projectpage to display
-    class Media:
-        css = {'all': ('admin/custom.css',)  }
-        js = ('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')  
-
-
+  
 
 admin.site.register(MyProjects)
 class MyProjectsAdmin(admin.ModelAdmin):
@@ -173,9 +183,4 @@ class MyProjectsAdmin(admin.ModelAdmin):
 
 
 
-
-
-    class Media:
-        css = {'all': ('admin/custom.css',)  }
-        js = {'all':('admin/custom.js','admi/jquery-3.4.1.min.js','admin/bootstrap.js')}  
 
