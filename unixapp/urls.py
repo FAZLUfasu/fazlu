@@ -9,6 +9,6 @@ app_name = 'unixapp'
 
 urlpatterns =([
     
-    path('home', views.flutter_app, name='flutter_app'), 
+    path('', views.flutter_app, name='flutter_app'), 
  
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
