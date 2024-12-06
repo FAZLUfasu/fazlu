@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'grappelli',
     'landpageapp',
     'cadmin',
+    'unixapp',
     'fasu.apps.FasuConfig',
     
     
@@ -86,6 +87,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'landpageapp/templates'),
+            os.path.join(BASE_DIR, 'unixapp/templates'),
             os.path.join(BASE_DIR, 'cadmin/templates'), 
             os.path.join(BASE_DIR, 'fasu/templates'), 
         ],
@@ -173,7 +175,9 @@ USE_TZ = True
 
 # # Ensure Django knows where to find static files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'landpageapp', 'static'),  # Add your static files here
+    os.path.join(BASE_DIR, 'landpageapp', 'static'),
+    os.path.join(BASE_DIR, 'unixapp','static'),
+       
 ]
 
 

@@ -9,6 +9,7 @@ urlpatterns = ([
     path('admin/', admin.site.urls), 
     path('cadmin/', include('cadmin.urls',namespace='cadmin')),
     path('app/',include('fasu.urls')), 
+    path('unixapp/',include('unixapp.urls')),
 ]+ static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
 +static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 )
