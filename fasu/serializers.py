@@ -87,7 +87,17 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeamMember
-        fields = [ 'name', 'role', 'photo', 'photo_url']
+        fields = [
+            'name', 
+            'role', 
+            'photo', 
+            'photo_url', 
+            'facebook_url', 
+            'twitter_url', 
+            'linkedin_url', 
+            'instagram_url', 
+            'youtube_url'
+        ]
 
     def get_photo_url(self, obj):
         # Construct the URL of the uploaded image
