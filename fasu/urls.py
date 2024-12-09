@@ -36,7 +36,7 @@ urlpatterns =([
     path('myprojects/username/<str:username>/', views. my_projects_view),
     path('forgot-password/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('register/', views.register, name='register'),
-    path('video-notifications/', views.get_video_notifications, name='video_notifications'),
+    path('video-notifications/', views.get_video, name='video_notifications'),
     path('create-join-request/', views.create_join_request, name='create_join_request'),
     path('user-details/', views.UserDetailView.as_view(), name='user-details'),
     path('reset_password/', auth_views.PasswordResetView.as_view(), name='password_reset'),
