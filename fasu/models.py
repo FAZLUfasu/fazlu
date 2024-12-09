@@ -3,8 +3,7 @@ from rest_framework.authtoken.models import Token
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
-
-
+from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -73,79 +72,126 @@ class InvestorProfile(models.Model):
 
 
 
-
-
-class Projectpage(models.Model):
-   
-    id = models.AutoField(primary_key=True) 
-    proname = models.CharField(unique=True,max_length=100,default='name')
+class BaseProject(models.Model):
     description = models.TextField(blank=True, null=True)
-    projectlogo = models.ImageField(upload_to='project_logos/', max_length=200,default='images/profilepicdefalt.png',blank=True, null=True)
-    prologoname = models.TextField(blank=True, null=True)
+    projectlogo = models.ImageField(upload_to='project_logos/', max_length=200, default='images/profilepicdefalt.png', blank=True, null=True)
+    projectlogoname = models.TextField(blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     date_of_establishment = models.DateField(blank=True, null=True)
-    location = models.CharField(max_length=100,blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
     number_of_ponds = models.PositiveIntegerField(blank=True, null=True)
-    water_capacity = models.FloatField(blank=True, null=True)  # Assuming in liters or cubic meters
-    annual_production_capacity = models.FloatField(blank=True, null=True)  # Assuming in tons or units
-    capital = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+    water_capacity = models.FloatField(blank=True, null=True)
+    annual_production_capacity = models.FloatField(blank=True, null=True)
+    capital = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     number_of_shares = models.PositiveIntegerField(blank=True, null=True)
-    price_per_share = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+    price_per_share = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+
+
+# class Projectpage(models.Model):
+   
+#     id = models.AutoField(primary_key=True) 
+#     proname = models.CharField(unique=True,max_length=100,default='name')
+#     description = models.TextField(blank=True, null=True)
+#     projectlogo = models.ImageField(upload_to='project_logos/', max_length=200,default='images/profilepicdefalt.png',blank=True, null=True)
+#     prologoname = models.TextField(blank=True, null=True)
+#     start_date = models.DateField(blank=True, null=True)
+#     date_of_establishment = models.DateField(blank=True, null=True)
+#     location = models.CharField(max_length=100,blank=True, null=True)
+#     number_of_ponds = models.PositiveIntegerField(blank=True, null=True)
+#     water_capacity = models.FloatField(blank=True, null=True)  # Assuming in liters or cubic meters
+#     annual_production_capacity = models.FloatField(blank=True, null=True)  # Assuming in tons or units
+#     capital = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+#     number_of_shares = models.PositiveIntegerField(blank=True, null=True)
+#     price_per_share = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
 
     
+#     def __str__(self):
+#         return self.proname
+    
+class Projectpage(BaseProject):
+    id = models.AutoField(primary_key=True)
+    proname = models.CharField(unique=True, max_length=100, default='name')
+
     def __str__(self):
         return self.proname
-    
 
 
 
 
-class MyProjects(models.Model):
+# class MyProjects(models.Model):
 
 
-    id= models.AutoField(primary_key=True) 
-    project = models.CharField(max_length=50, blank=True, null=True)
-    proname = models.ForeignKey(Projectpage, on_delete=models.CASCADE, related_name='projects', default=None)    
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
-    projectlogo = models.ImageField(upload_to='projectlogo_attachments/',blank=True)
-    projectlogoname =models.CharField(max_length=50, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    start_date = models.DateField(blank=True, null=True,default=None)
-    end_date = models.DateField(blank=True, null=True,default=None)
+#     id= models.AutoField(primary_key=True) 
+#     project = models.CharField(max_length=50, blank=True, null=True)
+#     proname = models.ForeignKey(Projectpage, on_delete=models.CASCADE, related_name='projects', default=None)    
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
+#     projectlogo = models.ImageField(upload_to='projectlogo_attachments/',blank=True)
+#     projectlogoname =models.CharField(max_length=50, blank=True, null=True)
+#     description = models.TextField(blank=True, null=True)
+#     start_date = models.DateField(blank=True, null=True,default=None)
+#     end_date = models.DateField(blank=True, null=True,default=None)
 
    
-    date_of_establishment = models.DateField()
-    location = models.CharField(max_length=100,default=None)
-    number_of_ponds = models.PositiveIntegerField(blank=True, null=True)
-    water_capacity = models.FloatField(blank=True, null=True)  # Assuming in liters or cubic meters
-    annual_production_capacity = models.FloatField(blank=True, null=True)  # Assuming in tons or units
-    capital = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
-    number_of_shares = models.PositiveIntegerField(blank=True, null=True)
-    price_per_share = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
-    investment_amount = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+#     date_of_establishment = models.DateField()
+#     location = models.CharField(max_length=100,default=None)
+#     number_of_ponds = models.PositiveIntegerField(blank=True, null=True)
+#     water_capacity = models.FloatField(blank=True, null=True)  # Assuming in liters or cubic meters
+#     annual_production_capacity = models.FloatField(blank=True, null=True)  # Assuming in tons or units
+#     capital = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+#     number_of_shares = models.PositiveIntegerField(blank=True, null=True)
+#     price_per_share = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+#     investment_amount = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+#     investment_date = models.DateField(blank=True, null=True)
+#     receipt = models.FileField(upload_to='investment_receipts/', blank=True, null=True)
+   
+#     installments = models.PositiveIntegerField(default=1,blank=True, null=True)
+#     total_investment = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+#     total_number_of_shares = models.PositiveIntegerField(blank=True, null=True)
+#     investment_price_per_share = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  # Assuming in currency
+#     shares_holding = models.PositiveIntegerField(default=0, blank=True, null=True)
+#     share_certificate = models.FileField(upload_to='share_certificates/', blank=True, null=True)
+
+
+#     dividend_date = models.DateField(blank=True, null=True)
+#     dividend_amount = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+#     transfer_proof = models.FileField(upload_to='dividend_transfer_proof/', blank=True, null=True)
+#     total_dividend = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+#     partnership_agreement = models.FileField(upload_to='partnership_agreements/', blank=True, null=True)
+#     other_agreements = models.FileField(upload_to='other_agreements/', blank=True, null=True)
+
+   
+#     def __str__(self):
+#       return f'{self.user.username} - {self.proname.proname}'
+
+
+class MyProjects(BaseProject):
+    id = models.AutoField(primary_key=True)
+    project = models.CharField(max_length=50, blank=True, null=True)
+    proname = models.ForeignKey(Projectpage, on_delete=models.CASCADE, related_name='projects', default=None)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
+    end_date = models.DateField(blank=True, null=True, default=None)
+    investment_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     investment_date = models.DateField(blank=True, null=True)
     receipt = models.FileField(upload_to='investment_receipts/', blank=True, null=True)
-   
-    installments = models.PositiveIntegerField(default=1,blank=True, null=True)
-    total_investment = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+    installments = models.PositiveIntegerField(default=1, blank=True, null=True)
+    total_investment = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     total_number_of_shares = models.PositiveIntegerField(blank=True, null=True)
-    investment_price_per_share = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  # Assuming in currency
+    investment_price_per_share = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     shares_holding = models.PositiveIntegerField(default=0, blank=True, null=True)
     share_certificate = models.FileField(upload_to='share_certificates/', blank=True, null=True)
-
-
     dividend_date = models.DateField(blank=True, null=True)
-    dividend_amount = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+    dividend_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     transfer_proof = models.FileField(upload_to='dividend_transfer_proof/', blank=True, null=True)
-    total_dividend = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)  # Assuming in currency
+    total_dividend = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     partnership_agreement = models.FileField(upload_to='partnership_agreements/', blank=True, null=True)
     other_agreements = models.FileField(upload_to='other_agreements/', blank=True, null=True)
 
-   
     def __str__(self):
-      return f'{self.user.username} - {self.proname.proname}'
-
-
+        return f'{self.user.username} - {self.proname.proname}'
 
 
 class video(models.Model):
@@ -259,33 +305,19 @@ class Whatsappchat(models.Model):
         return self.phone_number
 
 
-# class Notification(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     message = models.CharField(max_length=255)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     is_read = models.BooleanField(default=False)
 
-#     def __str__(self):
-#         return self.message
+class VideoNotification(models.Model):
+    video = models.ForeignKey(video, on_delete=models.CASCADE, related_name="notifications")
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-
-
-
-
-# # MyProjects Model
-# class MyProjects(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='projects')
-#     projectlogoname = models.CharField(max_length=255)
-#     projectlogo = models.ImageField(upload_to='project_logos/')
-
-#     def __str__(self):
-#         return self.projectlogoname
-
-
-# # Projectpage Model
-# class Projectpage(models.Model):
-#     my_project = models.ForeignKey(MyProjects, on_delete=models.CASCADE, related_name='project_pages')
-#     proname = models.CharField(max_length=255)
-
-#     def __str__(self):
-#         return self.proname
+    def __str__(self):
+        return f"Notification for {self.video.title}"
+    
+    @receiver(post_save, sender=video)
+    def create_video_notification(sender, instance, created, **kwargs):
+         if created:
+            VideoNotification.objects.create(
+            video=instance,
+            message=f"A new video '{instance.title}' has been uploaded."
+            )

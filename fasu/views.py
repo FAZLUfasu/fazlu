@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import viewsets
 from django.shortcuts import render, redirect
-from .serializers import UserRegistrationSerializer
+from .serializers import UserSerializer
 
 from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer, MyImageSerializer, MyProjectsSerializer, NewsUpdateSerializer, NotificationSerializer,ProjectpageSerializer, SummarySerializer, UserSerializer, WhatsappchatSerializer
 from .serializers import  ContactInfoSerializer, InvestorsProfileSerializer
@@ -147,6 +147,22 @@ def get_notifications(request):
     'notifications': list(notifications.values())
     }
     return JsonResponse(data)
+from django.http import JsonResponse
+from .models import VideoNotification
+
+def get_video_notifications(request):
+    notifications = VideoNotification.objects.order_by('-created_at')[:10]
+    data = [
+        {
+            "id": notification.id,
+            "video_title": notification.video.title,
+            "message": notification.message,
+            "created_at": notification.created_at,
+        }
+        for notification in notifications
+    ]
+    return JsonResponse({"notifications": data})
+
 
 def my_projects_view(request, username):
     try:
@@ -394,14 +410,6 @@ def team(request):
     return render(request, 'team.html') 
 
 
-# def subscribe(request):
-#     # You can handle the subscription logic here
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         # You could add logic to save the email or send a confirmation email
-#         print(f"Email received: {email}")  # Just an example; replace with actual logic
-#     return render(request, 'subscribe.html')  # Make sure you have a subscribe.html template
-
 
 
 
@@ -422,10 +430,14 @@ def team_page(request):
 
 
 @api_view(['POST'])
-def register_user(request):
+def register(request):
     if request.method == 'POST':
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+        
+        if username and email and password:
+            user = User.objects.create_user(username=username, email=email, password=password)
+            return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)

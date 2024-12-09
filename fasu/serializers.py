@@ -1,8 +1,11 @@
 from tkinter import Image
+
+from requests import Response
 from .models import  AboutUs, ContactInfo, Images, Join, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, Whatsappchat, video,Summary
 from rest_framework import serializers
 from .models import HomePageData, Login,InvestorProfile
-from rest_framework import serializers
+from rest_framework import serializers,viewsets
+from rest_framework.decorators import action
 from django.contrib.auth.models import User
 
 class WhatsappchatSerializer(serializers.ModelSerializer):
@@ -120,22 +123,30 @@ class MyImageSerializer(serializers.ModelSerializer):
         from django.contrib.auth.models import User
 
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    password2 = serializers.CharField(write_only=True)
 
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password2')
-
-    def validate(self, data):
-        if data['password'] != data['password2']:
-            raise serializers.ValidationError("Passwords do not match.")
-        return data
+        fields = ['username', 'email', 'password', 'first_name', 'last_name']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
-            password=validated_data['password']
+            password=validated_data['password'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name']
         )
         return user
+
+class UserRegisterView(viewsets.ViewSet):
+    @action(detail=False, methods=['post'])
+    def register(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "User created successfully."}, status=201)
+        return Response(serializer.errors, status=400)
+

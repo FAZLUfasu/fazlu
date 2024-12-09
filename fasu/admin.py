@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import AboutUs, ContactInfo, InvestorProfile, MyProjects, NewsUpdate, Notification,Summary
+from .models import AboutUs, ContactInfo, InvestorProfile, MyProjects, NewsUpdate, Notification,Summary, VideoNotification
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import InvestorProfile,Images,Projectpage, TeamMember, video
@@ -70,6 +70,9 @@ class NewsUpdateAdmin(admin.ModelAdmin):
     list_display = ['title', 'date_published']
     search_fields = ['title', 'description']
 
+@admin.register(VideoNotification)
+class VideoNotificationAdmin(admin.ModelAdmin):
+    list_display = ('video', 'message', 'created_at')
 
 class InvestorProfileInline(admin.StackedInline):
     model = InvestorProfile
