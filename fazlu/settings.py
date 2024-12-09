@@ -211,7 +211,6 @@ CORS_ALLOW_METHODS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:49301",
     "http://unix-aquatics.com",
     "https://unix-aquatics.com",
 ]
