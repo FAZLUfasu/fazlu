@@ -18,7 +18,7 @@ urlpatterns =([
     path('news/', views.NewsUpdateListCreateView.as_view(), name='news-list-create'),
     path('summary/', views.SummaryAPIView.as_view(), name='summary'),
     path('gallery/', views.gallery_data, name='gallery_data'),
-    path('videos/',views.VideoListCreateView.as_view(), name='video-list-create'),
+    path('videos/',views.VideoListCreateView.as_view(), name='video-detail'),
     path('images/',views. ImageUploadView.as_view(),name='images'),
     path('up/', views.ImageListView.as_view(), name='image-upload'),
     path('team_photos/', include(router.urls)),
