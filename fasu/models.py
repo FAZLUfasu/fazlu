@@ -312,12 +312,12 @@ class VideoNotification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Notification for {self.video.title}"
+        return f"Notification for {self.video}"
     
     @receiver(post_save, sender=video)
     def create_video_notification(sender, instance, created, **kwargs):
          if created:
             VideoNotification.objects.create(
             video=instance,
-            message=f"A new video '{instance.title}' has been uploaded."
+            message=f"A new video has been uploaded."
             )
