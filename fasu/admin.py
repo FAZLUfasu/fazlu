@@ -34,6 +34,7 @@ admin.site.register(TeamMember)
 admin.site.register(Summary)
 admin.site.register(Images)
 admin.site.register(Notification)
+admin.site.register(VideoNotification)
 
 
 
@@ -70,9 +71,7 @@ class NewsUpdateAdmin(admin.ModelAdmin):
     list_display = ['title', 'date_published']
     search_fields = ['title', 'description']
 
-@admin.register(VideoNotification)
-class VideoNotificationAdmin(admin.ModelAdmin):
-    list_display = ('video', 'message', 'created_at')
+
 
 class InvestorProfileInline(admin.StackedInline):
     model = InvestorProfile

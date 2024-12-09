@@ -221,24 +221,29 @@ class Notification(models.Model):
     message = models.CharField(max_length=255)
     last_uploaded_image_id = models.IntegerField(default=0)
 
-
-
-
 @receiver(post_save, sender=Images)
 def create_notification(sender, instance, **kwargs):
-    # Get the last uploaded image ID
     last_uploaded_image_id = instance.id
-    
-    # Get the last notification record
     notification = Notification.objects.first()
-    
-    # Update or create a new notification record
     if notification:
         notification.last_uploaded_image_id = last_uploaded_image_id
         notification.save()
     else:
         Notification.objects.create(message='New image uploaded', last_uploaded_image_id=last_uploaded_image_id)
         
+class VideoNotification(models.Model):
+    message = models.CharField(max_length=255)
+    last_uploaded_video_id = models.IntegerField(default=0)
+    
+@receiver(post_save, sender=video)
+def create_video_notification(sender, instance, **kwargs):
+    last_uploaded_video_id = instance.id
+    videonotification = Notification.objects.first()
+    if videonotification:
+        videonotification.last_uploaded_video_id = last_uploaded_video_id
+        videonotification.save()
+    else:
+        Notification.objects.create(message='New video uploaded', last_uploaded_video_id=last_uploaded_video_id)
 
 
 
@@ -306,18 +311,4 @@ class Whatsappchat(models.Model):
 
 
 
-class VideoNotification(models.Model):
-    video = models.ForeignKey(video, on_delete=models.CASCADE, related_name="notifications")
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Notification for {self.video}"
-    
-    @receiver(post_save, sender=video)
-    def create_video_notification(sender, instance, created, **kwargs):
-         if created:
-            VideoNotification.objects.create(
-            video=instance,
-            message=f"A new video has been uploaded."
-            )

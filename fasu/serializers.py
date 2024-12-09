@@ -1,7 +1,7 @@
 from tkinter import Image
 
 from requests import Response
-from .models import  AboutUs, ContactInfo, Images, Join, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, Whatsappchat, video,Summary
+from .models import  AboutUs, ContactInfo, Images, Join, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, VideoNotification, Whatsappchat, video,Summary
 from rest_framework import serializers
 from .models import HomePageData, Login,InvestorProfile
 from rest_framework import serializers,viewsets
@@ -53,6 +53,12 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = '__all__'
         
+class VideoNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoNotification
+        fields = '__all__'
+        
+
 class MyProjectsSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')

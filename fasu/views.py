@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import viewsets
 from django.shortcuts import render, redirect
-from .serializers import UserSerializer
+from .serializers import UserSerializer, VideoNotificationSerializer
 
 from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer, MyImageSerializer, MyProjectsSerializer, NewsUpdateSerializer, NotificationSerializer,ProjectpageSerializer, SummarySerializer, UserSerializer, WhatsappchatSerializer
 from .serializers import  ContactInfoSerializer, InvestorsProfileSerializer
@@ -148,11 +148,18 @@ def get_notifications(request):
     }
     return JsonResponse(data)
 
-@api_view(['GET'])
-def get_video(request, video_id):
-    video = video.objects.get(id=video_id)
-    serializer = VideoSerializer(video)
-    return Response(serializer.data)
+class VideoNotificationListView(APIView):
+    def get(self, request, format=None):
+        videonotifications = Notification.objects.all()
+        serializer = VideoNotificationSerializer(videonotifications, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+def get_video(request):
+    videonotifications = video.objects.all()
+    data = {
+    'videonotifications': list(videonotifications.values())
+    }
+    return JsonResponse(data)
 
 
 def my_projects_view(request, username):
@@ -332,6 +339,12 @@ class NotificationListView(APIView):
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data)
 
+class VideoNotificationListView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        videonotifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
+        serializer = VideoNotificationSerializer(videonotifications, many=True)
+        return Response(serializer.data)
 
 
 class ProjectpageListAPIView(APIView):
