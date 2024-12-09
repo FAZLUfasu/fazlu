@@ -155,7 +155,7 @@ def get_video_notifications(request):
     data = [
         {
             "id": notification.id,
-            "video_title": notification.video.title,
+            "video": notification.video,
             "message": notification.message,
             "created_at": notification.created_at,
         }
