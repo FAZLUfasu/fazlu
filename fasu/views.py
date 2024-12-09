@@ -274,10 +274,11 @@ class LoginView(APIView):
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
            
 
+
 class VideoListCreateView(generics.ListCreateAPIView):
     queryset = video.objects.all()
     serializer_class = VideoSerializer
-
+    
 class HomePageDataAPIView(APIView):
     def get(self, request):
         try:
