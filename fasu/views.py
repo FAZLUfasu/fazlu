@@ -115,7 +115,25 @@ class NewsUpdateListCreateView(generics.ListCreateAPIView):
 
 
 
+class VideouploadView(APIView):
+     parser_classes = (MultiPartParser, FormParser)
 
+     def post(self, request, *args, **kwargs):
+        serializer = VideoSerializer(data=request.data)
+        if serializer.is_valid():
+            video_instance = serializer.save()
+            # Create or update the notification
+            videonotification, created = Notification.objects.get_or_create(
+                defaults={'message': 'New video uploaded!'},
+                last_uploaded_video_id=video_instance.id
+            )
+            if not created:
+                videonotification.last_uploaded_image_id = video_instance.id
+                videonotification.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
@@ -274,7 +292,7 @@ class LoginView(APIView):
            
 
 
-class VideoListCreateView(generics.ListAPIView):
+class VideoListView(generics.ListAPIView):
     queryset = video.objects.all()
     serializer_class = VideoSerializer
 
