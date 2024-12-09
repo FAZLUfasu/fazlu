@@ -110,9 +110,7 @@ class NewsUpdateListCreateView(generics.ListCreateAPIView):
     queryset = NewsUpdate.objects.all().order_by('-date_published')
     serializer_class = NewsUpdateSerializer
 
-
-
-
+    
 
 
 class VideouploadView(APIView):

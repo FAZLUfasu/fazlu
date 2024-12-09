@@ -195,7 +195,8 @@ class MyProjects(BaseProject):
 
 
 class video(models.Model):
-    video = models.FileField(upload_to='videos/', blank=True)
+    message = models.CharField(max_length=255, default='New video uploaded',blank=True, null=True)
+    video = models.FileField(upload_to='videos/')
     videoname = models.CharField(max_length=50, blank=True, null=True)
     date_of_upload = models.DateField(max_length=50, blank=True, null=True)
     def __str__(self):
