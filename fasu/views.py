@@ -113,9 +113,8 @@ class NewsUpdateListCreateView(generics.ListCreateAPIView):
 
 
 
-class ImageListView(generics.ListAPIView):
-    queryset = Images.objects.all()
-    serializer_class = ImagesSerializer
+
+
 
 class ImageUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -275,10 +274,14 @@ class LoginView(APIView):
            
 
 
-class VideoListCreateView(generics.ListCreateAPIView):
+class VideoListCreateView(generics.ListAPIView):
     queryset = video.objects.all()
     serializer_class = VideoSerializer
-    
+
+class ImageListView(generics.ListAPIView):
+    queryset = Images.objects.all()
+    serializer_class = ImagesSerializer
+
 class HomePageDataAPIView(APIView):
     def get(self, request):
         try:
