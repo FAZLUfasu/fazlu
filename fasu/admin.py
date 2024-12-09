@@ -168,7 +168,7 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ('groups', 'user_permissions',)
   
 
-# Re-register UserAdmin
+
 class ProjectpageInline(admin.StackedInline):
     model = Projectpage
     fields = ['proname']  # List of fields from Projectpage to display

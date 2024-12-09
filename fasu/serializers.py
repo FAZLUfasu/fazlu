@@ -159,4 +159,8 @@ class UserRegisterView(viewsets.ViewSet):
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = video
-        fields = ['id', 'url','date_of_upload']  # Adjust based on your model
+        fields = '__all__'  
+class ImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Images
+        fields = '__all__'
