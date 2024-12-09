@@ -147,21 +147,12 @@ def get_notifications(request):
     'notifications': list(notifications.values())
     }
     return JsonResponse(data)
-from django.http import JsonResponse
-from .models import VideoNotification
 
-def get_video_notifications(request):
-    notifications = VideoNotification.objects.order_by('-created_at')[:10]
-    data = [
-        {
-            "id": notification.id,
-            "video": notification.video,
-            "message": notification.message,
-            "created_at": notification.created_at,
-        }
-        for notification in notifications
-    ]
-    return JsonResponse({"notifications": data})
+@api_view(['GET'])
+def get_video(request, video_id):
+    video = video.objects.get(id=video_id)
+    serializer = VideoSerializer(video)
+    return Response(serializer.data)
 
 
 def my_projects_view(request, username):

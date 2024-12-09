@@ -150,3 +150,7 @@ class UserRegisterView(viewsets.ViewSet):
             return Response({"message": "User created successfully."}, status=201)
         return Response(serializer.errors, status=400)
 
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = video
+        fields = ['id', 'url', 'description']  # Adjust based on your model
