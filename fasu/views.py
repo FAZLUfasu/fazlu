@@ -471,3 +471,22 @@ class CustomPasswordResetView(PasswordResetView):
         context = self.get_context_data()
         print("Context:", context)  # Debug
         return super().form_valid(form)
+    
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.template.loader import render_to_string
+
+# Assuming 'user' is the user object
+uid = urlsafe_base64_encode(force_bytes(User.pk))
+token = default_token_generator.make_token(User)
+
+context = {
+    'protocol': 'https',  # Use 'http' if your site does not use HTTPS
+    'domain': 'unix-aquatics.com',  # Replace with your actual domain
+    'uid': uid,
+    'token': token,
+}
+
+# Render the email body
+email_body = render_to_string('registration/password_reset_email.html', context)
