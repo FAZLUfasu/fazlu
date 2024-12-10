@@ -132,7 +132,7 @@ DATABASES = {
     }
 }
 LOGIN_URL = 'login' 
-
+FRONTEND_URL = "https://unix-aquatics.com"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
