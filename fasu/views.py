@@ -468,109 +468,62 @@ def register(request):
             return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+import json
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail, BadHeaderError
-
-try:
-    user = User.objects.get(username="cheri")
-    uid = urlsafe_base64_encode(user.pk)
-    token = default_token_generator.make_token(user)
-
-    subject = "Password reset request"
-    message = render_to_string('registration/password_reset_email.html', {
-        'user': user,
-        'uid': uid,
-        'token': token,
-        'protocol': 'https',
-        'domain': 'unix-aquatics.com',
-    })
-
-    send_mail(subject, message, 'no-reply@example.com', [user.email])
-except ObjectDoesNotExist:
-    # Handle the case where the user does not exist
-    print("User not found.")
-except BadHeaderError:
-    # Handle issues with sending the email
-    print("Invalid header found.")
-except Exception as e:
-    # General exception handling
-    print(f"Error sending email: {str(e)}")
-
-
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.contrib.auth.models import User
-from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.conf import settings
-
-# class PasswordResetView(APIView):
-#     def post(self, request):
-#         email = request.data.get('email')
-#         try:
-#             user = User.objects.get(email=email)
-#         except User.DoesNotExist:
-#             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
-
-#         # Generate password reset token
-#         uid = urlsafe_base64_encode(str(user.pk).encode())
-#         token = default_token_generator.make_token(user)
-
-#         # Build reset URL
-#         reset_url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
-
-#         # Send email
-#         subject = "Reset Your Password"
-#         message = render_to_string('password_reset_email.html', {'reset_url': reset_url})
-#         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
-
-#         return Response({"message": "Password reset email sent."}, status=status.HTTP_200_OK)
-    
-from django.contrib.auth.forms import PasswordResetForm
-from django.contrib.auth.models import User
-from django.core.mail import send_mail
-from django.shortcuts import render, redirect
+from django.contrib.auth.tokens import default_token_generator
+from django.shortcuts import render
 from django.http import JsonResponse
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
+from django.conf import settings
+from django.contrib.auth.forms import SetPasswordForm
+from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def reset_password(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        email = data.get('email')
-        if not email:
-            return JsonResponse({'error': 'Email is required'}, status=400)
+        try:
+            data = json.loads(request.body)
+            email = data.get('email')
 
-        user = User.objects.filter(email=email).first()
-        if not user:
-            return JsonResponse({'error': 'User with this email does not exist'}, status=404)
+            if not email:
+                return JsonResponse({'error': 'Email is required'}, status=400)
 
-        # Simulate sending the password reset email
-        return JsonResponse({'message': 'Password reset email sent!'}, status=200)
+            user = User.objects.filter(email=email).first()
+
+            if not user:
+                return JsonResponse({'error': 'User with this email does not exist'}, status=404)
+
+            # Generate the reset token and user ID
+            uid = urlsafe_base64_encode(str(user.pk).encode())
+            token = default_token_generator.make_token(user)
+
+            # Generate reset URL (e.g., frontend URL)
+            reset_url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
+
+            # Build the email content
+            subject = "Reset Your Password"
+            message = render_to_string('password_reset_email.html', {'reset_url': reset_url})
+
+            # Send email
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+
+            return JsonResponse({'message': 'Password reset email sent!'}, status=200)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-# Reset password confirmation view
+
 @csrf_exempt
 def reset_password_confirm(request, uidb64, token):
-    from django.contrib.auth.tokens import default_token_generator
-    from django.utils.http import urlsafe_base64_decode
-    from django.contrib.auth.models import User
-    from django.contrib.auth.forms import SetPasswordForm
-
     try:
+        # Decode the UID from the URL
         uid = urlsafe_base64_decode(uidb64).decode()
         user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
@@ -581,9 +534,12 @@ def reset_password_confirm(request, uidb64, token):
             form = SetPasswordForm(user, request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('password_reset_complete')
+                return JsonResponse({'message': 'Password has been reset successfully.'}, status=200)
+            else:
+                return JsonResponse({'error': 'Invalid form data.'}, status=400)
         else:
             form = SetPasswordForm(user)
         return render(request, 'registration/password_reset_confirm.html', {'form': form})
+
     else:
         return JsonResponse({'error': 'Invalid reset token'}, status=400)
