@@ -43,7 +43,7 @@ urlpatterns = ([
     path('create-join-request/', views.create_join_request, name='create_join_request'),
     path('user-details/', views.UserDetailView.as_view(), name='user-details'),
 
-
+    path('reset-password-confirm/<uidb64>/<token>/',views.reset_password_confirm, name='password_reset_confirm'),
     path('reset-password/', views.PasswordResetView.as_view(), name='api_reset_password'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -534,40 +534,16 @@ from django.conf import settings
 
 #         return Response({"message": "Password reset email sent."}, status=status.HTTP_200_OK)
     
-
-from django.contrib.auth.models import User
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
-
-@csrf_exempt
-def reset_password(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            email = data.get('email')
-
-            if not email:
-                return JsonResponse({'error': 'Email is required'}, status=400)
-
-            user = User.objects.filter(email=email).first()
-            if not user:
-                return JsonResponse({'error': 'User with this email does not exist'}, status=404)
-
-            # Add your password reset logic here
-            return JsonResponse({'message': 'Password reset email sent!'}, status=200)
-
-        except AttributeError as e:
-            return JsonResponse({'error': str(e)}, status=500)
-
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
-
-
 from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
 
+# Password reset form view
 def reset_password(request):
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
@@ -575,18 +551,46 @@ def reset_password(request):
             email = form.cleaned_data['email']
             users = User.objects.filter(email=email)
             if users.exists():
-                # Send email with reset link
+                user = users.first()
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                reset_url = f"https://unix-aquatics.com/app/reset-password-confirm/{uid}/{token}/"
+
+                # Send email
                 send_mail(
                     'Password Reset Request',
-                    'Please click the link to reset your password: <link>',
+                    f'Please click the link to reset your password: {reset_url}',
                     'unixaquaticsapp@gmail.com',
                     [email],
                 )
                 return redirect('password_reset_done')
+            else:
+                return JsonResponse({'error': 'User with this email does not exist'}, status=404)
     else:
         form = PasswordResetForm()
-    return render(request, 'password_reset_form.html', {'form': form})
+    return render(request, 'registration/password_reset_form.html', {'form': form})
 
-def reset_password_confirm(request, token):
-    # Validate the token and let the user reset their password
-    return render(request, 'reset_password_confirm.html')
+# Reset password confirmation view
+def reset_password_confirm(request, uidb64, token):
+    from django.contrib.auth.tokens import default_token_generator
+    from django.utils.http import urlsafe_base64_decode
+    from django.contrib.auth.models import User
+    from django.contrib.auth.forms import SetPasswordForm
+
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            form = SetPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('password_reset_complete')
+        else:
+            form = SetPasswordForm(user)
+        return render(request, 'registration/password_reset_confirm.html', {'form': form})
+    else:
+        return JsonResponse({'error': 'Invalid reset token'}, status=400)
