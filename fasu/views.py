@@ -13,7 +13,7 @@ from rest_framework import generics
 from rest_framework import viewsets
 from django.shortcuts import render, redirect
 from .serializers import UserSerializer, VideoNotificationSerializer
-
+from django.contrib.auth.views import PasswordResetView
 from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer, MyImageSerializer, MyProjectsSerializer, NewsUpdateSerializer, NotificationSerializer,ProjectpageSerializer, SummarySerializer, UserSerializer, WhatsappchatSerializer
 from .serializers import  ContactInfoSerializer, InvestorsProfileSerializer
 from .serializers import HomePageDataSerializer
@@ -465,3 +465,9 @@ def register(request):
             return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
         else:
             return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+class CustomPasswordResetView(PasswordResetView):
+    def form_valid(self, form):
+        context = self.get_context_data()
+        print("Context:", context)  # Debug
+        return super().form_valid(form)
