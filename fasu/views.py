@@ -1,4 +1,5 @@
 
+import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import authenticate
@@ -542,35 +543,24 @@ from django.http import JsonResponse
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
-
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def reset_password(request):
     if request.method == 'POST':
-        form = PasswordResetForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            users = User.objects.filter(email=email)
-            if users.exists():
-                user = users.first()
-                token = default_token_generator.make_token(user)
-                uid = urlsafe_base64_encode(force_bytes(user.pk))
-                reset_url = f"https://unix-aquatics.com/app/reset-password-confirm/{uid}/{token}/"
+        data = json.loads(request.body)
+        email = data.get('email')
+        if not email:
+            return JsonResponse({'error': 'Email is required'}, status=400)
 
-                # Send email
-                send_mail(
-                    'Password Reset Request',
-                    f'Please click the link to reset your password: {reset_url}',
-                    'unixaquaticsapp@gmail.com',
-                    [email],
-                )
-                return redirect('password_reset_done')
-            else:
-                return JsonResponse({'error': 'User with this email does not exist'}, status=404)
-    else:
-        form = PasswordResetForm()
-    return render(request, 'registration/password_reset_form.html', {'form': form})
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return JsonResponse({'error': 'User with this email does not exist'}, status=404)
+
+        # Simulate sending the password reset email
+        return JsonResponse({'message': 'Password reset email sent!'}, status=200)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 # Reset password confirmation view
 def reset_password_confirm(request, uidb64, token):
