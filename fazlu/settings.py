@@ -131,6 +131,17 @@ DATABASES = {
     }
 }
 
+# settings.py
+
+# Email settings for sending the password reset email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'unixaquaticsapp@gmail.com'  # Replace with your email
+EMAIL_HOST_PASSWORD = 'Kl10at10'  # Replace with your email password
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Used in password reset emails
 
 
 # Password validation
