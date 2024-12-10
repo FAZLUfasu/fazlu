@@ -131,7 +131,7 @@ DATABASES = {
         },
     }
 }
-LOGIN_URL = 'https://unix-aquatics.com/unixapp/'
+LOGIN_URL = 'login' 
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
