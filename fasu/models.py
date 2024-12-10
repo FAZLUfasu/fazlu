@@ -72,23 +72,6 @@ class InvestorProfile(models.Model):
 
 
 
-class BaseProject(models.Model):
-    description = models.TextField(blank=True, null=True)
-    projectlogo = models.ImageField(upload_to='project_logos/', max_length=200, default='images/profilepicdefalt.png', blank=True, null=True)
-    projectlogoname = models.TextField(blank=True, null=True)
-    start_date = models.DateField(blank=True, null=True)
-    date_of_establishment = models.DateField(blank=True, null=True)
-    location = models.CharField(max_length=100, blank=True, null=True)
-    number_of_ponds = models.PositiveIntegerField(blank=True, null=True)
-    water_capacity = models.FloatField(blank=True, null=True)
-    annual_production_capacity = models.FloatField(blank=True, null=True)
-    capital = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    number_of_shares = models.PositiveIntegerField(blank=True, null=True)
-    price_per_share = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-
-    class Meta:
-        abstract = True
-
 
 
 # class Projectpage(models.Model):
@@ -112,14 +95,6 @@ class BaseProject(models.Model):
 #     def __str__(self):
 #         return self.proname
     
-class Projectpage(BaseProject):
-    id = models.AutoField(primary_key=True)
-    proname = models.CharField(unique=True, max_length=100, default='name')
-
-    def __str__(self):
-        return self.proname
-
-
 
 
 # class MyProjects(models.Model):
@@ -168,11 +143,38 @@ class Projectpage(BaseProject):
 #       return f'{self.user.username} - {self.proname.proname}'
 
 
+class BaseProject(models.Model):
+    description = models.TextField(blank=True, null=True)
+    projectlogo = models.ImageField(upload_to='project_logos/', max_length=200, default='images/profilepicdefalt.png', blank=True, null=True)
+    projectlogoname = models.TextField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    date_of_establishment = models.DateField(blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
+    number_of_ponds = models.PositiveIntegerField(blank=True, null=True)
+    water_capacity = models.FloatField(blank=True, null=True)
+    annual_production_capacity = models.FloatField(blank=True, null=True)
+    capital = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    number_of_shares = models.PositiveIntegerField(blank=True, null=True)
+    price_per_share = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class Projectpage(BaseProject):
+    id = models.AutoField(primary_key=True)
+    proname = models.CharField(unique=True, max_length=100, default='name')
+
+    def __str__(self):
+        return self.proname
+
+
+
 class MyProjects(BaseProject):
     id = models.AutoField(primary_key=True)
     project = models.CharField(max_length=50, blank=True, null=True)
     proname = models.ForeignKey(Projectpage, on_delete=models.CASCADE, related_name='projects', default=None)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)  # Change to ForeignKey
     end_date = models.DateField(blank=True, null=True, default=None)
     investment_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     investment_date = models.DateField(blank=True, null=True)
@@ -192,6 +194,7 @@ class MyProjects(BaseProject):
 
     def __str__(self):
         return f'{self.user.username} - {self.proname.proname}'
+
 
 
 class video(models.Model):
