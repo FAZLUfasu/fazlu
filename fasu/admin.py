@@ -38,29 +38,29 @@ admin.site.register(VideoNotification)
 
 
 
-@admin.action(description='Reset selected user passwords')
-def reset_user_password(modeladmin, request, queryset):
-    # This action will send a reset password email to selected users
-    for user in queryset:
-        # Create a password reset link
-        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
-        reset_link = reverse('password_reset_confirm', kwargs={'uidb64': uidb64, 'token': token})
+# @admin.action(description='Reset selected user passwords')
+# def reset_user_password(modeladmin, request, queryset):
+#     # This action will send a reset password email to selected users
+#     for user in queryset:
+#         # Create a password reset link
+#         uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+#         token = default_token_generator.make_token(user)
+#         reset_link = reverse('password_reset_confirm', kwargs={'uidb64': uidb64, 'token': token})
 
-        # Create the email message
-        reset_url = f"{settings.SITE_URL}{reset_link}"
-        subject = "Password Reset Request"
-        message = render_to_string('registration/password_reset_email.html', {
-            'user': user,
-            'reset_url': reset_url
-        })
+#         # Create the email message
+#         reset_url = f"{settings.SITE_URL}{reset_link}"
+#         subject = "Password Reset Request"
+#         message = render_to_string('registration/password_reset_email.html', {
+#             'user': user,
+#             'reset_url': reset_url
+#         })
 
-        # Send the reset password email
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+#         # Send the reset password email
+#         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
 
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff')
-    actions = [reset_user_password]  # Add the custom action here
+# class UserAdmin(admin.ModelAdmin):
+#     list_display = ('username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff')
+#     actions = [reset_user_password]  # Add the custom action here
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
