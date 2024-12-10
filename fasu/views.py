@@ -499,3 +499,46 @@ except BadHeaderError:
 except Exception as e:
     # General exception handling
     print(f"Error sending email: {str(e)}")
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+
+class PasswordResetView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Generate password reset token
+        uid = urlsafe_base64_encode(str(user.pk).encode())
+        token = default_token_generator.make_token(user)
+
+        # Build reset URL
+        reset_url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
+
+        # Send email
+        subject = "Reset Your Password"
+        message = render_to_string('password_reset_email.html', {'reset_url': reset_url})
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+
+        return Response({"message": "Password reset email sent."}, status=status.HTTP_200_OK)
+    
+    
+def password_reset(request):
+    if request.content_type == 'application/json':
+        # Handle API request
+        return JsonResponse({"message": "Password reset email sent."})
+    else:
+        # Render HTML template for web clients
+        return render(request, 'registration/password_reset_form.html')
