@@ -472,18 +472,30 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail, BadHeaderError
 
-user = User.objects.get(username="cheri")  # Replace with actual user
-uid = urlsafe_base64_encode(str(user.pk).encode('utf-8'))
-token = default_token_generator.make_token(user)
+try:
+    user = User.objects.get(username="cheri")
+    uid = urlsafe_base64_encode(user.pk)
+    token = default_token_generator.make_token(user)
 
-subject = "Password reset request"
-message = render_to_string('registration/password_reset_email.html', {
-    'user': user,
-    'uid': uid,
-    'token': token,
-    'protocol': 'https',  # or 'https' depending on your setup
-    'domain': 'unix_aquatics.com',  # Replace with your domain
-})
+    subject = "Password reset request"
+    message = render_to_string('registration/password_reset_email.html', {
+        'user': user,
+        'uid': uid,
+        'token': token,
+        'protocol': 'https',
+        'domain': 'unix-aquatics.com',
+    })
 
-send_mail(subject, message, 'no-reply@example.com', [user.email])
+    send_mail(subject, message, 'no-reply@example.com', [user.email])
+except ObjectDoesNotExist:
+    # Handle the case where the user does not exist
+    print("User not found.")
+except BadHeaderError:
+    # Handle issues with sending the email
+    print("Invalid header found.")
+except Exception as e:
+    # General exception handling
+    print(f"Error sending email: {str(e)}")

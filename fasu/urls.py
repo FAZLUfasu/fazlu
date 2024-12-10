@@ -51,28 +51,29 @@
 
 
 from django.db import router
-from fasu import views
 from django.urls import path, include
 from rest_framework import routers
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
+from fasu import views
+
 
 # Initialize the router for the TeamMemberViewSet
 router = routers.DefaultRouter()
 router.register(r'team_photos', views.TeamMemberViewSet)
 
 # Define the urlpatterns
-urlpatterns = [
+urlpatterns = ([
     path('get_notifications/', views.get_notifications, name='get_notifications'),
     path('notifications/', views.NotificationListView.as_view(), name='notification_list'),
     path('Whatsappchat/', views.WhatsappchatView.as_view(), name='Whatsappchat'),
     path('news/', views.NewsUpdateListCreateView.as_view(), name='news-list-create'),
     path('summary/', views.SummaryAPIView.as_view(), name='summary'),
     path('gallery/', views.gallery_data, name='gallery_data'),
-    path('videos/', views.VideouploadView.as_view(), name='video-upload'),
+    # path('videos/', views.VideouploadView.as_view(), name='video-upload'),
     path('upvideos/', views.VideoListView.as_view(), name='videos'),
-    path('images/', views.ImageUploadView.as_view(), name='image-upload'),
+    # path('images/', views.ImageUploadView.as_view(), name='image-upload'),
     path('up/', views.ImageListView.as_view(), name='images'),
     path('team_photos/', include(router.urls)),
     path('loginn/', views.LoginView.as_view()),
@@ -93,8 +94,5 @@ urlpatterns = [
     path('videonotifications/', views.NotificationListView.as_view(), name='notification_list'),
     path('create-join-request/', views.create_join_request, name='create_join_request'),
     path('user-details/', views.UserDetailView.as_view(), name='user-details'),
-]
-
-# Append static and media URLs
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+)
