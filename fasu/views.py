@@ -512,27 +512,27 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 
-class PasswordResetView(APIView):
-    def post(self, request):
-        email = request.data.get('email')
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+# class PasswordResetView(APIView):
+#     def post(self, request):
+#         email = request.data.get('email')
+#         try:
+#             user = User.objects.get(email=email)
+#         except User.DoesNotExist:
+#             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        # Generate password reset token
-        uid = urlsafe_base64_encode(str(user.pk).encode())
-        token = default_token_generator.make_token(user)
+#         # Generate password reset token
+#         uid = urlsafe_base64_encode(str(user.pk).encode())
+#         token = default_token_generator.make_token(user)
 
-        # Build reset URL
-        reset_url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
+#         # Build reset URL
+#         reset_url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
 
-        # Send email
-        subject = "Reset Your Password"
-        message = render_to_string('password_reset_email.html', {'reset_url': reset_url})
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+#         # Send email
+#         subject = "Reset Your Password"
+#         message = render_to_string('password_reset_email.html', {'reset_url': reset_url})
+#         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
 
-        return Response({"message": "Password reset email sent."}, status=status.HTTP_200_OK)
+#         return Response({"message": "Password reset email sent."}, status=status.HTTP_200_OK)
     
 
 from django.contrib.auth.models import User
