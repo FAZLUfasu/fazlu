@@ -474,7 +474,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 user = User.objects.get(username="cheri")  # Replace with actual user
-uid = urlsafe_base64_encode(user.pk.encode('utf-8'))
+uid = urlsafe_base64_encode(str(user.pk).encode('utf-8'))
 token = default_token_generator.make_token(user)
 
 subject = "Password reset request"
