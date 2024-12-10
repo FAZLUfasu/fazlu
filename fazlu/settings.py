@@ -38,6 +38,10 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition
 
 INSTALLED_APPS = [
+    'landpageapp',
+    'cadmin',
+    'unixapp',
+    'fasu.apps.FasuConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,10 +54,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'channels',
     'grappelli',
-    'landpageapp',
-    'cadmin',
-    'unixapp',
-    'fasu.apps.FasuConfig',
+    
     
     
 ]
