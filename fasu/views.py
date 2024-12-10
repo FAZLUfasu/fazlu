@@ -534,11 +534,30 @@ class PasswordResetView(APIView):
 
         return Response({"message": "Password reset email sent."}, status=status.HTTP_200_OK)
     
-    
-def password_reset(request):
-    if request.content_type == 'application/json':
-        # Handle API request
-        return JsonResponse({"message": "Password reset email sent."})
-    else:
-        # Render HTML template for web clients
-        return render(request, 'registration/password_reset_form.html')
+
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt
+def reset_password(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            email = data.get('email')
+
+            if not email:
+                return JsonResponse({'error': 'Email is required'}, status=400)
+
+            user = User.objects.filter(email=email).first()
+            if not user:
+                return JsonResponse({'error': 'User with this email does not exist'}, status=404)
+
+            # Add your password reset logic here
+            return JsonResponse({'message': 'Password reset email sent!'}, status=200)
+
+        except AttributeError as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
