@@ -561,3 +561,32 @@ def reset_password(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+from django.contrib.auth.forms import PasswordResetForm
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+
+def reset_password(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            users = User.objects.filter(email=email)
+            if users.exists():
+                # Send email with reset link
+                send_mail(
+                    'Password Reset Request',
+                    'Please click the link to reset your password: <link>',
+                    'unixaquaticsapp@gmail.com',
+                    [email],
+                )
+                return redirect('password_reset_done')
+    else:
+        form = PasswordResetForm()
+    return render(request, 'password_reset_form.html', {'form': form})
+
+def reset_password_confirm(request, token):
+    # Validate the token and let the user reset their password
+    return render(request, 'reset_password_confirm.html')
