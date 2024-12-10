@@ -133,15 +133,13 @@ DATABASES = {
 
 # settings.py
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mailtrap.io'  # or your email provider's SMTP server
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'unixaquaticsapp@gmail.com'
+EMAIL_HOST_USER = 'unixaquaticsapp@gmail.com' 
 EMAIL_HOST_PASSWORD = 'Kl10at10'
-DEFAULT_FROM_EMAIL = 'webmaster@unix-aquatics.com'
- # Used in password reset emails
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
