@@ -139,7 +139,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'unixaquaticsapp@gmail.com' 
-EMAIL_HOST_PASSWORD = 'Kl10at10'
+EMAIL_HOST_PASSWORD = 'ehpc vxpm rwxp oisc'
 SITE_URL = "https://unix-aquatics.com"
 
 # Password validation
