@@ -465,99 +465,25 @@ def register(request):
             return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
         else:
             return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)
-        
-# class CustomPasswordResetView(PasswordResetView):
-#     def form_valid(self, form):
-#         context = self.get_context_data()
-#         print("Context:", context)  # Debug
-#         return super().form_valid(form)
-    
-# from django.contrib.auth.tokens import default_token_generator
-# from django.utils.http import urlsafe_base64_encode
-# from django.utils.encoding import force_bytes
-# from django.template.loader import render_to_string
-
-
-# from django.contrib.auth.models import User
-
-# # Fetch the user instance from the database, for example, by username or ID
-# user = User.objects.get(username='example_user')  # Replace with actual query
-
-# # Now generate the token for this user
-# token = default_token_generator.make_token(user)
-
-# # Assuming 'user' is the user object
-# uid = urlsafe_base64_encode(force_bytes(user.pk))
-
-
-# context = {
-#     'protocol': 'https',  # Use 'http' if your site does not use HTTPS
-#     'domain': 'unix-aquatics.com',  # Replace with your actual domain
-#     'uid': uid,
-#     'token': token,
-# }
-
-# # Render the email body
-# email_body = render_to_string('registration/password_reset_email.html', context)
-
 
 
 from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import PasswordResetForm
-from django.http import HttpResponse
 
-def reset_user_password(request):
-    if request.method == 'POST':
-        form = PasswordResetForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            try:
-                user = User.objects.get(email=email)
-                
-                # Generate the password reset token
-                token = default_token_generator.make_token(user)
-                
-                # Get the user ID and encode it
-                uidb64 = urlsafe_base64_encode(str(user.pk).encode())
-                
-                # Get the domain for the password reset URL
-                domain = get_current_site(request).domain
-                
-                # Create the password reset URL
-                reset_url = f"http://{domain}/reset/{uidb64}/{token}/"
-                
-                # Create the email context
-                context = {
-                    'user': user,
-                    'reset_url': reset_url,
-                    'domain': domain,
-                    'protocol': 'https',  # or 'https' based on your domain config
-                    'uid': uidb64,
-                    'token': token,
-                }
+user = User.objects.get(username="User")  # Replace with actual user
+uid = urlsafe_base64_encode(user.pk.encode('utf-8'))
+token = default_token_generator.make_token(user)
 
-                # Render the email template with the context
-                message = render_to_string('registration/password_reset_email.html', context)
-                
-                # Send the email
-                send_mail(
-                    'Password Reset Request',
-                    message,
-                    'no-reply@yourdomain.com',  # Your email address here
-                    [email],
-                    fail_silently=False,
-                )
+subject = "Password reset request"
+message = render_to_string('registration/password_reset_email.html', {
+    'user': user,
+    'uid': uid,
+    'token': token,
+    'protocol': 'https',  # or 'https' depending on your setup
+    'domain': 'unix_aquatics.com',  # Replace with your domain
+})
 
-                return HttpResponse("Password reset email sent.")
-            except User.DoesNotExist:
-                return HttpResponse("User with this email does not exist.")
-    else:
-        form = PasswordResetForm()
-
-    return render(request, 'reset_password.html', {'form': form})
+send_mail(subject, message, 'no-reply@example.com', [user.email])
