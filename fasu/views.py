@@ -483,42 +483,60 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt
-def reset_password(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            email = data.get('email')
+# @csrf_exempt
+# def reset_password(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+#             email = data.get('email')
 
-            if not email:
-                return JsonResponse({'error': 'Email is required'}, status=400)
+#             if not email:
+#                 return JsonResponse({'error': 'Email is required'}, status=400)
 
-            user = User.objects.filter(email=email).first()
+#             user = User.objects.filter(email=email).first()
 
-            if not user:
-                return JsonResponse({'error': 'User with this email does not exist'}, status=404)
+#             if not user:
+#                 return JsonResponse({'error': 'User with this email does not exist'}, status=404)
 
-            # Generate the reset token and user ID
-            uid = urlsafe_base64_encode(str(user.pk).encode())
-            token = default_token_generator.make_token(user)
+#             # Generate the reset token and user ID
+#             uid = urlsafe_base64_encode(str(user.pk).encode())
+#             token = default_token_generator.make_token(user)
 
-            # Generate reset URL (e.g., frontend URL)
-            reset_url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
+#             # Generate reset URL (e.g., frontend URL)
+#             reset_url = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}/"
 
-            # Build the email content
-            subject = "Reset Your Password"
-            message = render_to_string('password_reset_email.html', {'reset_url': reset_url})
+#             # Build the email content
+#             subject = "Reset Your Password"
+#             message = render_to_string('password_reset_email.html', {'reset_url': reset_url})
 
-            # Send email
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+#             # Send email
+#             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
 
-            return JsonResponse({'message': 'Password reset email sent!'}, status=200)
+#             return JsonResponse({'message': 'Password reset email sent!'}, status=200)
 
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=500)
 
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+#     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.views.decorators.csrf import csrf_exempt
+
+class ResetPasswordView(APIView):
+    @csrf_exempt
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return Response({'error': 'User with this email does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Logic for sending the password reset email
+        return Response({'message': 'Password reset email sent!'}, status=status.HTTP_200_OK)
 
 @csrf_exempt
 def reset_password_confirm(request, uidb64, token):
