@@ -552,7 +552,7 @@ class ResetPasswordView(APIView):
 
         # Render email template
         subject = "Reset Your Password"
-        message = render_to_string('email/password_reset_email.html', {
+        message = render_to_string('registration/password_reset_email.html', {
             'user': user,
             'reset_url': reset_url,
         })
