@@ -548,7 +548,7 @@ class ResetPasswordView(APIView):
         token = default_token_generator.make_token(user)
 
         # Build the reset link
-        reset_url = f"https://unix-aquatics.com/reset-password/{uid}/{token}/"
+        reset_url = f"https://unix-aquatics.com/reset/{uid}/{token}/"
 
         # Render email template
         subject = "Reset Your Password"
