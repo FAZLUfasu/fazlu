@@ -1,6 +1,6 @@
 
 import json
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
@@ -594,3 +594,9 @@ def reset_password_confirm(request, uidb64, token):
 
     else:
         return JsonResponse({'error': 'Invalid reset token'}, status=400)
+
+ 
+def password_reset_complete(request):
+     # After the password reset is complete, redirect to the desired URL
+     return HttpResponseRedirect('https://unix-aquatics.com/unixapp/')
+ 
