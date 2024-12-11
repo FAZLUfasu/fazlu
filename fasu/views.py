@@ -523,6 +523,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+
 
 class ResetPasswordView(APIView):
     @csrf_exempt
@@ -535,8 +543,33 @@ class ResetPasswordView(APIView):
         if not user:
             return Response({'error': 'User with this email does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Logic for sending the password reset email
-        return Response({'message': 'Password reset email sent!'}, status=status.HTTP_200_OK)
+        # Generate token and uid
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+
+        # Build the reset link
+        reset_url = f"https://unix-aquatics.com/reset-password/{uid}/{token}/"
+
+        # Render email template
+        subject = "Reset Your Password"
+        message = render_to_string('email/password_reset_email.html', {
+            'user': user,
+            'reset_url': reset_url,
+        })
+
+        try:
+            # Send the email
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+                fail_silently=False,
+            )
+            return Response({'message': 'Password reset email sent!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': f'Failed to send email: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @csrf_exempt
 def reset_password_confirm(request, uidb64, token):
