@@ -5,8 +5,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 from fasu import views
-from .views import reset_password
-from django.views.decorators.csrf import csrf_exempt
+
 
 # Initialize the router for the TeamMemberViewSet
 router = routers.DefaultRouter()
@@ -45,7 +44,7 @@ urlpatterns = ([
     path('user-details/', views.UserDetailView.as_view(), name='user-details'),
 
     path('reset-password-confirm/<uidb64>/<token>/',views.reset_password_confirm, name='password_reset_confirm'),
-    path('app/reset-password/', csrf_exempt(reset_password), name='reset_password'),
+    path('reset-password/', views.PasswordResetView.as_view(), name='api_reset_password'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )
