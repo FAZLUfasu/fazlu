@@ -81,32 +81,8 @@
 
         <p class="footer">
             {% blocktrans %}Remembered your password?{% endblocktrans %}
-            <a href="{% url 'login' %}">{% blocktrans %}Log in{% endblocktrans %}</a>
+            <a href="https://unix-aquatics.com/unixapp/">{% blocktrans %}Log in{% endblocktrans %}</a>
         </p>
     </div>
 </body>
 </html>
-
-{% comment %} {% load i18n %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% blocktrans %}Password Reset{% endblocktrans %}</title>
-</head>
-<body>
-    <h1>{% blocktrans %}Password Reset{% endblocktrans %}</h1>
-   
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">{% blocktrans %}Submit{% endblocktrans %}</button>
-    </form>
-
-    <p>{% blocktrans %}Remembered your password?{% endblocktrans %} <a href="{% url 'login' %}">{% blocktrans %}Log in{% endblocktrans %}</a></p>
-
-</body>
-</html> {% endcomment %}
-
