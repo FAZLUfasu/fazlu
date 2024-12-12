@@ -13,13 +13,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import viewsets
 from django.shortcuts import render, redirect
-from .serializers import UserSerializer, VideoNotificationSerializer
+from .serializers import BackgroundImageSerializer, UserSerializer, VideoNotificationSerializer
 from django.contrib.auth.views import PasswordResetView
 from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer, MyImageSerializer, MyProjectsSerializer, NewsUpdateSerializer, NotificationSerializer,ProjectpageSerializer, SummarySerializer, UserSerializer, WhatsappchatSerializer
 from .serializers import  ContactInfoSerializer, InvestorsProfileSerializer
 from .serializers import HomePageDataSerializer
 from .serializers import  TeamMemberSerializer, VideoSerializer
-from .models import  AboutUs, MyProjects, NewsUpdate, HomePageData, Notification, Summary, Whatsappchat
+from .models import  AboutUs, MyProjects, NewsUpdate, HomePageData, Notification, Summary, Whatsappchat, backgroundimage
 from .models import Join,Projectpage
 from .models import ContactInfo, InvestorProfile, TeamMember, video
 from .models import Images,video
@@ -597,3 +597,26 @@ def reset_password_confirm(request, uidb64, token):
 
  
  
+
+
+
+
+
+class BackgroundImageView(APIView):
+    def get(self, request):
+        """
+        Return all background images.
+        """
+        bg_images = backgroundimage.objects.all()
+        serializer = BackgroundImageSerializer(bg_images, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        """
+        Upload a new background image.
+        """
+        serializer = BackgroundImageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
