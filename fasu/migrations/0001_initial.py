@@ -25,13 +25,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='backgroundimage',
-            fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('bg_image', models.ImageField(upload_to='bg_image')),
-            ],
-        ),
-        migrations.CreateModel(
             name='ContactInfo',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
