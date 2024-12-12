@@ -316,12 +316,11 @@ class Whatsappchat(models.Model):
 
 
 
-class Backgroundimage(models.Model):
-    id = models.AutoField(primary_key=True)
-    bg_image = models.ImageField(upload_to='bg_image')
+class BackgroundImage(models.Model):
     name = models.CharField(max_length=255,blank=True, null=True)
+    image = models.ImageField(upload_to='background_images/',blank=True, null=True)
 
     def __str__(self):
-        return self.name
-    
+        # Ensure that the string returned is not None
+        return self.name if self.name else f"BackgroundImage #{self.id}"
    

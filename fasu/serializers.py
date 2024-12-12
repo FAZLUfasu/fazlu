@@ -1,7 +1,7 @@
 from tkinter import Image
 
 from requests import Response
-from .models import  AboutUs, Backgroundimage,ContactInfo, Images, Join, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, VideoNotification, Whatsappchat, video,Summary
+from .models import  AboutUs, BackgroundImage, ContactInfo, Images, Join, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, VideoNotification, Whatsappchat, video,Summary
 from rest_framework import serializers
 from .models import HomePageData, Login,InvestorProfile
 from rest_framework import serializers,viewsets
@@ -168,5 +168,5 @@ class ImagesSerializer(serializers.ModelSerializer):
 
 class BackgroundImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Backgroundimage
+        model = BackgroundImage
         fields = ['id', 'bg_image']

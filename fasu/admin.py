@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import AboutUs, Backgroundimage, ContactInfo, InvestorProfile, MyProjects, NewsUpdate, Notification,Summary, VideoNotification
+from .models import AboutUs, BackgroundImage, ContactInfo, InvestorProfile, MyProjects, NewsUpdate, Notification,Summary, VideoNotification
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import InvestorProfile,Images,Projectpage, TeamMember, video
@@ -23,7 +23,7 @@ admin.site.site_header = "INVESTERS APP"  # default: "Django Administration"
 admin.site.site_title = "UNIX"  # default: "Django site admin"
 admin.site.index_title = "Admin"  # default: "Site administration"
 
-admin.site.register(Backgroundimage)
+admin.site.register(BackgroundImage)
 
 admin.site.register(Join)
 

@@ -19,7 +19,7 @@ from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer
 from .serializers import  ContactInfoSerializer, InvestorsProfileSerializer
 from .serializers import HomePageDataSerializer
 from .serializers import  TeamMemberSerializer, VideoSerializer
-from .models import  AboutUs, Backgroundimage,  MyProjects, NewsUpdate, HomePageData, Notification, Summary, Whatsappchat
+from .models import  AboutUs, BackgroundImage,  MyProjects, NewsUpdate, HomePageData, Notification, Summary, Whatsappchat
 from .models import Join,Projectpage
 from .models import ContactInfo, InvestorProfile, TeamMember, video
 from .models import Images,video
@@ -607,7 +607,7 @@ class BackgroundImageView(APIView):
         """
         Return all background images.
         """
-        bg_images = Backgroundimage.objects.all()
+        bg_images = BackgroundImage.objects.all()
         serializer = BackgroundImageSerializer(bg_images, many=True)
         return Response(serializer.data)
 
