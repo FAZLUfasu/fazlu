@@ -319,6 +319,9 @@ class Whatsappchat(models.Model):
 class Backgroundimage(models.Model):
     id = models.AutoField(primary_key=True)
     bg_image = models.ImageField(upload_to='bg_image')
-    
+    name = models.CharField(max_length=255,blank=True, null=True)
+
     def __str__(self):
-        return "Backgroundimage"
+        return self.name
+    
+   
