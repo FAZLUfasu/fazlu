@@ -170,7 +170,7 @@ class ImagesSerializer(serializers.ModelSerializer):
 class BackgroundImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = BackgroundImage
-        fields = ['id', 'name', 'image', 'image_url']
+        fields = ['id', 'name', 'image']
     def get_image_url(self, obj):
         # Ensure the image URL is prefixed with MEDIA_URL
         return settings.MEDIA_URL + str(obj.image)

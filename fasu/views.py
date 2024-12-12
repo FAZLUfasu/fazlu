@@ -599,25 +599,8 @@ def reset_password_confirm(request, uidb64, token):
  
 
 
+class BackgroundImageView(generics.ListAPIView):
+    queryset = BackgroundImage.objects.all()
+    serializer_class = BackgroundImageSerializer
 
 
-
-class BackgroundImageView(APIView):
-    def get(self, request):
-        """
-        Return all background images.
-        """
-        bg_images = BackgroundImage.objects.all()
-        serializer = BackgroundImageSerializer(bg_images, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        """
-        Upload a new background image.
-        """
-        serializer = BackgroundImageSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
