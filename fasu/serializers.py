@@ -169,4 +169,4 @@ class ImagesSerializer(serializers.ModelSerializer):
 class BackgroundImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = BackgroundImage
-        fields = ['id', 'bg_image']
+        fields ='__all__''__all__'
