@@ -1,5 +1,6 @@
 from tkinter import Image
 
+from django.conf import settings
 from requests import Response
 from .models import  AboutUs, BackgroundImage, ContactInfo, Images, Join, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, VideoNotification, Whatsappchat, video,Summary
 from rest_framework import serializers
@@ -169,4 +170,7 @@ class ImagesSerializer(serializers.ModelSerializer):
 class BackgroundImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = BackgroundImage
-        fields ='__all__'
+        fields = ['id', 'name', 'image', 'image_url']
+    def get_image_url(self, obj):
+        # Ensure the image URL is prefixed with MEDIA_URL
+        return settings.MEDIA_URL + str(obj.image)
