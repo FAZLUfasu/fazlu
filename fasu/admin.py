@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import AboutUs, BackgroundImage, ContactInfo, InvestorProfile, MyProjects, NewsUpdate, Notification,Summary, VideoNotification
+from .models import AboutUs, BackgroundImage, ContactInfo, InvestorProfile, Location, MyProjects, NewsUpdate, Notification,Summary, VideoNotification
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import InvestorProfile,Images,Projectpage, TeamMember, video
@@ -184,5 +184,5 @@ class MyProjectsAdmin(admin.ModelAdmin):
     get_proname.short_description = 'Project Name'
 
 
-
+admin.site.register(Location)
 

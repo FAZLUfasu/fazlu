@@ -2,7 +2,7 @@ from tkinter import Image
 
 from django.conf import settings
 from requests import Response
-from .models import  AboutUs, BackgroundImage, ContactInfo, Images, Join, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, VideoNotification, Whatsappchat, video,Summary
+from .models import  AboutUs, BackgroundImage, ContactInfo, Images, Join, Location, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, VideoNotification, Whatsappchat, video,Summary
 from rest_framework import serializers
 from .models import HomePageData, Login,InvestorProfile
 from rest_framework import serializers,viewsets
@@ -174,3 +174,10 @@ class BackgroundImageSerializer(serializers.ModelSerializer):
     def get_image_url(self, obj):
         # Ensure the image URL is prefixed with MEDIA_URL
         return settings.MEDIA_URL + str(obj.image)
+    
+
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = '__all__'  # Include all fields from the Location model

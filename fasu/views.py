@@ -13,13 +13,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import viewsets
 from django.shortcuts import render, redirect
-from .serializers import  BackgroundImageSerializer, UserSerializer, VideoNotificationSerializer
+from .serializers import  BackgroundImageSerializer, LocationSerializer, UserSerializer, VideoNotificationSerializer
 from django.contrib.auth.views import PasswordResetView
 from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer, MyImageSerializer, MyProjectsSerializer, NewsUpdateSerializer, NotificationSerializer,ProjectpageSerializer, SummarySerializer, UserSerializer, WhatsappchatSerializer
 from .serializers import  ContactInfoSerializer, InvestorsProfileSerializer
 from .serializers import HomePageDataSerializer
 from .serializers import  TeamMemberSerializer, VideoSerializer
-from .models import  AboutUs, BackgroundImage,  MyProjects, NewsUpdate, HomePageData, Notification, Summary, Whatsappchat
+from .models import  AboutUs, BackgroundImage, Location,  MyProjects, NewsUpdate, HomePageData, Notification, Summary, Whatsappchat
 from .models import Join,Projectpage
 from .models import ContactInfo, InvestorProfile, TeamMember, video
 from .models import Images,video
@@ -604,3 +604,7 @@ class BackgroundImageView(generics.ListAPIView):
     serializer_class = BackgroundImageSerializer
 
 
+
+class LocationViewSet(viewsets.ModelViewSet):
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer

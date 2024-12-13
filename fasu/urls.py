@@ -46,6 +46,7 @@ urlpatterns = ([
     path('reset-password-confirm/<uidb64>/<token>/',views.reset_password_confirm, name='password_reset_confirm'),
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('reset-password/', views.ResetPasswordView.as_view(), name='api_reset_password'),
+    path('locations/', views.LocationViewSet.as_view({'get': 'list'}), name='location-list-create'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )

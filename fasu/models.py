@@ -324,3 +324,21 @@ class BackgroundImage(models.Model):
         # Ensure that the string returned is not None
         return self.name if self.name else f"BackgroundImage #{self.id}"
    
+
+
+class Location(models.Model):
+    # Basic fields for the location
+    name = models.CharField(max_length=255, help_text="Name of the location")
+    address = models.TextField(help_text="Address of the location")
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Latitude of the location")
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Longitude of the location")
+
+    # Optional: You can add a foreign key to associate location with another model, for example, a Project.
+    # project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='locations', help_text="The project this location is associated with")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Location'
+        verbose_name_plural = 'Locations'
