@@ -1,4 +1,124 @@
-{% extends "admin/base.html" %}
+<!-- templates/admin/base_site.html -->
+{% extends "admin/base_site.html" %}
+
+{% block extrahead %}
+<style>
+    /* Navbar styles */
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #333;
+        padding: 10px 20px;
+        color: white;
+    }
+
+    .navbar .navbar-left, .navbar .navbar-right {
+        flex: 1;
+    }
+
+    .navbar .navbar-center {
+        flex: 2;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* Table styles */
+    .navbar-table {
+        border-collapse: collapse;
+    }
+
+    .navbar-table th, .navbar-table td {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+    }
+
+    .navbar-table th {
+        background-color: #555;
+        color: white;
+    }
+
+    .navbar-table td {
+        background-color: #f4f4f4;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% block nav-global %}
+  <ul class="nav nav-pills">
+    {% load i18n static %}
+    <li><a href="{% url 'admin:index' %}">{% translate 'List view' %}</a></li>
+    <!-- Add your custom link here -->
+    <li><a href="https://unix-aquatics.com/cadmin/index" target="_blank">Table View</a></li>
+  </ul>
+{% endblock %}  
+    <!-- Custom Navbar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <!-- Left side of the navbar (optional) -->
+        </div>
+
+        <div class="navbar-center">
+            <!-- Table View in the Navbar -->
+            <table class="navbar-table">
+                <thead>
+                    <tr>
+                        <th>Header 1</th>
+                        <th>Header 2</th>
+                        <th>Header 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                    </tr>
+                    <tr>
+                        <td>Data 4</td>
+                        <td>Data 5</td>
+                        <td>Data 6</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="navbar-right">
+            <!-- Right side of the navbar (optional) -->
+        </div>
+    </div>
+
+    <button class="sticky toggle-nav-sidebar" id="toggle-nav-sidebar" aria-label="Toggle navigation">Toggle Sidebar</button>
+
+    <div class="sidebar">
+        <!-- Sidebar content here -->
+    </div>
+
+    <div class="content-main">
+        <!-- Main content here -->
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+        document.getElementById('toggle-nav-sidebar').addEventListener('click', function() {
+            var sidebar = document.querySelector('.sidebar');
+            var content = document.querySelector('.content-main');
+
+            // Toggle the sidebar visibility
+            sidebar.classList.toggle('hidden');
+            
+            // Toggle the content area to full width when the sidebar is hidden
+            content.classList.toggle('full-width');
+        });
+    </script>
+{% endblock %}
+
+
+
+{% comment %} {% extends "admin/base.html" %}
 
 {% block title %}
   {% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}
@@ -18,4 +138,4 @@
     <!-- Add your custom link here -->
     <li><a href="https://unix-aquatics.com/cadmin/index" target="_blank">Table View</a></li>
   </ul>
-{% endblock %}
+{% endblock %}  {% endcomment %}
