@@ -332,6 +332,7 @@ class Location(models.Model):
     address = models.TextField(help_text="Address of the location")
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Latitude of the location")
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Longitude of the location")
+    location_url = models.URLField(blank=True, null=True) 
 
     # Optional: You can add a foreign key to associate location with another model, for example, a Project.
     # project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='locations', help_text="The project this location is associated with")
