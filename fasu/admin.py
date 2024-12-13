@@ -192,6 +192,8 @@ from django.contrib.auth.models import User
 from .models import Images, Projectpage, TeamMember, video
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 admin.site.site_header = "INVESTORS APP"  # default: "Django Administration"
 admin.site.site_title = "UNIX"  # default: "Django site admin"
@@ -234,9 +236,36 @@ admin.site.register(Notification)
 admin.site.register(VideoNotification)
 admin.site.register(Location)
 
-# **User Management**
+
+
+# Define your custom UserAdmin class
+class CustomUserAdmin(BaseUserAdmin):
+    # Your custom UserAdmin configuration
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'password1', 'password2'),
+        }),
+    )
+    search_fields = ('username', 'first_name', 'last_name', 'email')
+    ordering = ('username',)
+    filter_horizontal = ('groups', 'user_permissions',)
+
+# Now register the custom UserAdmin without unregistering the default User model# Unregister the default User model admin
 admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+
+# Register the custom User model admin
+admin.site.register(User, CustomUserAdmin)
+
+
 
 # To register the custom user admin interface
 
@@ -253,7 +282,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
     search_fields = ('username', 'email', 'first_name', 'last_name')
 
-admin.site.register(User, CustomUserAdmin)
+# admin.site.register(User, CustomUserAdmin)
 class MyProjectsInline(admin.StackedInline):
     model = MyProjects
     can_delete = False
@@ -266,6 +295,6 @@ class CustomProjectpageAdmin(Projectpage):
     inlines = [MyProjectsInline]
     list_display = ['proname', 'description']  # Example fields
 
-admin.site.register(Projectpage, CustomProjectpageAdmin)
+# admin.site.register(Projectpage, CustomProjectpageAdmin)
 
 # Your other custom admin registration can go below
