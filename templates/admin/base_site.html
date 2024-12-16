@@ -1,8 +1,30 @@
-<!-- templates/admin/base_site.html -->
 {% extends "admin/base_site.html" %}
 
 {% block extrahead %}
 <style>
+    /* Make the main content full width */
+    .content-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+        width: 200px; /* Adjusted for better visibility */
+        background-color: #f8f9fa;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        display: block;
+        overflow-y: auto;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar.hidden {
+        display: none;
+    }
+
     /* Navbar styles */
     .navbar {
         display: flex;
@@ -41,101 +63,55 @@
     .navbar-table td {
         background-color: #f4f4f4;
     }
+
+    /* Transition for smooth sidebar toggle */
+    .content-main {
+        transition: margin-left 0.3s ease, width 0.3s ease;
+    }
 </style>
 {% endblock %}
 
-{% block content %}
 {% block nav-global %}
-  <ul class="nav nav-pills">
+<ul class="nav nav-pills">
     {% load i18n static %}
     <li><a href="{% url 'admin:index' %}">{% translate 'List view' %}</a></li>
-    <!-- Add your custom link here -->
     <li><a href="https://unix-aquatics.com/cadmin/index" target="_blank">Table View</a></li>
-  </ul>
-{% endblock %}  
-    <!-- Custom Navbar -->
-    <div class="navbar">
-        <div class="navbar-left">
-            <!-- Left side of the navbar (optional) -->
-        </div>
-
-        <div class="navbar-center">
-            <!-- Table View in the Navbar -->
-            <table class="navbar-table">
-                <thead>
-                    <tr>
-                        <th>Header 1</th>
-                        <th>Header 2</th>
-                        <th>Header 3</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Data 1</td>
-                        <td>Data 2</td>
-                        <td>Data 3</td>
-                    </tr>
-                    <tr>
-                        <td>Data 4</td>
-                        <td>Data 5</td>
-                        <td>Data 6</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="navbar-right">
-            <!-- Right side of the navbar (optional) -->
-        </div>
-    </div>
-
-    <button class="sticky toggle-nav-sidebar" id="toggle-nav-sidebar" aria-label="Toggle navigation">Toggle Sidebar</button>
-
-    <div class="sidebar">
-        <!-- Sidebar content here -->
-    </div>
-
-    <div class="content-main">
-        <!-- Main content here -->
-    </div>
-
+</ul>
 {% endblock %}
 
 {% block footer %}
-    <script>
-        document.getElementById('toggle-nav-sidebar').addEventListener('click', function() {
-            var sidebar = document.querySelector('.sidebar');
-            var content = document.querySelector('.content-main');
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Find the sidebar, content, and toggle button elements
+        var sidebar = document.getElementById("nav-sidebar");
+        var contentMain = document.querySelector(".content-main");
+        var toggleButton = document.getElementById("toggle-nav-sidebar");
 
-            // Toggle the sidebar visibility
-            sidebar.classList.toggle('hidden');
-            
-            // Toggle the content area to full width when the sidebar is hidden
-            content.classList.toggle('full-width');
-        });
-    </script>
+        // Initialize state
+        var isSidebarHidden = false;
+
+        // Function to toggle the sidebar and update the button
+        function toggleSidebar() {
+            if (isSidebarHidden) {
+                // Show the sidebar
+                sidebar.style.display = "block"; // Ensure it's visible
+                contentMain.style.marginLeft = "200px"; // Adjust content margin
+                contentMain.style.width = "calc(100% - 200px)"; // Adjust content width
+                toggleButton.textContent = "Hide Sidebar"; // Update button text
+            } else {
+                // Hide the sidebar
+                sidebar.style.display = "none"; // Ensure it's hidden
+                contentMain.style.marginLeft = "0"; // Reset content margin
+                contentMain.style.width = "100%"; // Reset content width
+                toggleButton.textContent = "Show Sidebar"; // Update button text
+            }
+            isSidebarHidden = !isSidebarHidden; // Toggle the state
+        }
+
+        // Add event listener to the toggle button
+        if (toggleButton) {
+            toggleButton.addEventListener("click", toggleSidebar);
+        }
+    });
+</script>
 {% endblock %}
-
-
-
-{% comment %} {% extends "admin/base.html" %}
-
-{% block title %}
-  {% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}
-{% endblock %}
-
-{% block branding %}
-  <div id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></div>
-  {% if user.is_anonymous %}
-    {% include "admin/color_theme_toggle.html" %}
-  {% endif %}
-{% endblock %}
-
-{% block nav-global %}
-  <ul class="nav nav-pills">
-    {% load i18n static %}
-    <li><a href="{% url 'admin:index' %}">{% translate 'List view' %}</a></li>
-    <!-- Add your custom link here -->
-    <li><a href="https://unix-aquatics.com/cadmin/index" target="_blank">Table View</a></li>
-  </ul>
-{% endblock %}  {% endcomment %}

@@ -1,167 +1,176 @@
-<!-- templates/admin/index.html -->
-{% extends "admin/base_site.html" %}
-
-{% block content %}
-
-    <!-- Horizontal Navigation Bar (Home Bar) -->
-    <div class="navbar">
-        <button class="nav-button" onclick="toggleSection('updations')">UPDATIONS</button>
-        <button class="nav-button" onclick="toggleSection('pages')">PAGES</button>
-        <button class="nav-button" onclick="toggleSection('users')">USERS</button>
-        <button class="nav-button" onclick="toggleSection('leads')">LEADS</button>
-        <button class="nav-button" onclick="toggleSection('others')">OTHERS</button>
-    </div>
-
-    <!-- Section Content -->
-    <div id="updations" class="model-group section-content" style="display: none;">
-       
-        <ul>
-            <li><a href="{% url 'admin:fasu_backgroundimage_changelist' %}">Background Images</a></li>
-            <li><a href="{% url 'admin:fasu_video_changelist' %}">Videos</a></li>
-            <li><a href="{% url 'admin:fasu_images_changelist' %}">Images</a></li>
-            <li><a href="{% url 'admin:fasu_summary_changelist' %}">Summary</a></li>
-            <li><a href="{% url 'admin:fasu_newsupdate_changelist' %}">News Updates</a></li>
-        </ul>
-    </div>
-
-    <div id="pages" class="model-group section-content" style="display: none;">
-      
-        <ul>
-            <li><a href="{% url 'admin:fasu_aboutus_changelist' %}">About Us</a></li>
-            <li><a href="{% url 'admin:fasu_contactinfo_changelist' %}">Contact Info</a></li>
-            <li><a href="{% url 'admin:fasu_teammember_changelist' %}">Team Members</a></li>
-            <li><a href="{% url 'admin:fasu_projectpage_changelist' %}">Project Page</a></li>
-            <li><a href="{% url 'admin:fasu_myprojects_changelist' %}">My Projects</a></li>
-            <li><a href="{% url 'admin:fasu_investorprofile_changelist' %}">Investor Profiles</a></li>
-        </ul>
-    </div>
-
-    <div id="users" class="model-group section-content" style="display: none;">
-      
-        <ul>
-            <li><a href="{% url 'admin:auth_user_changelist' %}">Users</a></li>
-            <li><a href="{% url 'admin:fasu_investorprofile_changelist' %}">Investor Profiles</a></li>
-        </ul>
-    </div>
-
-    <div id="leads" class="model-group section-content" style="display: none;">
-
-        <ul>
-            <li><a href="{% url 'admin:fasu_join_changelist' %}">Join Requests</a></li>
-        </ul>
-    </div>
-
-    <div id="others" class="model-group section-content" style="display: none;">
-   
-        <ul>
-            <li><a href="{% url 'admin:fasu_location_changelist' %}">Locations</a></li>
-            <li><a href="{% url 'admin:fasu_notification_changelist' %}">Notifications</a></li>
-            <li><a href="{% url 'admin:fasu_videonotification_changelist' %}">Video Notifications</a></li>
-        </ul>
-    </div>
-
-{% endblock %}
-
 {% block extrahead %}
-    <style>
-        /* Styling for the horizontal navigation bar */
+<style>
+    /****************************
+        Navigation Bar Styles
+    ****************************/
+    .navbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(90deg, #0066ff, #00ccff);
+        padding: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .nav-button {
+        background-color: white;
+        color: #0066ff;
+        border: none;
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin: 0 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .nav-button:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 102, 255, 0.2);
+        z-index: 1;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-button:hover:before {
+        left: 0;
+    }
+    
+    .nav-button:hover {
+        background-color: #0066ff;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    .nav-button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    /****************************
+        Section Content Styles
+    ****************************/
+    .section-content {
+        display: none; /* Initially hide all sections */
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .section-content.visible {
+        display: block; /* Show the section when active */
+    }
+
+    /****************************
+        Responsive Design
+    ****************************/
+    @media (max-width: 768px) {
         .navbar {
-            display: flex;
-            justify-content: space-evenly;
-            margin-bottom: 20px;
-            background-color: #f8f9fa;
-            padding: 10px 0;
+            flex-wrap: wrap;
         }
-
+    
         .nav-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
+            margin: 5px;
+            padding: 8px 15px;
+            font-size: 14px;
         }
+    }
+</style>
 
-        .nav-button:hover {
-            background-color: #0056b3;
+<script>
+    // Function to toggle the display of sections
+    function toggleSection(sectionId) {
+        // Hide all sections first
+        const sections = document.querySelectorAll('.section-content');
+        sections.forEach(section => {
+            section.classList.remove('visible');
+        });
+
+        // Show the selected section
+        const selectedSection = document.getElementById(sectionId);
+        if (selectedSection) {
+            selectedSection.classList.add('visible');
         }
-
-        /* Styling for the section content */
-        .model-group {
-            margin: 20px 0;
-        }
-
-        .section-content {
-            display: none; /* Initially hide all sections */
-        }
-    </style>
-
-    <script>
-        // Function to toggle the display of sections
-        function toggleSection(sectionId) {
-            // Hide all sections first
-            const sections = document.querySelectorAll('.section-content');
-            sections.forEach(section => {
-                section.style.display = 'none';
-            });
-
-            // Show the selected section
-            const selectedSection = document.getElementById(sectionId);
-            selectedSection.style.display = 'block';
-        }
-    </script>
+    }
+</script>
 {% endblock %}
 
-{% comment %} {% extends "admin/base_site.html" %}
+{% block nav-global %}
+<ul class="nav nav-pills">
+    {% load i18n static %}
+    <li><a href="{% url 'admin:index' %}">{% translate 'List view' %}</a></li>
+    <li><a href="https://unix-aquatics.com/cadmin/index" target="_blank">Table View</a></li>
+</ul>
+{% endblock %}
 
-{% block content %}
-    <h1>Admin Dashboard</h1>
 
-    <div class="model-group">
-        <h2>UPDATIONS</h2>
-        <ul>
-            <li><a href="{% url 'admin:fasu_backgroundimage_changelist' %}">Background Images</a></li>
-            <li><a href="{% url 'admin:fasu_video_changelist' %}">Videos</a></li>
-            <li><a href="{% url 'admin:fasu_images_changelist' %}">Images</a></li>
-            <li><a href="{% url 'admin:fasu_summary_changelist' %}">Summary</a></li>
-            <li><a href="{% url 'admin:fasu_newsupdate_changelist' %}">News Updates</a></li>
-        </ul>
-    </div>
+<div class="navbar">
+    <button class="nav-button" onclick="toggleSection('updations')">UPDATIONS</button>
+    <button class="nav-button" onclick="toggleSection('pages')">PAGES</button>
+    <button class="nav-button" onclick="toggleSection('users')">USERS</button>
+    <button class="nav-button" onclick="toggleSection('leads')">LEADS</button>
+    <button class="nav-button" onclick="toggleSection('others')">OTHERS</button>
+</div>
 
-    <div class="model-group">
-        <h2>PAGES</h2>
-        <ul>
-            <li><a href="{% url 'admin:fasu_aboutus_changelist' %}">About Us</a></li>
-            <li><a href="{% url 'admin:fasu_contactinfo_changelist' %}">Contact Info</a></li>
-            <li><a href="{% url 'admin:fasu_teammember_changelist' %}">Team Members</a></li>
-            <li><a href="{% url 'admin:fasu_projectpage_changelist' %}">Project Page</a></li>
-            <li><a href="{% url 'admin:fasu_myprojects_changelist' %}">My Projects</a></li>
-            <li><a href="{% url 'admin:fasu_investorprofile_changelist' %}">Investor Profiles</a></li>
-        </ul>
-    </div>
+<div id="updations" class="section-content">
+    <h3>Updations</h3>
+    <ul>
+        <li><a href="{% url 'admin:fasu_backgroundimage_changelist' %}">Background Images</a></li>
+        <li><a href="{% url 'admin:fasu_video_changelist' %}">Videos</a></li>
+        <li><a href="{% url 'admin:fasu_images_changelist' %}">Images</a></li>
+        <li><a href="{% url 'admin:fasu_summary_changelist' %}">Summary</a></li>
+        <li><a href="{% url 'admin:fasu_newsupdate_changelist' %}">News Updates</a></li>
+    </ul>
+</div>
 
-    <div class="model-group">
-        <h2>USERS</h2>
-        <ul>
-            <li><a href="{% url 'admin:auth_user_changelist' %}">Users</a></li>
-            <li><a href="{% url 'admin:fasu_investorprofile_changelist' %}">Investor Profiles</a></li>
-        </ul>
-    </div>
+<div id="pages" class="section-content">
+    <h3>Pages</h3>
+    <ul>
+        <li><a href="{% url 'admin:fasu_aboutus_changelist' %}">About Us</a></li>
+        <li><a href="{% url 'admin:fasu_contactinfo_changelist' %}">Contact Info</a></li>
+        <li><a href="{% url 'admin:fasu_teammember_changelist' %}">Team Members</a></li>
+        <li><a href="{% url 'admin:fasu_projectpage_changelist' %}">Project Page</a></li>
+        <li><a href="{% url 'admin:fasu_myprojects_changelist' %}">My Projects</a></li>
+        <li><a href="{% url 'admin:fasu_investorprofile_changelist' %}">Investor Profiles</a></li>
+    </ul>
+</div>
 
-    <div class="model-group">
-        <h2>LEADS</h2>
-        <ul>
-            <li><a href="{% url 'admin:fasu_join_changelist' %}">Join Requests</a></li>
-        </ul>
-    </div>
+<div id="users" class="section-content">
+    <h3>Users</h3>
+    <ul>
+        <li><a href="{% url 'admin:auth_user_changelist' %}"> App Users</a></li>
+    </ul>
+</div>
 
-    <div class="model-group">
-        <h2>OTHERS</h2>
-        <ul>
-            <li><a href="{% url 'admin:fasu_location_changelist' %}">Locations</a></li>
-            <li><a href="{% url 'admin:fasu_notification_changelist' %}">Notifications</a></li>
-            <li><a href="{% url 'admin:fasu_videonotification_changelist' %}">Video Notifications</a></li>
-        </ul>
-    </div>
+<div id="leads" class="section-content">
+    <h3>Leads</h3>
+    <ul>
+        <li><a href="{% url 'admin:fasu_join_changelist' %}">Join Requests</a></li>
+    </ul>
+</div>
 
-{% endblock %} {% endcomment %}
+<div id="others" class="section-content">
+    <h3>Others</h3>
+    <ul>
+        <li><a href="{% url 'admin:fasu_location_changelist' %}">Locations</a></li>
+        <li><a href="{% url 'admin:fasu_notification_changelist' %}">Notifications</a></li>
+        <li><a href="{% url 'admin:fasu_videonotification_changelist' %}">Video Notifications</a></li>
+    </ul>
+</div>
+
+
+
