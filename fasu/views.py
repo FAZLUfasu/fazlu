@@ -557,3 +557,17 @@ class BackgroundImageView(generics.ListAPIView):
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+
+
+
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def get_current_user(request):
+    user = request.user
+    return JsonResponse({
+        'id': user.id,
+        'username': user.username,
+        'email': user.email,
+    })
