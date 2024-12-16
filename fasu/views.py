@@ -464,19 +464,49 @@ def team_page(request):
 
 
 
+# @api_view(['POST'])
+# def register(request):
+#     if request.method == 'POST':
+#         username = request.data.get('username')
+#         email = request.data.get('email')
+#         password = request.data.get('password')
+        
+#         if username and email and password:
+#             user = User.objects.create_user(username=username, email=email, password=password)
+#             return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
+#         else:
+#             return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.models import User
+
 @api_view(['POST'])
 def register(request):
     if request.method == 'POST':
+        # Retrieve the data from the request
         username = request.data.get('username')
         email = request.data.get('email')
         password = request.data.get('password')
+        first_name = request.data.get('first_name')
+        last_name = request.data.get('last_name')
         
-        if username and email and password:
-            user = User.objects.create_user(username=username, email=email, password=password)
+        # Ensure all required fields are present
+        if username and email and password and first_name and last_name:
+            # Create a new user with the provided information
+            user = User.objects.create_user(
+                username=username, 
+                email=email, 
+                password=password,
+                first_name=first_name,
+                last_name=last_name
+            )
             return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
         else:
+            # Return an error response if any required field is missing
             return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 
