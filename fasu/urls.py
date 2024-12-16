@@ -47,7 +47,7 @@ urlpatterns = ([
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('reset-password/', views.ResetPasswordView.as_view(), name='api_reset_password'),
     path('locations/', views.LocationViewSet.as_view({'get': 'list'}), name='location-list-create'),
-    path('current-user/', views.get_current_user, name='current_user'),
+    path('api/get_user_details/', views.get_user_details, name='get_user_details'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )

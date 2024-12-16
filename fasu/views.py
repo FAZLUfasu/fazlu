@@ -560,14 +560,36 @@ class LocationViewSet(viewsets.ModelViewSet):
 
 
 
+from django.contrib.auth.models import User
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
 
-from django.contrib.auth.decorators import login_required
+@api_view(['GET'])
+def get_user_details(request):
+    # Get username from query params
+    username = request.GET.get('username', None)
 
-@login_required
-def get_current_user(request):
-    user = request.user
-    return JsonResponse({
-        'id': user.id,
-        'username': user.username,
-        'email': user.email,
-    })
+    if username is None:
+        return Response({"error": "Username not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        # Fetch user based on username
+        user = User.objects.get(username=username)
+
+        # Return user details (you can customize what data you want to send)
+        user_data = {
+            "user_id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "date_joined": user.date_joined,
+            "is_active": user.is_active,
+            "is_staff": user.is_staff,
+        }
+
+        return Response(user_data, status=status.HTTP_200_OK)
+
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
