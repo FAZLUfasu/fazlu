@@ -213,31 +213,40 @@ from fasu.models import Dividend
 from django.db.models import Sum
 
 
+
 def dividend_view(request):
     # Get all dividends
     dividends = Dividend.objects.all()
 
-    # Calculate total dividend for each project and each user
+    # Create dictionaries for project and user dividends
     project_dividends = {}
     user_dividends = {}
 
+    # Calculate the total dividends for each project and user
     for dividend in dividends:
-        # Calculate total dividend for project
         project = dividend.project
-        if project not in project_dividends:
-            project_dividends[project] = project.dividends.aggregate(total_dividend=Sum('dividend_amount'))['total_dividend'] or 0
-
-        # Calculate total dividend for user
         user = dividend.user
+
+        # Add the dividend to the total for the project
+        if project not in project_dividends:
+            project_dividends[project] = 0
+        project_dividends[project] += dividend.dividend_amount
+
+        # Add the dividend to the total for the user
         if user not in user_dividends:
-            user_dividends[user] = user.dividends.aggregate(total_user_dividend=Sum('dividend_amount'))['total_user_dividend'] or 0
+            user_dividends[user] = 0
+        user_dividends[user] += dividend.dividend_amount
 
     # Calculate net dividend for all projects
     total_net_dividend = Dividend.objects.aggregate(total_net_dividend=Sum('dividend_amount'))['total_net_dividend'] or 0
 
-    return render(request, 'dividend.html', {
+    # Prepare context data
+    context = {
         'dividends': dividends,
         'project_dividends': project_dividends,
         'user_dividends': user_dividends,
         'total_net_dividend': total_net_dividend,
-    })
+    }
+
+    # Render the template with context data
+    return render(request, 'dividend.html', context)
