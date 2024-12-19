@@ -127,7 +127,7 @@ class MyImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = '__all__'
-        from django.contrib.auth.models import User
+       
 
 
 

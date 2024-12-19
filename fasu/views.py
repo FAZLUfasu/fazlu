@@ -166,6 +166,11 @@ class NotificationListView(APIView):
     def get(self, request, format=None):
         notifications = Notification.objects.all()
         serializer = NotificationSerializer(notifications, many=True)
+        image_notifications = []
+        
+        for notification in serializer.data:
+            notification['image_url'] = notification['image']  # Add the image URL to the response
+            image_notifications.append(notification)
         return Response(serializer.data, status=status.HTTP_200_OK)
 def get_notifications(request):
     notifications = Notification.objects.all()
