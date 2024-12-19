@@ -248,15 +248,22 @@ class DividendAdmin(admin.ModelAdmin):
         return obj.user.username if obj.user else None
     get_user.short_description = 'User'  # Set the header name for this column
 
-
-    # Custom method to display project's name in the admin list
+    # Custom method to display the project's name in the admin list
     def get_project(self, obj):
-        return obj.Myproject.project if obj.Myproject else None
-    get_project.short_description = 'MyProject'  # Set the header name for this column
-
-    # Optionally, you can add additional filters or ordering here
+        return obj.project.project if obj.project else None
+    get_project.short_description = 'Project'  # Set the header name for this column
 
 admin.site.register(Dividend, DividendAdmin)
+
+
+#     # Custom method to display project's name in the admin list
+#     def get_project(self, obj):
+#         return obj.Myproject.project if obj.Myproject else None
+#     get_project.short_description = 'MyProject'  # Set the header name for this column
+
+#     # Optionally, you can add additional filters or ordering here
+
+# admin.site.register(Dividend, DividendAdmin)
 
 admin.site.register(Projectpage)
 admin.site.register(InvestorProfile)
