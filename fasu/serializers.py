@@ -2,7 +2,7 @@ from tkinter import Image
 
 from django.conf import settings
 from requests import Response
-from .models import  AboutUs, BackgroundImage, ContactInfo, Images, Join, Location, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, VideoNotification, Whatsappchat, video,Summary
+from .models import  AboutUs, BackgroundImage, ContactInfo, Dividend, Images, Join, Location, MyProjects, NewsUpdate, Notification, Projectpage, TeamMember, VideoNotification, Whatsappchat, video,Summary
 from rest_framework import serializers
 from .models import HomePageData, Login,InvestorProfile
 from rest_framework import serializers,viewsets
@@ -183,3 +183,17 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = '__all__'  # Include all fields from the Location model
 
 
+
+
+class DividendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dividend
+        fields = ['id', 'project', 'user', 'dividend_date', 'dividend_amount', 'transfer_proof']
+
+    def create(self, validated_data):
+        # Optionally handle any additional logic before saving the dividend
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # Optionally handle updates
+        return super().update(instance, validated_data)

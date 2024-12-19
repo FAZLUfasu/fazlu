@@ -10,9 +10,11 @@ from fasu import views
 # Initialize the router for the TeamMemberViewSet
 router = routers.DefaultRouter()
 router.register(r'team_photos', views.TeamMemberViewSet)
+router.register(r'dividends', views.DividendViewSet) 
 
 # Define the urlpatterns
 urlpatterns = ([
+    path('api/', include(router.urls)), 
     path('get_notifications/', views.get_notifications, name='get_notifications'),
     path('notifications/', views.NotificationListView.as_view(), name='notification_list'),
     path('Whatsappchat/', views.WhatsappchatView.as_view(), name='Whatsappchat'),
@@ -47,7 +49,7 @@ urlpatterns = ([
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('reset-password/', views.ResetPasswordView.as_view(), name='api_reset_password'),
     path('locations/', views.LocationViewSet.as_view({'get': 'list'}), name='location-list-create'),
-    path('api/get_user_details/', views.get_user_details, name='get_user_details'),
+    path('get_user_details/', views.get_user_details, name='get_user_details'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )

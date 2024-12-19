@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import AboutUs, BackgroundImage, ContactInfo, InvestorProfile, Location, MyProjects, NewsUpdate, Notification,Summary, VideoNotification
+from .models import AboutUs, BackgroundImage, ContactInfo, Dividend, InvestorProfile, Location, MyProjects, NewsUpdate, Notification,Summary, VideoNotification
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import InvestorProfile,Images,Projectpage, TeamMember, video
@@ -235,11 +235,27 @@ admin.site.register(MyProjects)
 
 class MyProjectsAdmin(admin.ModelAdmin):
     inlines = [ProjectpageInline]
-    list_display = ['user', 'projectlogoname', 'projectlogo', 'get_proname']
+    list_display = ['user', 'projectlogo', 'get_proname']
 
-    def get_proname(self, obj):
-        return obj.name.proname if obj.name else ''  # Custom method to display proname
-    get_proname.short_description = 'Project Name'
+
+
+class DividendAdmin(admin.ModelAdmin):
+    # Modify list_display to show specific fields from related models (user and project)
+    list_display = ('get_user', 'get_project', 'dividend_date', 'dividend_amount', 'transfer_proof')
+
+    # Custom method to display user's username in the admin list
+    def get_user(self, obj):
+        return obj.User.username if obj.User else None
+    get_user.short_description = 'User'  # Set the header name for this column
+
+    # Custom method to display project's name in the admin list
+    def get_project(self, obj):
+        return obj.Myproject.project if obj.Myproject else None
+    get_project.short_description = 'MyProject'  # Set the header name for this column
+
+    # Optionally, you can add additional filters or ordering here
+
+admin.site.register(Dividend, DividendAdmin)
 
 admin.site.register(Projectpage)
 admin.site.register(InvestorProfile)

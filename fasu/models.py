@@ -194,8 +194,36 @@ class MyProjects(BaseProject):
 
     def __str__(self):
         return f'{self.user.username} - {self.proname.proname}'
+    def save(self, *args, **kwargs):
+        super(MyProjects, self).save(*args, **kwargs)
+        # Update the latest dividend details when a new dividend is added to the project
+        update_project_dividend(self)
 
 
+
+class Dividend(models.Model):
+    project = models.ForeignKey('MyProjects', on_delete=models.CASCADE, related_name='dividends')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dividends')
+    dividend_date = models.DateField(blank=True, null=True)
+    dividend_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    transfer_proof = models.FileField(upload_to='dividend_transfer_proof/', blank=True, null=True)
+
+    def __str__(self):
+        return f"Dividend for {self.user.username} in project {self.project.project} on {self.dividend_date}"
+
+    def save(self, *args, **kwargs):
+        super(Dividend, self).save(*args, **kwargs)
+        # Update the total dividend and link to the project
+        update_project_dividend(self.project)
+
+def update_project_dividend(project):
+    """Update the most recent dividend information in the project."""
+    latest_dividend = project.dividends.order_by('-dividend_date').first()  # Get the latest dividend
+    project.total_dividend = sum(dividend.dividend_amount for dividend in project.dividends.all())  # Calculate total dividend for the project
+    project.dividend_date = latest_dividend.dividend_date if latest_dividend else None
+    project.dividend_amount = latest_dividend.dividend_amount if latest_dividend else None
+    project.transfer_proof = latest_dividend.transfer_proof if latest_dividend else None
+    project.save()
 
 class video(models.Model):
     message = models.CharField(max_length=255, default='New video uploaded',blank=True, null=True)
@@ -288,9 +316,9 @@ class ContactInfo(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=20)
     address = models.TextField()
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Latitude of the location")
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Longitude of the location")
-    location_url = models.URLField(blank=True, null=True) 
+    # latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Latitude of the location")
+    # longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Longitude of the location")
+    # location_url = models.URLField(blank=True, null=True) 
 
     def __str__(self):
         return "ContactInfo"
@@ -348,3 +376,24 @@ class Location(models.Model):
         verbose_name_plural = 'Locations'
 
 
+# class Dividend(models.Model):
+#     dividend_date = models.DateField(blank=True, null=True)
+#     dividend_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+#     transfer_proof = models.FileField(upload_to='dividend_transfer_proof/', blank=True, null=True)
+
+#     def __str__(self):
+#         return f"Dividend on {self.dividend_date} of amount {self.dividend_amount}"
+
+# class TotalDividend(models.Model):
+#     total_amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+
+#     def __str__(self):
+#         return f"Total Dividend Amount: {self.total_amount}"
+
+# @receiver(post_save, sender=Dividend)
+# def update_total_dividend(sender, instance, created, **kwargs):
+#     if created:
+#         # Fetch the current total dividend record
+#         total_dividend, created = TotalDividend.objects.get_or_create(id=1)  # assuming only one record
+#         total_dividend.total_amount += instance.dividend_amount or Decimal(0)
+#         total_dividend.save()

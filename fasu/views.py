@@ -13,13 +13,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import viewsets
 from django.shortcuts import render, redirect
-from .serializers import  BackgroundImageSerializer, LocationSerializer, UserSerializer, VideoNotificationSerializer
+from .serializers import  BackgroundImageSerializer, DividendSerializer, LocationSerializer, UserSerializer, VideoNotificationSerializer
 from django.contrib.auth.views import PasswordResetView
 from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer, MyImageSerializer, MyProjectsSerializer, NewsUpdateSerializer, NotificationSerializer,ProjectpageSerializer, SummarySerializer, UserSerializer, WhatsappchatSerializer
 from .serializers import  ContactInfoSerializer, InvestorsProfileSerializer
 from .serializers import HomePageDataSerializer
 from .serializers import  TeamMemberSerializer, VideoSerializer
-from .models import  AboutUs, BackgroundImage, Location,  MyProjects, NewsUpdate, HomePageData, Notification, Summary, Whatsappchat
+from .models import  AboutUs, BackgroundImage, Dividend, Location,  MyProjects, NewsUpdate, HomePageData, Notification, Summary, Whatsappchat
 from .models import Join,Projectpage
 from .models import ContactInfo, InvestorProfile, TeamMember, video
 from .models import Images,video
@@ -623,3 +623,20 @@ def get_user_details(request):
 
     except User.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+
+    
+
+from rest_framework.decorators import action
+
+class DividendViewSet(viewsets.ModelViewSet):
+    queryset = Dividend.objects.all()
+    serializer_class = DividendSerializer
+
+    # Optionally add actions such as a custom endpoint for specific functionality
+    @action(detail=True, methods=['get'])
+    def get_total_dividend(self, request, pk=None):
+        # Get the total dividend for a project or user
+        dividend = self.get_object()
+        total_dividend = sum(d.dividend_amount for d in dividend.project.dividends.all())
+        return Response({"total_dividend": total_dividend}, status=status.HTTP_200_OK)
