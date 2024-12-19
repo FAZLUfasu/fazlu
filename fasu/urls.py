@@ -25,7 +25,6 @@ urlpatterns = ([
     path('upvideos/', views.VideoListView.as_view(), name='videos'),
     path('images/', views.ImageUploadView.as_view(), name='image-upload'),
     path('up/', views.ImageListView.as_view(), name='images'),
-    path('get_image_by_id/', views.get_image_by_id, name='get_image_by_id'),
     path('team_photos/', include(router.urls)),
     path('loginn/', views.LoginView.as_view()),
     path('investorprofilecreate/', views.create_investor_profile, name='investorprofilecreate'),
