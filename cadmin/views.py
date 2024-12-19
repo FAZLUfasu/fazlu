@@ -208,3 +208,9 @@ def index(request):
 
 
 
+from django.shortcuts import render
+from fasu.models import Dividend
+
+def dividend_view(request):
+    dividends = Dividend.objects.all()
+    return render(request, 'dividend.html', {'dividends': dividends})

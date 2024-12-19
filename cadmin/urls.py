@@ -20,6 +20,7 @@ urlpatterns = [
     path('my-project/', views.my_project_page_view, name='my_project_page'),
     path('project/', views.project_page_view, name='project_page'),
     path('team/', views.team_members_view, name='team_members'),
+    path('divident_table/', views.dividend_view, name='divident_table'),
     path('index/', views.index, name='index'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

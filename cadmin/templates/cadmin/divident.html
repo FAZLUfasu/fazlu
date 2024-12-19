@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dividend Details</title>
+    {% load static %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Navbar container */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* Logo */
+        .navbar .logo {
+            font-size: 1.5em;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        /* Navbar links */
+        .navbar .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover {
+            color: #ffcc00;
+        }
+
+        /* Hamburger menu (hidden by default) */
+        .navbar .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .navbar .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+        }
+
+        /* Responsive navbar */
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                background-color: #007bff;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                padding: 10px;
+                border-radius: 5px;
+            }
+
+            .navbar .nav-links.active {
+                display: flex;
+            }
+
+            .navbar .hamburger {
+                display: flex;
+            }
+        }
+
+        /* Table styling */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="index.html" class="logo">Unix Aquatics</a>
+        <div class="hamburger" onclick="toggleNav()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="nav-links">
+            <a href="/cadmin/index">Table View</a>
+            <a href="/cadmin/investor-profiles">Investor Profiles</a>
+            <a href="/cadmin/my-project">My Project</a>
+            <a href="/cadmin/project/">Project</a>
+            <a href="/cadmin/team">Team</a>
+            <a href="https://unix-aquatics.com/admin" class="btn btn-danger">List view</a>
+        </div>
+    </header>
+
+    <!-- Dividend Details Section -->
+    <section class="dividend-section">
+        <h2>Dividend Overview</h2>
+        <table class="dividend-table">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>User's Project</th>
+                    <th>Dividend Amount</th>
+                    <th>Dividend Date</th>
+                    <th>Total Dividend for User's Project</th>
+                    <th>Total Dividend for User</th>
+                    <th>Net Dividend for All Projects</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dividend in dividends %}
+                <tr>
+                    <td>{{ dividend.user.username }}</td>
+                    <td>{{ dividend.project.project }}</td>
+                    <td>{{ dividend.dividend_amount }}</td>
+                    <td>{{ dividend.dividend_date }}</td>
+                    <td>
+                        {% with total_dividend=dividend.project.dividends.aggregate(Sum='dividend_amount') %}
+                            {{ total_dividend.Sum|default:0 }}
+                        {% endwith %}
+                    </td>
+                    <td>
+                        {% with total_user_dividend=dividend.user.dividends.aggregate(Sum='dividend_amount') %}
+                            {{ total_user_dividend.Sum|default:0 }}
+                        {% endwith %}
+                    </td>
+                    <td>
+                        {% with net_dividend=dividend.project.dividends.aggregate(Sum='dividend_amount') %}
+                            {{ net_dividend.Sum|default:0 }}
+                        {% endwith %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">No dividend data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        function toggleNav() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
