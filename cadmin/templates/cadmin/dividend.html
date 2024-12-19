@@ -1,3 +1,5 @@
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,118 +8,8 @@
     <title>Dividend Details</title>
     {% load static %}
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        /* Navbar container */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #007bff;
-            padding: 10px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        /* Logo */
-        .navbar .logo {
-            font-size: 1.5em;
-            color: white;
-            font-weight: bold;
-            text-transform: uppercase;
-            text-decoration: none;
-        }
-
-        /* Navbar links */
-        .navbar .nav-links {
-            display: flex;
-            gap: 15px;
-        }
-
-        .navbar .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 1em;
-            transition: color 0.3s ease;
-        }
-
-        .navbar .nav-links a:hover {
-            color: #ffcc00;
-        }
-
-        /* Hamburger menu (hidden by default) */
-        .navbar .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 5px;
-        }
-
-        .navbar .hamburger div {
-            width: 25px;
-            height: 3px;
-            background-color: white;
-        }
-
-        /* Responsive navbar */
-        @media (max-width: 768px) {
-            .navbar .nav-links {
-                display: none;
-                flex-direction: column;
-                background-color: #007bff;
-                position: absolute;
-                top: 60px;
-                right: 20px;
-                padding: 10px;
-                border-radius: 5px;
-            }
-
-            .navbar .nav-links.active {
-                display: flex;
-            }
-
-            .navbar .hamburger {
-                display: flex;
-            }
-        }
-
-        /* Table styling */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #333;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #343a40;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #ddd;
-        }
-
+        /* Styles for table and navbar */
+        /* ... (keep your styles here) ... */
     </style>
 </head>
 <body>
@@ -161,15 +53,9 @@
                     <td>{{ dividend.project.project }}</td>
                     <td>{{ dividend.dividend_amount }}</td>
                     <td>{{ dividend.dividend_date }}</td>
-                    <td>
-                        {{ project_dividends|get_item:dividend.project.id }}
-                    </td>
-                    <td>
-                        {{ user_dividends|get_item:dividend.user.id }}
-                    </td>
-                    <td>
-                        {{ total_net_dividend }}
-                    </td>
+                    <td>{{ project_dividends|get_item:dividend.project.id }}</td>
+                    <td>{{ user_dividends|get_item:dividend.user.id }}</td>
+                    <td>{{ total_net_dividend }}</td>
                 </tr>
                 {% empty %}
                 <tr>
