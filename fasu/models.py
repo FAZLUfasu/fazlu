@@ -194,11 +194,7 @@ class MyProjects(BaseProject):
 
     def __str__(self):
         return f'{self.user.username} - {self.proname.proname}'
-    def save(self, *args, **kwargs):
-        super(MyProjects, self).save(*args, **kwargs)
-        # Update the latest dividend details when a new dividend is added to the project
-        update_project_dividend(self)
-
+  
 
 
 class Dividend(models.Model):
