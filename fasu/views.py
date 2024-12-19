@@ -39,7 +39,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
-from rest_framework_simplejwt.tokens import AccessToken
+# from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
@@ -52,10 +52,10 @@ class CustomObtainAuthToken(ObtainAuthToken):
 
 
 
-# Generate token for authenticated user
-def generate_token(user):
-    token = AccessToken.for_user(user)
-    return str(token)
+# # Generate token for authenticated user
+# def generate_token(user):
+#     token = AccessToken.for_user(user)
+#     return str(token)
 
 
 
