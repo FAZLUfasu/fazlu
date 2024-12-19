@@ -162,10 +162,10 @@
                     <td>{{ dividend.dividend_amount }}</td>
                     <td>{{ dividend.dividend_date }}</td>
                     <td>
-                        {{ project_dividends[dividend.project] }}
+                        {{ project_dividends|get_item:dividend.project.id }}
                     </td>
                     <td>
-                        {{ user_dividends[dividend.user] }}
+                        {{ user_dividends|get_item:dividend.user.id }}
                     </td>
                     <td>
                         {{ total_net_dividend }}
