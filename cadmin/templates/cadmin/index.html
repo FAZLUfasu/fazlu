@@ -384,19 +384,13 @@
                     <td>{{ dividend.dividend_amount }}</td>
                     <td>{{ dividend.dividend_date }}</td>
                     <td>
-                        {% with total_dividend=dividend.project.dividends.aggregate(Sum='dividend_amount') %}
-                            {{ total_dividend.Sum|default:0 }}
-                        {% endwith %}
+                        {{ project_dividends[dividend.project] }}
                     </td>
                     <td>
-                        {% with total_user_dividend=dividend.user.dividends.aggregate(Sum='dividend_amount') %}
-                            {{ total_user_dividend.Sum|default:0 }}
-                        {% endwith %}
+                        {{ user_dividends[dividend.user] }}
                     </td>
                     <td>
-                        {% with net_dividend=dividend.project.dividends.aggregate(Sum='dividend_amount') %}
-                            {{ net_dividend.Sum|default:0 }}
-                        {% endwith %}
+                        {{ total_net_dividend }}
                     </td>
                 </tr>
                 {% empty %}
@@ -407,7 +401,6 @@
             </tbody>
         </table>
     </section>
-
 
 
     <section class="team-section">
