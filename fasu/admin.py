@@ -237,16 +237,17 @@ class MyProjectsAdmin(admin.ModelAdmin):
     inlines = [ProjectpageInline]
     list_display = ['user', 'projectlogo', 'get_proname']
 
-
+from django.contrib import admin
+from .models import Dividend
 
 class DividendAdmin(admin.ModelAdmin):
-    # Modify list_display to show specific fields from related models (user and project)
     list_display = ('get_user', 'get_project', 'dividend_date', 'dividend_amount', 'transfer_proof')
 
-    # Custom method to display user's username in the admin list
+    # Custom method to display the user's username in the admin list
     def get_user(self, obj):
-        return obj.User.username if obj.User else None
+        return obj.user.username if obj.user else None
     get_user.short_description = 'User'  # Set the header name for this column
+
 
     # Custom method to display project's name in the admin list
     def get_project(self, obj):
