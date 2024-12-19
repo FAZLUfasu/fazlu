@@ -249,4 +249,4 @@ def dividend_view(request):
     }
 
     # Render the template with context data
-    return render(request, 'dividend.html', context)
+    return render(request, 'cadmin/dividend.html', context)
