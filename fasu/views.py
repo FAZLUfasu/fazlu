@@ -166,14 +166,9 @@ class NotificationListView(APIView):
     def get(self, request, format=None):
         notifications = Notification.objects.all()
         serializer = NotificationSerializer(notifications, many=True)
-        image_notifications = []
-
-        for notification in serializer.data:
-            notification['image_url'] = notification['image']  # Add the image URL to the response
-            image_notifications.append(notification)
         return Response(serializer.data, status=status.HTTP_200_OK)
 def get_notifications(request):
-    notifications = Notification.objects.all()
+    notifications = Images.objects.all()
     data = {
     'notifications': list(notifications.values())
     }
@@ -649,30 +644,30 @@ class DividendViewSet(viewsets.ModelViewSet):
 
 
 
-@csrf_exempt
-def get_image_by_id(request):
-    """
-    Fetch the image data from the database by image ID.
-    """
-    # Check if request method is GET and has the 'id' parameter
-    if request.method == 'GET':
-        image_id = request.GET.get('id')  # Get the image ID from the query parameters
-        if image_id:
-            try:
-                # Fetch the image from the database by id
-                image = Images.objects.get(id=image_id)
+# @csrf_exempt
+# def get_image_by_id(request):
+#     """
+#     Fetch the image data from the database by image ID.
+#     """
+#     # Check if request method is GET and has the 'id' parameter
+#     if request.method == 'GET':
+#         image_id = request.GET.get('id')  # Get the image ID from the query parameters
+#         if image_id:
+#             try:
+#                 # Fetch the image from the database by id
+#                 image = Images.objects.get(id=image_id)
                 
-                # Return the image data as a JSON response
-                data = {
-                    'id': image.id,
-                    'imagename': image.imagename,
-                    'image_url': image.image.url,  # The URL to the image
-                    'uploaded_at': image.uploaded_at,
-                }
-                return JsonResponse(data, status=200)
-            except Images.DoesNotExist:
-                return JsonResponse({'error': 'Image not found'}, status=404)
-        else:
-            return JsonResponse({'error': 'No image ID provided'}, status=400)
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=405)
+#                 # Return the image data as a JSON response
+#                 data = {
+#                     'id': image.id,
+#                     'imagename': image.imagename,
+#                     'image_url': image.image.url,  # The URL to the image
+#                     'uploaded_at': image.uploaded_at,
+#                 }
+#                 return JsonResponse(data, status=200)
+#             except Images.DoesNotExist:
+#                 return JsonResponse({'error': 'Image not found'}, status=404)
+#         else:
+#             return JsonResponse({'error': 'No image ID provided'}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Invalid request method'}, status=405)
