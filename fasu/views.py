@@ -39,7 +39,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
-# from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.tokens import AccessToken # type: ignore
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 
@@ -52,10 +52,10 @@ class CustomObtainAuthToken(ObtainAuthToken):
 
 
 
-# # Generate token for authenticated user
-# def generate_token(user):
-#     token = AccessToken.for_user(user)
-#     return str(token)
+# Generate token for authenticated user
+def generate_token(user):
+    token = AccessToken.for_user(user)
+    return str(token)
 
 
 
@@ -511,54 +511,16 @@ def register(request):
 
 
 
-
-
-
-
-
-# class DeleteAccountView(APIView):
-#     permission_classes = [IsAuthenticated]  # Only authenticated users can delete their accounts
-
-#     def delete(self, request, *args, **kwargs):
-#         user = request.user  # The current logged-in user
-
-#         try:
-#             # Delete the user
-#             user.delete()
-
-#             # Optionally: You can delete related data (posts, comments, etc.) here if needed
-#             # Example: Post.objects.filter(user=user).delete()
-
-#             return Response({"message": "Account successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
-
-#         except Exception as e:
-#             return Response({"message": f"Error deleting account: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-# views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
-
 class DeleteAccountView(APIView):
-    permission_classes = [IsAuthenticated]  # Only authenticated users can delete their account
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, *args, **kwargs):
-        user = request.user  # Get the currently authenticated user
-
+        user = request.user
         try:
-            # Delete the user account
-            user.delete()
-
-            # Optionally, you can delete associated data (e.g., user posts, comments, etc.)
-            # Example: Post.objects.filter(user=user).delete()
-
+            user.delete()  # Delete user account
             return Response({"message": "Account successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
-        
         except Exception as e:
             return Response({"message": f"Error deleting account: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 
 
