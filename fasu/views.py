@@ -39,9 +39,10 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.auth.forms import SetPasswordForm
-from rest_framework_simplejwt.tokens import AccessToken # type: ignore
+
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+
 
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -52,10 +53,10 @@ class CustomObtainAuthToken(ObtainAuthToken):
 
 
 
-# Generate token for authenticated user
-def generate_token(user):
-    token = AccessToken.for_user(user)
-    return str(token)
+# # Generate token for authenticated user
+# def generate_token(user):
+#     token = AccessToken.for_user(user)
+#     return str(token)
 
 
 
@@ -275,7 +276,29 @@ def create_investor_profile(request):
     except Exception as e:
         return Response({"error": str(e)}, status=500)
 
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_investor_profile(request):
+    try:
+        user = request.user
+        # Check if the investor profile exists for this user
+        profile = InvestorProfile.objects.filter(user=user).first()
 
+        if not profile:
+            return Response({"error": "Investor profile not found for this user"}, status=404)
+
+        # Serialize the data from the request body
+        serializer = InvestorProfileUpdateSerializer(profile, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()  # Save the updated data
+            return Response({"success": "Investor profile updated successfully"}, status=200)
+        else:
+            return Response({"error": serializer.errors}, status=400)
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+    
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -464,18 +487,6 @@ def team_page(request):
 
 
 
-# @api_view(['POST'])
-# def register(request):
-#     if request.method == 'POST':
-#         username = request.data.get('username')
-#         email = request.data.get('email')
-#         password = request.data.get('password')
-        
-#         if username and email and password:
-#             user = User.objects.create_user(username=username, email=email, password=password)
-#             return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 from rest_framework.decorators import api_view
@@ -509,20 +520,29 @@ def register(request):
             return Response({"error": "All fields are required"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User
 
 class DeleteAccountView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
 
     def delete(self, request, *args, **kwargs):
-        user = request.user
+        user = request.user  # Get the currently authenticated user
+
         try:
-            user.delete()  # Delete user account
+            # Delete the user
+            user.delete()
+
+            # Optionally: Delete related data like posts, comments, etc. if needed
+            # Example: Post.objects.filter(user=user).delete()
+
             return Response({"message": "Account successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
+
         except Exception as e:
             return Response({"message": f"Error deleting account: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 
 
 

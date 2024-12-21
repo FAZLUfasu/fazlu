@@ -48,6 +48,10 @@ class AboutUsPageSerializer(serializers.ModelSerializer):
         model = AboutUs
         fields = '__all__'
 
+class InvestorProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InvestorProfile
+        fields = '__all__'
 
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:

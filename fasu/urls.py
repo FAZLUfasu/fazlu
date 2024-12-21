@@ -29,6 +29,7 @@ urlpatterns = ([
     path('loginn/', views.LoginView.as_view()),
     path('investorprofilecreate/', views.create_investor_profile, name='investorprofilecreate'),
     path('investorprofile/', views.InvestorProfileAPIView.as_view(), name='investorprofile'),
+    path('investor_profile_update/',views.update_investor_profile, name='update_investor_profile'),
     path('HomePageData/', views.HomePageDataAPIView.as_view(), name='HomePageData'),
     path('myprojects/', views.MyProjectsAPIView.as_view(), name='myproject-list-create'),
     path('Projectpage/', views.ProjectpageListAPIView.as_view(), name='Projectpage'),
@@ -51,7 +52,7 @@ urlpatterns = ([
     path('locations/', views.LocationViewSet.as_view({'get': 'list'}), name='location-list-create'),
     path('get_user_details/', views.get_user_details, name='get_user_details'),
     path('delete-account/', views.DeleteAccountView.as_view(), name='delete-account'),
-
+    # path('token_refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )
