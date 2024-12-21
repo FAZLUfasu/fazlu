@@ -516,25 +516,48 @@ def register(request):
 
 
 
+# class DeleteAccountView(APIView):
+#     permission_classes = [IsAuthenticated]  # Only authenticated users can delete their accounts
+
+#     def delete(self, request, *args, **kwargs):
+#         user = request.user  # The current logged-in user
+
+#         try:
+#             # Delete the user
+#             user.delete()
+
+#             # Optionally: You can delete related data (posts, comments, etc.) here if needed
+#             # Example: Post.objects.filter(user=user).delete()
+
+#             return Response({"message": "Account successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
+
+#         except Exception as e:
+#             return Response({"message": f"Error deleting account: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+
 class DeleteAccountView(APIView):
-    permission_classes = [IsAuthenticated]  # Only authenticated users can delete their accounts
+    permission_classes = [IsAuthenticated]  # Only authenticated users can delete their account
 
     def delete(self, request, *args, **kwargs):
-        user = request.user  # The current logged-in user
+        user = request.user  # Get the currently authenticated user
 
         try:
-            # Delete the user
+            # Delete the user account
             user.delete()
 
-            # Optionally: You can delete related data (posts, comments, etc.) here if needed
+            # Optionally, you can delete associated data (e.g., user posts, comments, etc.)
             # Example: Post.objects.filter(user=user).delete()
 
             return Response({"message": "Account successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
-
+        
         except Exception as e:
             return Response({"message": f"Error deleting account: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 
 
 
