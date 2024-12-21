@@ -511,6 +511,39 @@ def register(request):
 
 
 
+
+
+
+
+
+class DeleteAccountView(APIView):
+    permission_classes = [IsAuthenticated]  # Only authenticated users can delete their accounts
+
+    def delete(self, request, *args, **kwargs):
+        user = request.user  # The current logged-in user
+
+        try:
+            # Delete the user
+            user.delete()
+
+            # Optionally: You can delete related data (posts, comments, etc.) here if needed
+            # Example: Post.objects.filter(user=user).delete()
+
+            return Response({"message": "Account successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
+
+        except Exception as e:
+            return Response({"message": f"Error deleting account: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+
+
+
+
 class ResetPasswordView(APIView):
     @csrf_exempt
     def post(self, request):
@@ -642,32 +675,3 @@ class DividendViewSet(viewsets.ModelViewSet):
         return Response({"total_dividend": total_dividend}, status=status.HTTP_200_OK)
     
 
-
-
-# @csrf_exempt
-# def get_image_by_id(request):
-#     """
-#     Fetch the image data from the database by image ID.
-#     """
-#     # Check if request method is GET and has the 'id' parameter
-#     if request.method == 'GET':
-#         image_id = request.GET.get('id')  # Get the image ID from the query parameters
-#         if image_id:
-#             try:
-#                 # Fetch the image from the database by id
-#                 image = Images.objects.get(id=image_id)
-                
-#                 # Return the image data as a JSON response
-#                 data = {
-#                     'id': image.id,
-#                     'imagename': image.imagename,
-#                     'image_url': image.image.url,  # The URL to the image
-#                     'uploaded_at': image.uploaded_at,
-#                 }
-#                 return JsonResponse(data, status=200)
-#             except Images.DoesNotExist:
-#                 return JsonResponse({'error': 'Image not found'}, status=404)
-#         else:
-#             return JsonResponse({'error': 'No image ID provided'}, status=400)
-#     else:
-#         return JsonResponse({'error': 'Invalid request method'}, status=405)

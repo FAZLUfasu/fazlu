@@ -50,6 +50,8 @@ urlpatterns = ([
     path('reset-password/', views.ResetPasswordView.as_view(), name='api_reset_password'),
     path('locations/', views.LocationViewSet.as_view({'get': 'list'}), name='location-list-create'),
     path('get_user_details/', views.get_user_details, name='get_user_details'),
+    path('delete-account/', views.DeleteAccountView.as_view(), name='delete-account'),
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 )
