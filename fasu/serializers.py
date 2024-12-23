@@ -44,7 +44,13 @@ class InvestorsProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
+class UpdateInvestorProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InvestorProfile
+        fields = '__all__'  # Include all fields in the model for updating
+        extra_kwargs = {
+            'email': {'read_only': True},  # Email is the primary key; make it read-only
+        }
 
 class AboutUsPageSerializer(serializers.ModelSerializer):
     class Meta:

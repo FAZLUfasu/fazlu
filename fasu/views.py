@@ -14,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework import viewsets
 from django.shortcuts import render, redirect
-from .serializers import  BackgroundImageSerializer, DividendSerializer, LocationSerializer, UserSerializer, VideoNotificationSerializer
+from .serializers import  BackgroundImageSerializer, DividendSerializer, LocationSerializer, UpdateInvestorProfileSerializer, UserSerializer, VideoNotificationSerializer
 from django.contrib.auth.views import PasswordResetView
 from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer, MyImageSerializer, MyProjectsSerializer, NewsUpdateSerializer, NotificationSerializer,ProjectpageSerializer, SummarySerializer, UserSerializer, WhatsappchatSerializer
 from .serializers import  ContactInfoSerializer, InvestorsProfileSerializer
@@ -257,52 +257,74 @@ def view_investor_profile(request):
         return Response({"error": str(e)}, status=500) 
 
 
-
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_investor_profile(request, username):
     try:
-        # Get the user's profile
-        user = request.user
+        # Fetch the user and associated profile
+        user = User.objects.get(username=username)
         profile = InvestorProfile.objects.get(user=user)
-        
-        # Handle non-attachment fields first
-        profile.name = request.data.get('name', profile.name)
-        profile.address = request.data.get('address', profile.address)
-        profile.mobile_number = request.data.get('mobile_number', profile.mobile_number)
-        profile.email = request.data.get('email', profile.email)
-        profile.whatsapp = request.data.get('whatsapp', profile.whatsapp)
-        profile.aadhar_card = request.data.get('aadhar_card', profile.aadhar_card)
-        profile.election_id = request.data.get('election_id', profile.election_id)
-        profile.passport_number = request.data.get('passport_number', profile.passport_number)
-        profile.pan_card_number = request.data.get('pan_card_number', profile.pan_card_number)
-        profile.account_number = request.data.get('account_number', profile.account_number)
-        profile.iban = request.data.get('iban', profile.iban)
-        profile.bank_name = request.data.get('bank_name', profile.bank_name)
-        profile.branch = request.data.get('branch', profile.branch)
-        profile.ifsc_code = request.data.get('ifsc_code', profile.ifsc_code)
-        
-        # Handle attachment fields (only update if a new file is provided)
-        if 'profilepic' in request.FILES:
-            profile.profilepic = request.FILES['profilepic']
-        if 'aadhar_card_attachment' in request.FILES:
-            profile.aadhar_card_attachment = request.FILES['aadhar_card_attachment']
-        if 'election_id_attachment' in request.FILES:
-            profile.election_id_attachment = request.FILES['election_id_attachment']
-        if 'passport_attachment' in request.FILES:
-            profile.passport_attachment = request.FILES['passport_attachment']
-        if 'pan_card_attachment' in request.FILES:
-            profile.pan_card_attachment = request.FILES['pan_card_attachment']
-        if 'bank_account_passbook_attachment' in request.FILES:
-            profile.bank_account_passbook_attachment = request.FILES['bank_account_passbook_attachment']
-        
-        profile.save()  # Save the updated profile
-        return Response({"success": "Investor profile updated successfully"}, status=status.HTTP_200_OK)
-    
+
+        # Deserialize and validate the incoming data
+        serializer = UpdateInvestorProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()  # Save the updated profile
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
     except InvestorProfile.DoesNotExist:
-        return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# @api_view(['PUT'])
+# @permission_classes([IsAuthenticated])
+# def update_investor_profile(request, username):
+#     try:
+#         # Get the user's profile
+#         user = request.user
+#         profile = InvestorProfile.objects.get(user=user)
+        
+#         # Handle non-attachment fields first
+#         profile.name = request.data.get('name', profile.name)
+#         profile.address = request.data.get('address', profile.address)
+#         profile.mobile_number = request.data.get('mobile_number', profile.mobile_number)
+#         profile.email = request.data.get('email', profile.email)
+#         profile.whatsapp = request.data.get('whatsapp', profile.whatsapp)
+#         profile.aadhar_card = request.data.get('aadhar_card', profile.aadhar_card)
+#         profile.election_id = request.data.get('election_id', profile.election_id)
+#         profile.passport_number = request.data.get('passport_number', profile.passport_number)
+#         profile.pan_card_number = request.data.get('pan_card_number', profile.pan_card_number)
+#         profile.account_number = request.data.get('account_number', profile.account_number)
+#         profile.iban = request.data.get('iban', profile.iban)
+#         profile.bank_name = request.data.get('bank_name', profile.bank_name)
+#         profile.branch = request.data.get('branch', profile.branch)
+#         profile.ifsc_code = request.data.get('ifsc_code', profile.ifsc_code)
+        
+#         # Handle attachment fields (only update if a new file is provided)
+#         if 'profilepic' in request.FILES:
+#             profile.profilepic = request.FILES['profilepic']
+#         if 'aadhar_card_attachment' in request.FILES:
+#             profile.aadhar_card_attachment = request.FILES['aadhar_card_attachment']
+#         if 'election_id_attachment' in request.FILES:
+#             profile.election_id_attachment = request.FILES['election_id_attachment']
+#         if 'passport_attachment' in request.FILES:
+#             profile.passport_attachment = request.FILES['passport_attachment']
+#         if 'pan_card_attachment' in request.FILES:
+#             profile.pan_card_attachment = request.FILES['pan_card_attachment']
+#         if 'bank_account_passbook_attachment' in request.FILES:
+#             profile.bank_account_passbook_attachment = request.FILES['bank_account_passbook_attachment']
+        
+#         profile.save()  # Save the updated profile
+#         return Response({"success": "Investor profile updated successfully"}, status=status.HTTP_200_OK)
+    
+#     except InvestorProfile.DoesNotExist:
+    #     return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
+    # except Exception as e:
+    #     return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
 
