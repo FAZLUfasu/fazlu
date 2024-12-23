@@ -229,8 +229,8 @@ def profile_view(request, username):
         profile_data = model_to_dict(profile)
 
         # Add profilepic URL if it exists
-        if profile.profilepic and profile.profilepic.name:  # Check if the field has a value
-            profile_data['profilepic'] = profile.profilepic.url
+        if profile.profilepic and profile.profilepicname:  # Check if the field has a value
+            profile_data['profilepic'] = profile.profilepic
         else:
             profile_data['profilepic'] = None  # Explicitly set to None if not available
 
