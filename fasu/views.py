@@ -233,7 +233,12 @@ def my_projects_view(request, username):
 #         return JsonResponse({'error': 'Profile not found'}, status=404)
 
 
-
+class InvestorProfileAPIView(generics.ListCreateAPIView):
+    queryset = InvestorProfile.objects.all()
+    serializer_class = InvestorsProfileSerializer
+   
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 def profile_view(request, username):
     try:
@@ -261,12 +266,7 @@ def profile_view(request, username):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-class InvestorProfileAPIView(generics.ListCreateAPIView):
-    queryset = InvestorProfile.objects.all()
-    serializer_class = InvestorsProfileSerializer
-   
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+
     
 
 
