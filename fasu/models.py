@@ -55,9 +55,6 @@ class InvestorProfile(models.Model):
     passport_attachment = models.FileField(upload_to='passport_attachments/', blank=True, null=True)
     pan_card_number = models.CharField(max_length=10, blank=True, null=True)
     pan_card_attachment = models.FileField(upload_to  ='pan_card_attachments/', blank=True, null=True)
-
-    
-    
     account_number = models.CharField(max_length=50,blank=True, null=True)
     iban = models.CharField(max_length=50,blank=True, null=True)
     bank_name = models.CharField(max_length=100,blank=True, null=True)

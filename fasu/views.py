@@ -208,29 +208,7 @@ def my_projects_view(request, username):
 
 
 
-# def profile_view(request, username):
-#     try:
-#         user = User.objects.get(username=username)
-#         profile = InvestorProfile.objects.get(user=user)
-        
-#         # Serialize the profile data as needed
-#         profile_data = {
-#             'username': profile.user.username,
-#             'email': profile.user.email,
-#             # Add other profile fields as needed...
-#         }
-        
-#         # Add all profile fields to profile_data
-#         profile_data.update(profile.__dict__)
-        
-#         # Remove unnecessary fields
-#         profile_data.pop('_state', None)  # Remove _state field
-        
-#         return JsonResponse(profile_data)
-#     except User.DoesNotExist:
-#         return JsonResponse({'error': 'User not found'}, status=404)
-#     except InvestorProfile.DoesNotExist:
-#         return JsonResponse({'error': 'Profile not found'}, status=404)
+
 
 
 class InvestorProfileAPIView(generics.ListCreateAPIView):
@@ -239,6 +217,9 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
    
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+
 
 def profile_view(request, username):
     try:
@@ -249,11 +230,11 @@ def profile_view(request, username):
         # Serialize the profile data
         profile_data = model_to_dict(profile)
         
-        # If you have image fields like profile_pic, add the URL instead of the file object
-        if profile.profile_pic:
-            profile_data['profile_pic'] = profile.profile_pic.url
+        # Add profilepic URL if it exists
+        if profile.profilepic:  # Check if the field has a value
+            profile_data['profilepic'] = profile.profilepic.url  # Add URL to the response
         
-        # Remove unnecessary fields like '_state'
+        # Remove unnecessary fields
         profile_data.pop('_state', None)
         
         return JsonResponse(profile_data)
@@ -264,8 +245,6 @@ def profile_view(request, username):
         return JsonResponse({'error': 'Profile not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
-
-
 
     
 
