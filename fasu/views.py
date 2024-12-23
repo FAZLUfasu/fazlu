@@ -268,21 +268,23 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
     
-    @api_view(['GET'])
-    @permission_classes([IsAuthenticated])
-    def view_investor_profile(request):
-        try:
 
-            user = request.user
-            profile = [InvestorProfile.objects.get(user=user)]
-            serializer = InvestorsProfileSerializer(profile)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def view_investor_profile(request):
+    try:
+
+        user = request.user
+        profile = [InvestorProfile.objects.get(user=user)]
+        serializer = InvestorsProfileSerializer(profile)
 
         # You may customize the response data based on your requirements
-            return Response({"profile": profile.serialize()}, status=200)
-        except InvestorProfile.DoesNotExist:
+        return Response({"profile": profile.serialize()}, status=200)
+    except InvestorProfile.DoesNotExist:
             return Response({"error": "Investor profile does not exist for this user"}, status=404)
-        except Exception as e:
-            return Response({"error": str(e)}, status=500)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500) 
 
 
 
