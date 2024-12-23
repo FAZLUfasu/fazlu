@@ -284,14 +284,21 @@ def update_investor_profile(request, username):
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 
+
+    
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib import messages
+from .models import InvestorProfile
+from .forms import InvestorProfileForm
 
 @login_required
-def upload_investor_profile(request):
+def upload_investor_profile(request, username):
     try:
-        # Get the user's investor profile
-        profile = InvestorProfile.objects.get(user=request.user)
+        # Get the user's investor profile by username
+        profile = get_object_or_404(InvestorProfile, user__username=username)
 
         if request.method == 'POST':
             form = InvestorProfileForm(request.POST, request.FILES, instance=profile)
