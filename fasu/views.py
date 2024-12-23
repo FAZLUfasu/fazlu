@@ -219,32 +219,25 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
         return self.list(request, *args, **kwargs)
 
 
+
+@api_view(['GET'])
 def profile_view(request, username):
     try:
-        # Get user and profile
+        # Fetch user and associated profile
         user = User.objects.get(username=username)
         profile = InvestorProfile.objects.get(user=user)
 
-        # Serialize the profile data
-        profile_data = model_to_dict(profile)
+        # Use the serializer to serialize the data
+        serializer = InvestorsProfileSerializer(profile)
 
-        # Add profilepic URL if it exists
-        if profile.profilepic and profile.profilepicname:  # Check if the field has a value
-            profile_data['profilepic'] = profile.profilepic
-        else:
-            profile_data['profilepic'] = None  # Explicitly set to None if not available
-
-        # Remove unnecessary fields
-        profile_data.pop('_state', None)
-
-        return JsonResponse(profile_data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     except User.DoesNotExist:
-        return JsonResponse({'error': 'User not found'}, status=404)
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
     except InvestorProfile.DoesNotExist:
-        return JsonResponse({'error': 'Profile not found'}, status=404)
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)  
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['GET'])
