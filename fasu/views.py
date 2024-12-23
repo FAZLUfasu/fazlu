@@ -261,15 +261,48 @@ def view_investor_profile(request):
 
 
 
-@api_view(['PUT', 'PATCH'])
+# @api_view(['PUT', 'PATCH'])
+# def update_investor_profile(request, username):
+#     try:
+#         # Fetch the user and profile
+#         user = User.objects.get(username=username)
+#         profile = InvestorProfile.objects.get(user=user)
+
+#         # Deserialize and validate the data
+#         serializer = UpdateInvestorProfileSerializer(profile, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     except User.DoesNotExist:
+#         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+#     except InvestorProfile.DoesNotExist:
+#         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+#     except Exception as e:
+#         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST', 'PUT', 'PATCH'])
 def update_investor_profile(request, username):
     try:
         # Fetch the user and profile
         user = User.objects.get(username=username)
-        profile = InvestorProfile.objects.get(user=user)
 
-        # Deserialize and validate the data
-        serializer = UpdateInvestorProfileSerializer(profile, data=request.data, partial=True)
+        # Check if it's a POST request and whether we need to create a new profile
+        if request.method == 'POST':
+            # In case of POST, create a new InvestorProfile for the user if not exists
+            if InvestorProfile.objects.filter(user=user).exists():
+                return Response({'error': 'Profile already exists for this user.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            profile = InvestorProfile(user=user)
+            # Deserialize and validate the data for creating a new profile
+            serializer = UpdateInvestorProfileSerializer(profile, data=request.data)
+        else:
+            # For PUT/PATCH, fetch existing profile
+            profile = InvestorProfile.objects.get(user=user)
+            # Deserialize and validate the data for updating the existing profile
+            serializer = UpdateInvestorProfileSerializer(profile, data=request.data, partial=True)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -278,10 +311,12 @@ def update_investor_profile(request, username):
     except User.DoesNotExist:
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
     except InvestorProfile.DoesNotExist:
+        if request.method == 'POST':
+            # If POST request and no profile exists, return an error
+            return Response({'error': 'Profile not found for creating new one'}, status=status.HTTP_404_NOT_FOUND)
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
