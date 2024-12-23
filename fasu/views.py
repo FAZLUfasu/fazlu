@@ -1,5 +1,6 @@
 
 import json
+from django.forms import model_to_dict
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import authenticate
@@ -206,33 +207,58 @@ def my_projects_view(request, username):
         return JsonResponse({'error': str(e)}, status=500)
 
 
+
+# def profile_view(request, username):
+#     try:
+#         user = User.objects.get(username=username)
+#         profile = InvestorProfile.objects.get(user=user)
+        
+#         # Serialize the profile data as needed
+#         profile_data = {
+#             'username': profile.user.username,
+#             'email': profile.user.email,
+#             # Add other profile fields as needed...
+#         }
+        
+#         # Add all profile fields to profile_data
+#         profile_data.update(profile.__dict__)
+        
+#         # Remove unnecessary fields
+#         profile_data.pop('_state', None)  # Remove _state field
+        
+#         return JsonResponse(profile_data)
+#     except User.DoesNotExist:
+#         return JsonResponse({'error': 'User not found'}, status=404)
+#     except InvestorProfile.DoesNotExist:
+#         return JsonResponse({'error': 'Profile not found'}, status=404)
+
+
+
+
 def profile_view(request, username):
     try:
+        # Get user and profile
         user = User.objects.get(username=username)
         profile = InvestorProfile.objects.get(user=user)
         
-        # Serialize the profile data as needed
-        profile_data = {
-            'username': profile.user.username,
-            'email': profile.user.email,
-            # Add other profile fields as needed...
-        }
+        # Serialize the profile data
+        profile_data = model_to_dict(profile)
         
-        # Add all profile fields to profile_data
-        profile_data.update(profile.__dict__)
+        # If you have image fields like profile_pic, add the URL instead of the file object
+        if profile.profile_pic:
+            profile_data['profile_pic'] = profile.profile_pic.url
         
-        # Remove unnecessary fields
-        profile_data.pop('_state', None)  # Remove _state field
+        # Remove unnecessary fields like '_state'
+        profile_data.pop('_state', None)
         
         return JsonResponse(profile_data)
+    
     except User.DoesNotExist:
         return JsonResponse({'error': 'User not found'}, status=404)
     except InvestorProfile.DoesNotExist:
         return JsonResponse({'error': 'Profile not found'}, status=404)
-
-
-
-
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 
 class InvestorProfileAPIView(generics.ListCreateAPIView):
@@ -260,6 +286,52 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
 
 
 
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_investor_profile(request, username):
+    try:
+        # Get the user's profile
+        user = request.user
+        profile = InvestorProfile.objects.get(user=user)
+        
+        # Handle non-attachment fields first
+        profile.name = request.data.get('name', profile.name)
+        profile.address = request.data.get('address', profile.address)
+        profile.mobile_number = request.data.get('mobile_number', profile.mobile_number)
+        profile.email = request.data.get('email', profile.email)
+        profile.whatsapp = request.data.get('whatsapp', profile.whatsapp)
+        profile.aadhar_card = request.data.get('aadhar_card', profile.aadhar_card)
+        profile.election_id = request.data.get('election_id', profile.election_id)
+        profile.passport_number = request.data.get('passport_number', profile.passport_number)
+        profile.pan_card_number = request.data.get('pan_card_number', profile.pan_card_number)
+        profile.account_number = request.data.get('account_number', profile.account_number)
+        profile.iban = request.data.get('iban', profile.iban)
+        profile.bank_name = request.data.get('bank_name', profile.bank_name)
+        profile.branch = request.data.get('branch', profile.branch)
+        profile.ifsc_code = request.data.get('ifsc_code', profile.ifsc_code)
+        
+        # Handle attachment fields (only update if a new file is provided)
+        if 'profilepic' in request.FILES:
+            profile.profilepic = request.FILES['profilepic']
+        if 'aadhar_card_attachment' in request.FILES:
+            profile.aadhar_card_attachment = request.FILES['aadhar_card_attachment']
+        if 'election_id_attachment' in request.FILES:
+            profile.election_id_attachment = request.FILES['election_id_attachment']
+        if 'passport_attachment' in request.FILES:
+            profile.passport_attachment = request.FILES['passport_attachment']
+        if 'pan_card_attachment' in request.FILES:
+            profile.pan_card_attachment = request.FILES['pan_card_attachment']
+        if 'bank_account_passbook_attachment' in request.FILES:
+            profile.bank_account_passbook_attachment = request.FILES['bank_account_passbook_attachment']
+        
+        profile.save()  # Save the updated profile
+        return Response({"success": "Investor profile updated successfully"}, status=status.HTTP_200_OK)
+    
+    except InvestorProfile.DoesNotExist:
+        return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 
 
 @api_view(['POST'])
@@ -269,13 +341,20 @@ def create_investor_profile(request):
         user = request.user
         if InvestorProfile.objects.filter(user=user).exists():
             return Response({"error": "Investor profile already exists for this user"}, status=400)
-        profile = InvestorProfile(user=user)
-        profile.save()
-        return Response({"success": "Investor profile created successfully"}, status=201)
+
+        # Create a profile instance and save the file fields
+        profile_data = request.data
+        profile_data['user'] = user.id  # Ensure the user is linked to the profile
+        profile_serializer = InvestorsProfileSerializer(data=profile_data, context={'request': request})
+
+        if profile_serializer.is_valid():
+            profile_serializer.save()
+            return Response({"success": "Investor profile created successfully", "profile": profile_serializer.data}, status=201)
+        return Response({"error": profile_serializer.errors}, status=400)
+
     except Exception as e:
         return Response({"error": str(e)}, status=500)
-
-
+    
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -284,6 +363,16 @@ class ProfileView(APIView):
         profile = get_object_or_404(InvestorProfile, user=user)
         serializer = InvestorsProfileSerializer(profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def put(self, request, username):
+        user = get_object_or_404(User, username=username)
+        profile = get_object_or_404(InvestorProfile, user=user)
+        profile_serializer = InvestorsProfileSerializer(profile, data=request.data, context={'request': request}, partial=True)
+        
+        if profile_serializer.is_valid():
+            profile_serializer.save()
+            return Response(profile_serializer.data, status=status.HTTP_200_OK)
+        return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
 
@@ -299,6 +388,29 @@ class LoginView(APIView):
         else:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
            
+
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def create_investor_profile(request):
+#     try:
+#         user = request.user
+#         if InvestorProfile.objects.filter(user=user).exists():
+#             return Response({"error": "Investor profile already exists for this user"}, status=400)
+#         profile = InvestorProfile(user=user)
+#         profile.save()
+#         return Response({"success": "Investor profile created successfully"}, status=201)
+#     except Exception as e:
+#         return Response({"error": str(e)}, status=500)
+
+
+# class ProfileView(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request, username):
+#         user = get_object_or_404(User, username=username)
+#         profile = get_object_or_404(InvestorProfile, user=user)
+#         serializer = InvestorsProfileSerializer(profile)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class VideoListView(generics.ListAPIView):

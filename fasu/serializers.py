@@ -43,6 +43,9 @@ class InvestorsProfileSerializer(serializers.ModelSerializer):
         model = InvestorProfile
         fields = '__all__'
 
+
+
+
 class AboutUsPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = AboutUs
