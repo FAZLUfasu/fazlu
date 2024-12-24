@@ -328,21 +328,23 @@ def update_investor_profile(request, username):
 #         return Response(serializer.errors, status=400)
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
-
-from .serializers import InvestorsProfileSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from .models import InvestorProfile  # Make sure this model is properly imported
+from .serializers import InvestorsProfileSerializer  # Make sure the correct serializer is imported
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])  # Ensure only authenticated users can upload files
 def profile_attachment_upload(request, username):
     try:
-        profile = profile.objects.get(user__username=username)
-    except profile.DoesNotExist:
+        # Retrieve the profile for the given username
+        profile = InvestorProfile.objects.get(user__username=username)
+    except InvestorProfile.DoesNotExist:
         return HttpResponse("Profile not found.", status=404)
 
     if request.method == 'POST' and request.FILES:
+        # Retrieve the uploaded files
         profilepic = request.FILES.get('profilepic')
         aadhar_card_attachment = request.FILES.get('aadhar_card_attachment')
         election_id_attachment = request.FILES.get('election_id_attachment')
@@ -368,8 +370,9 @@ def profile_attachment_upload(request, username):
 
         return HttpResponse("Files uploaded successfully!", status=200)
 
-    # Render the upload form
+    # If no files are uploaded, render the upload form
     return render(request, 'profile/upload.html', {'username': username})
+
 
 
         

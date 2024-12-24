@@ -1,7 +1,10 @@
-<!-- templates/profile/update_profile.html -->
-<h1>Update Profile</h1>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
+    <input type="file" name="profilepic" />
+    <input type="file" name="aadhar_card_attachment" />
+    <input type="file" name="election_id_attachment" />
+    <input type="file" name="passport_attachment" />
+    <input type="file" name="pan_card_attachment" />
+    <input type="file" name="bank_account_passbook_attachment" />
+    <button type="submit">Upload</button>
 </form>
