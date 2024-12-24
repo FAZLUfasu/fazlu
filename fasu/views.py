@@ -302,18 +302,59 @@ def upload_file(request):
 
 
 
-@api_view(['PUT', 'PATCH' ,])
+# @api_view(['PUT', 'PATCH' ,])
+# def update_investor_profile(request, username):
+#     try:
+#         # Fetch the user and profile
+#         user = User.objects.get(username=username)
+#         profile = InvestorProfile.objects.get(user=user)
+
+#         # Deserialize and validate the data
+#         serializer = UpdateInvestorProfileSerializer(profile, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     except User.DoesNotExist:
+#         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+#     except InvestorProfile.DoesNotExist:
+#         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+#     except Exception as e:
+#         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import User, InvestorProfile
+from .serializers import UpdateInvestorProfileSerializer
+from django.core.files.storage import default_storage
+
+@api_view(['PUT','POST', 'PATCH'])
 def update_investor_profile(request, username):
     try:
         # Fetch the user and profile
         user = User.objects.get(username=username)
         profile = InvestorProfile.objects.get(user=user)
 
-        # Deserialize and validate the data
+        file_fields = [field.name for field in InvestorProfile._meta.get_fields() if field.get_internal_type() == 'FileField']
+
+        for field in file_fields:
+            file = request.FILES.get(field)
+            if file:
+                # Optionally, delete the old file if needed
+                if getattr(profile, field):
+                    default_storage.delete(getattr(profile, field).path)  # Delete the old file from storage
+                
+                # Update the file field with the new file
+                setattr(profile, field, file)
+
+        # Deserialize and validate the other data
         serializer = UpdateInvestorProfileSerializer(profile, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     except User.DoesNotExist:
@@ -322,7 +363,6 @@ def update_investor_profile(request, username):
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
 
 
 # @csrf_exempt
