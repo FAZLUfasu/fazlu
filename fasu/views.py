@@ -324,21 +324,28 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import InvestorProfile
 
-@api_view(['DELETE'])
+import os
+from django.conf import settings
+
 def delete_profile(request, username):
     try:
-        # Find the profile by username
         profile = InvestorProfile.objects.get(user__username=username)
-        
-        # Delete the profile
+
+        # Delete files associated with the profile
+        if profile.profilepic:
+            profile_pic_path = os.path.join(settings.MEDIA_ROOT, profile.profile_pic.name)
+            if os.path.exists(profile_pic_path):
+                os.remove(profile_pic_path)
+
+        # Now delete the profile
         profile.delete()
 
-        # Respond with success
         return Response({'message': 'Profile deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
-    
+
     except InvestorProfile.DoesNotExist:
-        # Handle the case where the profile does not exist
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
 
 # @api_view(['PUT', 'PATCH' ,])
 # def update_investor_profile(request, username):
