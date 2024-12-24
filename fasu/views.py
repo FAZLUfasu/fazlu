@@ -214,6 +214,10 @@ def my_projects_view(request, username):
 
 
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+
 
 class InvestorProfileAPIView(generics.ListCreateAPIView):
     queryset = InvestorProfile.objects.all()
@@ -224,137 +228,116 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
     
 
 
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core.files.storage import default_storage
 
-@csrf_exempt
-def update_profile(request, username):
-    if request.method == "PUT":
-        # Extract file from the request
-        file = request.FILES.get('attachment')
-        label = request.POST.get('label')
+# @csrf_exempt
+# def update_profile(request, username):
+#     # Log the incoming request method
+#     print(f"Received request method: {request.method}")
+#     print(f"Received request headers: {request.headers}")
 
-        if not file or not label:
-            return JsonResponse({"error": "File and label are required"}, status=400)
+#     if request.method == "PUT":
+#         # Extract file from the request
+#         file = request.FILES.get('attachment')
+#         label = request.POST.get('label')
 
-        # Save the file (example)
-        file_path = default_storage.save(f"uploads/{username}/{label}/{file.name}", file)
+#         if not file or not label:
+#             return JsonResponse({"error": "File and label are required"}, status=400)
 
-        return JsonResponse({"file_url": file_path}, status=200)
+#         # Save the file
+#         file_path = default_storage.save(f"uploads/{username}/{label}/{file.name}", file)
 
-    return JsonResponse({"error": "Invalid request method"}, status=405)
+#         return JsonResponse({"file_url": file_path}, status=200)
 
-    
-
-@api_view(['GET'])
-def profile_view(request, username):
-    try:
-        # Fetch user and associated profile
-        user = User.objects.get(username=username)
-        profile = InvestorProfile.objects.get(user=user)
-
-        # Use the serializer to serialize the data
-        serializer = InvestorsProfileSerializer(profile)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    except User.DoesNotExist:
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-    except InvestorProfile.DoesNotExist:
-        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+#     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 # @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def view_investor_profile(request):
+# def profile_view(request, username):
 #     try:
+#         # Fetch user and associated profile
+#         user = User.objects.get(username=username)
+#         profile = InvestorProfile.objects.get(user=user)
 
-#         user = request.user
-#         profile = [InvestorProfile.objects.get(user=user)]
+#         # Use the serializer to serialize the data
 #         serializer = InvestorsProfileSerializer(profile)
 
-#         # You may customize the response data based on your requirements
-#         return Response({"profile": profile.serialize()}, status=200)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+#     except User.DoesNotExist:
+#         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 #     except InvestorProfile.DoesNotExist:
-#             return Response({"error": "Investor profile does not exist for this user"}, status=404)
+#         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
 #     except Exception as e:
-#         return Response({"error": str(e)}, status=500) 
+#         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
 
 
 
-@api_view(['PUT', 'PATCH' ,])
-def update_investor_profile(request, username):
-    try:
-        # Fetch the user and profile
-        user = User.objects.get(username=username)
-        profile = InvestorProfile.objects.get(user=user)
+# @api_view(['PUT', 'PATCH' ,])
+# def update_investor_profile(request, username):
+#     try:
+#         # Fetch the user and profile
+#         user = User.objects.get(username=username)
+#         profile = InvestorProfile.objects.get(user=user)
 
-        # Deserialize and validate the data
-        serializer = UpdateInvestorProfileSerializer(profile, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         # Deserialize and validate the data
+#         serializer = UpdateInvestorProfileSerializer(profile, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    except User.DoesNotExist:
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-    except InvestorProfile.DoesNotExist:
-        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#     except User.DoesNotExist:
+#         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+#     except InvestorProfile.DoesNotExist:
+#         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+#     except Exception as e:
+#         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core.files.storage import FileSystemStorage
 
-@csrf_exempt
-def update_profile(request, username):
-    if request.method == 'PUT':
-        file = request.FILES.get('attachment')
-        if file:
-            fs = FileSystemStorage()
-            # Save the file with a timestamp or specific path
-            filename = fs.save(file.name, file)
-            uploaded_file_url = fs.url(filename)  # Get the URL of the file
-            # Update the user's profile with the file URL
-            profile = InvestorProfile.objects.get(user__username=username)
-            profile.attachment = filename
-            profile.save()
+# @csrf_exempt
+# def update_profile(request, username):
+#     if request.method == 'PUT':
+#         file = request.FILES.get('attachment')
+#         if file:
+#             fs = FileSystemStorage()
+#             # Save the file with a timestamp or specific path
+#             filename = fs.save(file.name, file)
+#             uploaded_file_url = fs.url(filename)  # Get the URL of the file
+#             # Update the user's profile with the file URL
+#             profile = InvestorProfile.objects.get(user__username=username)
+#             profile.attachment = filename
+#             profile.save()
 
-            return JsonResponse({'message': 'File uploaded successfully', 'file_url': uploaded_file_url})
-        else:
-            return JsonResponse({'error': 'No file provided'}, status=400)
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+#             return JsonResponse({'message': 'File uploaded successfully', 'file_url': uploaded_file_url})
+#         else:
+#             return JsonResponse({'error': 'No file provided'}, status=400)
+#     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
         
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def create_investor_profile(request):
-    try:
-        user = request.user
-        if InvestorProfile.objects.filter(user=user).exists():
-            return Response({"error": "Investor profile already exists for this user"}, status=400)
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def create_investor_profile(request):
+#     try:
+#         user = request.user
+#         if InvestorProfile.objects.filter(user=user).exists():
+#             return Response({"error": "Investor profile already exists for this user"}, status=400)
 
-        # Create a profile instance and save the file fields
-        profile_data = request.data
-        profile_data['user'] = user.id  # Ensure the user is linked to the profile
-        profile_serializer = InvestorsProfileSerializer(data=profile_data, context={'request': request})
+#         # Create a profile instance and save the file fields
+#         profile_data = request.data
+#         profile_data['user'] = user.id  # Ensure the user is linked to the profile
+#         profile_serializer = InvestorsProfileSerializer(data=profile_data, context={'request': request})
 
-        if profile_serializer.is_valid():
-            profile_serializer.save()
-            return Response({"success": "Investor profile created successfully", "profile": profile_serializer.data}, status=201)
-        return Response({"error": profile_serializer.errors}, status=400)
+#         if profile_serializer.is_valid():
+#             profile_serializer.save()
+#             return Response({"success": "Investor profile created successfully", "profile": profile_serializer.data}, status=201)
+#         return Response({"error": profile_serializer.errors}, status=400)
 
-    except Exception as e:
-        return Response({"error": str(e)}, status=500)
+#     except Exception as e:
+#         return Response({"error": str(e)}, status=500)
     
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]

@@ -27,7 +27,7 @@ urlpatterns = ([
     path('up/', views.ImageListView.as_view(), name='images'),
     path('team_photos/', include(router.urls)),
     path('loginn/', views.LoginView.as_view()),
-    path('investorprofilecreate/', views.create_investor_profile, name='investorprofilecreate'),
+    # path('investorprofilecreate/', views.create_investor_profile, name='investorprofilecreate'),
     path('investorprofile/', views.InvestorProfileAPIView.as_view(), name='investorprofile'),
     path('invprofile/<str:username>', views.update_profile, name='investorprofile'),
 
