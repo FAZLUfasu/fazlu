@@ -270,21 +270,19 @@ def profile_view(request, username):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
-    
+
 from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import InvestorProfile
-
 @api_view(['POST'])
 def upload_file(request, username):
-    # Check if a file is included in the request
     if request.FILES.get('file'):
         file = request.FILES['file']
         attachment_type = request.data.get('attachmentType', 'default')
-        
+
         try:
-            # Fetch the InvestorProfile object using the username
+            # Fetch the profile using the username
             profile = InvestorProfile.objects.get(user__username=username)
 
             # Update the appropriate field based on the attachment type
@@ -301,11 +299,11 @@ def upload_file(request, username):
             elif attachment_type == 'bank_account_passbook_attachment':
                 profile.bank_account_passbook_attachment = file
 
-            # Save the profile with the updated file field
+            # Save the profile
             profile.save()
 
-            # Construct the file URL dynamically based on the attachment type
-            base_url = settings.BASE_URL  # Example: 'https://unix-aquatics.com'
+            # Construct the file URL
+            base_url = settings.BASE_URL
             file_url = f"{base_url}/media/{attachment_type}/{file.name}"
 
             return Response({'fileUrl': file_url})
@@ -314,9 +312,6 @@ def upload_file(request, username):
             return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
 
     return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 
 
 
