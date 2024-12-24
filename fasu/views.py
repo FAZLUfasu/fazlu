@@ -275,24 +275,30 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.conf import settings
 from .models import InvestorProfile
-
 @api_view(['POST'])
 def upload_file(request):
     if request.FILES.get('file'):
         file = request.FILES['file']
         attachment_type = request.data.get('attachmentType', 'default')
+
+        # Handle the file saving process (perhaps in a more flexible model)
         file_path = file.name  # Get the file name
 
-        # Save the file in the appropriate directory
+        # Assuming you have a model `InvestorProfile`, save the file to the corresponding field
+        # You might want to dynamically save the file to the correct model field depending on `attachment_type`
         profile = InvestorProfile.objects.create(
-            aadhar_card_attachment=file if attachment_type == 'aadhar_card_attachments' else None,
-            # Save the file based on attachment type
+            aadhar_card_attachment=file if attachment_type == 'aadhar_card_attachment' else None,
+            # You can handle more attachment types dynamically here if necessary
         )
-        
-        # Construct the file URL dynamically
-        file_url = f"{settings.BASE_URL}/media/{attachment_type}/{file_path}"
 
+        # Construct the file URL dynamically
+        file_url = f"{settings.BASE_URL}/media/{file_path}"
+
+        # Return the file URL in the response
         return Response({'fileUrl': file_url})
+    else:
+        return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
