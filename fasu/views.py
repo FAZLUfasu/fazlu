@@ -333,9 +333,9 @@ def delete_profile(request, username):
 
         # Delete files associated with the profile
         if profile.profilepic:
-            profile_pic_path = os.path.join(settings.MEDIA_ROOT, profile.profile_pic.name)
-            if os.path.exists(profile_pic_path):
-                os.remove(profile_pic_path)
+            profilepic_path = os.path.join(settings.MEDIA_ROOT, profile.profilepic.name)
+            if os.path.exists(profilepic_path):
+                os.remove(profilepic_path)
 
         # Now delete the profile
         profile.delete()
