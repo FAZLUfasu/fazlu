@@ -230,7 +230,7 @@ from .models import InvestorProfile
 class file_upload(APIView):
     serializer_class = InvestorsProfileSerializer
 
-    def post(self, request, username):
+    def post(request, username):
         # Fetch the investor profile by the provided username
         try:
             user_profile = InvestorProfile.objects.get(user__username=username)  # Assuming there's a `user` field in the InvestorProfile model
@@ -238,7 +238,7 @@ class file_upload(APIView):
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
         # Pass the data along with the existing user profile for validation
-        serializer = self.serializer_class(user_profile, data=request.data)
+        serializer = username.serializer_class(user_profile, data=request.data)
 
         if serializer.is_valid():
             serializer.save()
