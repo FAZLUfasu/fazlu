@@ -327,6 +327,12 @@ from .models import InvestorProfile
 import os
 from django.conf import settings
 
+from rest_framework.response import Response
+from rest_framework import status
+from .models import InvestorProfile
+import os
+from django.conf import settings
+
 def delete_profile(request, username):
     try:
         profile = InvestorProfile.objects.get(user__username=username)
@@ -340,9 +346,11 @@ def delete_profile(request, username):
         # Now delete the profile
         profile.delete()
 
-        return Response({'message': 'Profile deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        # Return 200 OK status with success message
+        return Response({'message': 'Profile deleted successfully'}, status=status.HTTP_200_OK)
 
     except InvestorProfile.DoesNotExist:
+        # Return 404 Not Found if the profile does not exist
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
