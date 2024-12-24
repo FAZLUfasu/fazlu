@@ -270,26 +270,28 @@ def profile_view(request, username):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
-
 from django.conf import settings
-from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 from .models import InvestorProfile
-@api_view(['POST'])
-def upload_file(request, username):
+from django.core.exceptions import ObjectDoesNotExist
+
+@api_view(['POST','PATCH'])
+def update_profile_attachment(request, username):
     if request.FILES.get('file'):
         file = request.FILES['file']
-        attachment_type = request.data.get('attachmentType', 'default')
+        attachment_type = request.data.get('attachmentType')
 
         try:
-            # Fetch the profile using the username
+            # Get the investor profile for the logged-in user
             profile = InvestorProfile.objects.get(user__username=username)
 
-            # Update the appropriate field based on the attachment type
-            if attachment_type == 'aadhar_card_attachments':
+            # Check the attachment type and update the appropriate field
+            if attachment_type == 'profile_pic':
+                profile.profilepic = file
+            elif attachment_type == 'aadhar_card_attachment':
                 profile.aadhar_card_attachment = file
-            elif attachment_type == 'profile_pic':
-                profile.profile_pic = file
             elif attachment_type == 'election_id_attachment':
                 profile.election_id_attachment = file
             elif attachment_type == 'passport_attachment':
@@ -298,17 +300,18 @@ def upload_file(request, username):
                 profile.pan_card_attachment = file
             elif attachment_type == 'bank_account_passbook_attachment':
                 profile.bank_account_passbook_attachment = file
+            else:
+                return Response({'error': 'Invalid attachment type'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Save the profile
             profile.save()
 
-            # Construct the file URL
-            base_url = settings.BASE_URL
+            # Construct the file URL dynamically based on the attachment type
+            base_url = settings.BASE_URL  # Example: 'https://unix-aquatics.com'
             file_url = f"{base_url}/media/{attachment_type}/{file.name}"
 
             return Response({'fileUrl': file_url})
 
-        except InvestorProfile.DoesNotExist:
+        except ObjectDoesNotExist:
             return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
 
     return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
