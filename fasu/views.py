@@ -332,7 +332,14 @@ from rest_framework import status
 from .models import InvestorProfile
 import os
 from django.conf import settings
+from rest_framework.response import Response
+from rest_framework import status
+from .models import InvestorProfile
+import os
+from django.conf import settings
+from rest_framework.decorators import api_view
 
+@api_view(['DELETE'])
 def delete_profile(request, username):
     try:
         profile = InvestorProfile.objects.get(user__username=username)
@@ -352,7 +359,6 @@ def delete_profile(request, username):
     except InvestorProfile.DoesNotExist:
         # Return 404 Not Found if the profile does not exist
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
-
 
 
 # @api_view(['PUT', 'PATCH' ,])
