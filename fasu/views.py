@@ -270,53 +270,54 @@ def profile_view(request, username):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
+
+
 from django.conf import settings
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import InvestorProfile
-from django.core.exceptions import ObjectDoesNotExist
 
-@api_view(['POST','PATCH'])
-def update_profile_attachment(request, username):
-    if request.FILES.get('file'):
-        file = request.FILES['file']
-        attachment_type = request.data.get('attachmentType')
+@api_view(['POST'])
+def upload_file(request, username):
+    # Check if a file is included in the request
+    if 'file' not in request.FILES:
+        return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            # Get the investor profile for the logged-in user
-            profile = InvestorProfile.objects.get(user__username=username)
+    file = request.FILES['file']
+    attachment_type = request.data.get('attachmentType', 'default')
 
-            # Check the attachment type and update the appropriate field
-            if attachment_type == 'profile_pic':
-                profile.profilepic = file
-            elif attachment_type == 'aadhar_card_attachment':
-                profile.aadhar_card_attachment = file
-            elif attachment_type == 'election_id_attachment':
-                profile.election_id_attachment = file
-            elif attachment_type == 'passport_attachment':
-                profile.passport_attachment = file
-            elif attachment_type == 'pan_card_attachment':
-                profile.pan_card_attachment = file
-            elif attachment_type == 'bank_account_passbook_attachment':
-                profile.bank_account_passbook_attachment = file
-            else:
-                return Response({'error': 'Invalid attachment type'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        # Fetch the profile using the username
+        profile = InvestorProfile.objects.get(user__username=username)
 
-            profile.save()
+        # Update the profile fields based on the attachment type
+        if attachment_type == 'aadhar_card_attachments':
+            profile.aadhar_card_attachment = file
+        elif attachment_type == 'profile_pic':
+            profile.profilepic = file
+        elif attachment_type == 'election_id_attachment':
+            profile.election_id_attachment = file
+        elif attachment_type == 'passport_attachment':
+            profile.passport_attachment = file
+        elif attachment_type == 'pan_card_attachment':
+            profile.pan_card_attachment = file
+        elif attachment_type == 'bank_account_passbook_attachment':
+            profile.bank_account_passbook_attachment = file
 
-            # Construct the file URL dynamically based on the attachment type
-            base_url = settings.BASE_URL  # Example: 'https://unix-aquatics.com'
-            file_url = f"{base_url}/media/{attachment_type}/{file.name}"
+        # Save the updated profile
+        profile.save()
 
-            return Response({'fileUrl': file_url})
+        # Construct the file URL (based on settings)
+        base_url = settings.BASE_URL
+        file_url = f"{base_url}/media/{attachment_type}/{file.name}"
 
-        except ObjectDoesNotExist:
-            return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'fileUrl': file_url})
 
-    return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
-
-
+    except InvestorProfile.DoesNotExist:
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # @api_view(['PUT', 'PATCH' ,])
 # def update_investor_profile(request, username):
