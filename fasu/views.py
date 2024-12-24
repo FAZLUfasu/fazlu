@@ -221,18 +221,31 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
    
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import InvestorsProfileSerializer
+from .models import InvestorProfile
 
 class file_upload(APIView):
     serializer_class = InvestorsProfileSerializer
-    def post(self,request, username):
-        request.user=InvestorProfile.objects.all()
-        serializer =self.serializer_class(request.user, data=request.data)
+
+    def post(self, request, username):
+        # Fetch the investor profile by the provided username
+        try:
+            user_profile = InvestorProfile.objects.get(user__username=username)  # Assuming there's a `user` field in the InvestorProfile model
+        except InvestorProfile.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Pass the data along with the existing user profile for validation
+        serializer = self.serializer_class(user_profile, data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-    
+        return Response({'error': 'Invalid data'}, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET'])
 def profile_view(request, username):
     try:
