@@ -42,7 +42,13 @@ class InvestorsProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestorProfile
         fields = '__all__'
-
+        
+    def update(self, instance, validated_data):
+        # Handle file uploads
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 class UpdateInvestorProfileSerializer(serializers.ModelSerializer):
     class Meta:
