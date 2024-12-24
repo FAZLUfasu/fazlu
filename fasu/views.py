@@ -271,6 +271,28 @@ def profile_view(request, username):
 
 
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.conf import settings
+from .models import InvestorProfile
+
+@api_view(['POST'])
+def upload_file(request):
+    if request.FILES.get('file'):
+        file = request.FILES['file']
+        attachment_type = request.data.get('attachmentType', 'default')
+        file_path = file.name  # Get the file name
+
+        # Save the file in the appropriate directory
+        profile = InvestorProfile.objects.create(
+            aadhar_card_attachment=file if attachment_type == 'aadhar_card_attachments' else None,
+            # Save the file based on attachment type
+        )
+        
+        # Construct the file URL dynamically
+        file_url = f"{settings.BASE_URL}/media/{attachment_type}/{file_path}"
+
+        return Response({'fileUrl': file_url})
 
 
 

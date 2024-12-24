@@ -29,7 +29,7 @@ urlpatterns = ([
     path('loginn/', views.LoginView.as_view()),
     # path('investorprofilecreate/', views.create_investor_profile, name='investorprofilecreate'),
     path('investorprofile/', views.InvestorProfileAPIView.as_view(), name='investorprofile'),
-    # path('invprofile/<str:username>', views.update_profile, name='investorprofile'),
+    path('invprofile/<str:username>', views.upload_file, name='investorprofile'),
 
     path('profile/<str:username>/update/', views.update_investor_profile, name='update-investor-profile'),
   
