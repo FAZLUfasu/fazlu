@@ -244,28 +244,28 @@ def profile_view(request, username):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def view_investor_profile(request):
-    try:
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def view_investor_profile(request):
+#     try:
 
-        user = request.user
-        profile = [InvestorProfile.objects.get(user=user)]
-        serializer = InvestorsProfileSerializer(profile)
+#         user = request.user
+#         profile = [InvestorProfile.objects.get(user=user)]
+#         serializer = InvestorsProfileSerializer(profile)
 
-        # You may customize the response data based on your requirements
-        return Response({"profile": profile.serialize()}, status=200)
-    except InvestorProfile.DoesNotExist:
-            return Response({"error": "Investor profile does not exist for this user"}, status=404)
-    except Exception as e:
-        return Response({"error": str(e)}, status=500) 
-
-
+#         # You may customize the response data based on your requirements
+#         return Response({"profile": profile.serialize()}, status=200)
+#     except InvestorProfile.DoesNotExist:
+#             return Response({"error": "Investor profile does not exist for this user"}, status=404)
+#     except Exception as e:
+#         return Response({"error": str(e)}, status=500) 
 
 
 
 
-@api_view(['PUT', 'PATCH'])
+
+
+@api_view(['PUT', 'PATCH' ,'POST'])
 def update_investor_profile(request, username):
     try:
         # Fetch the user and profile
@@ -288,105 +288,6 @@ def update_investor_profile(request, username):
     
 
 
-
-# @api_view(['POST'])
-# class ProfileAttachmentUploadView(APIView):
-#     parser_classes = (MultiPartParser, FormParser)
-
-#     def post(self, request, username, *args, **kwargs):
-#         # Check if the profile exists
-#         try:
-#             profile = profile.objects.get(user__username=username)
-#         except profile.DoesNotExist:
-#             return Response({"error": "Profile not found."}, status=404)
-        
-#         # Create a serializer for the incoming data
-#         serializer = InvestorsProfileSerializer(data=request.data)
-        
-#         if serializer.is_valid():
-#             # Save the profile data, excluding the file fields
-#             profile = serializer.save(user=profile.user)  # Use existing user
-
-#             # Handle the file fields and save them to the profile instance
-#             if 'profilepic' in request.FILES:
-#                 profile.profilepic = request.FILES['profilepic']
-#             if 'aadhar_card_attachment' in request.FILES:
-#                 profile.aadhar_card_attachment = request.FILES['aadhar_card_attachment']
-#             if 'election_id_attachment' in request.FILES:
-#                 profile.election_id_attachment = request.FILES['election_id_attachment']
-#             if 'passport_attachment' in request.FILES:
-#                 profile.passport_attachment = request.FILES['passport_attachment']
-#             if 'pan_card_attachment' in request.FILES:
-#                 profile.pan_card_attachment = request.FILES['pan_card_attachment']
-#             if 'bank_account_passbook_attachment' in request.FILES:
-#                 profile.bank_account_passbook_attachment = request.FILES['bank_account_passbook_attachment']
-
-#             # Save the updated profile instance with the files
-#             profile.save()
-
-#             return Response({"message": "File uploaded successfully!"}, status=200)
-        
-#         return Response(serializer.errors, status=400)
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from .models import InvestorProfile  # Make sure this model is properly imported
-from .serializers import InvestorsProfileSerializer  # Make sure the correct serializer is imported
-from rest_framework.parsers import MultiPartParser, FormParser
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])  # Ensure only authenticated users can upload files
-def profile_attachment_upload(request, username):
-    try:
-        # Retrieve the profile for the given username
-        profile = InvestorProfile.objects.get(user__username=username)
-    except InvestorProfile.DoesNotExist:
-        return HttpResponse("Profile not found.", status=404)
-
-    if request.method == 'POST' and request.FILES:
-        # Retrieve the uploaded files
-        profilepic = request.FILES.get('profilepic')
-        aadhar_card_attachment = request.FILES.get('aadhar_card_attachment')
-        election_id_attachment = request.FILES.get('election_id_attachment')
-        passport_attachment = request.FILES.get('passport_attachment')
-        pan_card_attachment = request.FILES.get('pan_card_attachment')
-        bank_account_passbook_attachment = request.FILES.get('bank_account_passbook_attachment')
-
-        # Save the files to the profile
-        if profilepic:
-            profile.profilepic = profilepic
-        if aadhar_card_attachment:
-            profile.aadhar_card_attachment = aadhar_card_attachment
-        if election_id_attachment:
-            profile.election_id_attachment = election_id_attachment
-        if passport_attachment:
-            profile.passport_attachment = passport_attachment
-        if pan_card_attachment:
-            profile.pan_card_attachment = pan_card_attachment
-        if bank_account_passbook_attachment:
-            profile.bank_account_passbook_attachment = bank_account_passbook_attachment
-
-        profile.save()
-
-        return HttpResponse("Files uploaded successfully!", status=200)
-
-    # If no files are uploaded, render the upload form
-    return render(request, 'profile/upload.html', {'username': username})
-from django.core.files.storage import FileSystemStorage
-
-def upload_aadhar_card(request, username):
-    if request.method == 'POST' and request.FILES['file']:
-        aadhar_file = request.FILES['file']
-
-        # Define the file path in the `aadhar_card_attachments` folder
-        fs = FileSystemStorage(location=os.path.join('media/aadhar_card_attachments'))
-        filename = fs.save(aadhar_file.name, aadhar_file)
-        file_url = fs.url(filename)
-
-        return JsonResponse({'status': 'success', 'file_url': file_url})
-    else:
-        return JsonResponse({'status': 'error', 'message': 'No file uploaded.'})
 
         
 @api_view(['POST'])
@@ -428,6 +329,16 @@ class ProfileView(APIView):
             profile_serializer.save()
             return Response(profile_serializer.data, status=status.HTTP_200_OK)
         return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+
+
+
+
+
+
+
 
 class LoginView(APIView):
 
@@ -444,28 +355,6 @@ class LoginView(APIView):
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
            
 
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def create_investor_profile(request):
-#     try:
-#         user = request.user
-#         if InvestorProfile.objects.filter(user=user).exists():
-#             return Response({"error": "Investor profile already exists for this user"}, status=400)
-#         profile = InvestorProfile(user=user)
-#         profile.save()
-#         return Response({"success": "Investor profile created successfully"}, status=201)
-#     except Exception as e:
-#         return Response({"error": str(e)}, status=500)
-
-
-# class ProfileView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def get(self, request, username):
-#         user = get_object_or_404(User, username=username)
-#         profile = get_object_or_404(InvestorProfile, user=user)
-#         serializer = InvestorsProfileSerializer(profile)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class VideoListView(generics.ListAPIView):
