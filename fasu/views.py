@@ -229,26 +229,26 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
 
 
 
-@csrf_exempt
-def update_profile(request, username):
-    # Log the incoming request method
-    print(f"Received request method: {request.method}")
-    print(f"Received request headers: {request.headers}")
+# @csrf_exempt
+# def update_profile(request, username):
+#     # Log the incoming request method
+#     print(f"Received request method: {request.method}")
+#     print(f"Received request headers: {request.headers}")
 
-    if request.method == "PUT":
-        # Extract file from the request
-        file = request.FILES.get('attachment')
-        label = request.POST.get('label')
+#     if request.method == "PUT":
+#         # Extract file from the request
+#         file = request.FILES.get('attachment')
+#         label = request.POST.get('label')
 
-        if not file or not label:
-            return JsonResponse({"error": "File and label are required"}, status=400)
+#         if not file or not label:
+#             return JsonResponse({"error": "File and label are required"}, status=400)
 
-        # Save the file
-        file_path = default_storage.save(f"uploads/{username}/{label}/{file.name}", file)
+#         # Save the file
+#         file_path = default_storage.save(f"uploads/{username}/{label}/{file.name}", file)
 
-        return JsonResponse({"file_url": file_path}, status=200)
+#         return JsonResponse({"file_url": file_path}, status=200)
 
-    return JsonResponse({"error": "Invalid request method"}, status=405)
+#     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 @api_view(['GET'])
 def profile_view(request, username):
@@ -274,26 +274,26 @@ def profile_view(request, username):
 
 
 
-# @api_view(['PUT', 'PATCH' ,])
-# def update_investor_profile(request, username):
-#     try:
-#         # Fetch the user and profile
-#         user = User.objects.get(username=username)
-#         profile = InvestorProfile.objects.get(user=user)
+@api_view(['PUT', 'PATCH' ,])
+def update_investor_profile(request, username):
+    try:
+        # Fetch the user and profile
+        user = User.objects.get(username=username)
+        profile = InvestorProfile.objects.get(user=user)
 
-#         # Deserialize and validate the data
-#         serializer = UpdateInvestorProfileSerializer(profile, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Deserialize and validate the data
+        serializer = UpdateInvestorProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#     except User.DoesNotExist:
-#         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-#     except InvestorProfile.DoesNotExist:
-#         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
-#     except Exception as e:
-#         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    except InvestorProfile.DoesNotExist:
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
 
