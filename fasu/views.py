@@ -319,6 +319,27 @@ def upload_file(request, username):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+from .models import InvestorProfile
+
+@api_view(['DELETE'])
+def delete_profile(request, username):
+    try:
+        # Find the profile by username
+        profile = InvestorProfile.objects.get(user__username=username)
+        
+        # Delete the profile
+        profile.delete()
+
+        # Respond with success
+        return Response({'message': 'Profile deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    
+    except InvestorProfile.DoesNotExist:
+        # Handle the case where the profile does not exist
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
 # @api_view(['PUT', 'PATCH' ,])
 # def update_investor_profile(request, username):
 #     try:

@@ -30,7 +30,7 @@ urlpatterns = ([
     # path('investorprofilecreate/', views.create_investor_profile, name='investorprofilecreate'),
     path('investorprofile/', views.InvestorProfileAPIView.as_view(), name='investorprofile'),
     path('profile/<str:username>/upload/', views.upload_file, name='investorprofile'),
-
+    path('profile/delete/<str:username>/', views.delete_profile, name='delete_profile'),
     path('profile/<str:username>/update/', views.update_investor_profile, name='update-investor-profile'),
   
     path('HomePageData/', views.HomePageDataAPIView.as_view(), name='HomePageData'),
