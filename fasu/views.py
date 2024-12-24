@@ -288,46 +288,91 @@ def update_investor_profile(request, username):
 
 
 
+# @api_view(['POST'])
+# class ProfileAttachmentUploadView(APIView):
+#     parser_classes = (MultiPartParser, FormParser)
+
+#     def post(self, request, username, *args, **kwargs):
+#         # Check if the profile exists
+#         try:
+#             profile = profile.objects.get(user__username=username)
+#         except profile.DoesNotExist:
+#             return Response({"error": "Profile not found."}, status=404)
+        
+#         # Create a serializer for the incoming data
+#         serializer = InvestorsProfileSerializer(data=request.data)
+        
+#         if serializer.is_valid():
+#             # Save the profile data, excluding the file fields
+#             profile = serializer.save(user=profile.user)  # Use existing user
+
+#             # Handle the file fields and save them to the profile instance
+#             if 'profilepic' in request.FILES:
+#                 profile.profilepic = request.FILES['profilepic']
+#             if 'aadhar_card_attachment' in request.FILES:
+#                 profile.aadhar_card_attachment = request.FILES['aadhar_card_attachment']
+#             if 'election_id_attachment' in request.FILES:
+#                 profile.election_id_attachment = request.FILES['election_id_attachment']
+#             if 'passport_attachment' in request.FILES:
+#                 profile.passport_attachment = request.FILES['passport_attachment']
+#             if 'pan_card_attachment' in request.FILES:
+#                 profile.pan_card_attachment = request.FILES['pan_card_attachment']
+#             if 'bank_account_passbook_attachment' in request.FILES:
+#                 profile.bank_account_passbook_attachment = request.FILES['bank_account_passbook_attachment']
+
+#             # Save the updated profile instance with the files
+#             profile.save()
+
+#             return Response({"message": "File uploaded successfully!"}, status=200)
+        
+#         return Response(serializer.errors, status=400)
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+
+
+from .serializers import InvestorsProfileSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 @api_view(['POST'])
-class ProfileAttachmentUploadView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
+def profile_attachment_upload(request, username):
+    try:
+        profile = profile.objects.get(user__username=username)
+    except profile.DoesNotExist:
+        return HttpResponse("Profile not found.", status=404)
 
-    def post(self, request, username, *args, **kwargs):
-        # Check if the profile exists
-        try:
-            profile = profile.objects.get(user__username=username)
-        except profile.DoesNotExist:
-            return Response({"error": "Profile not found."}, status=404)
+    if request.method == 'POST' and request.FILES:
+        profilepic = request.FILES.get('profilepic')
+        aadhar_card_attachment = request.FILES.get('aadhar_card_attachment')
+        election_id_attachment = request.FILES.get('election_id_attachment')
+        passport_attachment = request.FILES.get('passport_attachment')
+        pan_card_attachment = request.FILES.get('pan_card_attachment')
+        bank_account_passbook_attachment = request.FILES.get('bank_account_passbook_attachment')
+
+        # Save the files to the profile
+        if profilepic:
+            profile.profilepic = profilepic
+        if aadhar_card_attachment:
+            profile.aadhar_card_attachment = aadhar_card_attachment
+        if election_id_attachment:
+            profile.election_id_attachment = election_id_attachment
+        if passport_attachment:
+            profile.passport_attachment = passport_attachment
+        if pan_card_attachment:
+            profile.pan_card_attachment = pan_card_attachment
+        if bank_account_passbook_attachment:
+            profile.bank_account_passbook_attachment = bank_account_passbook_attachment
+
+        profile.save()
+
+        return HttpResponse("Files uploaded successfully!", status=200)
+
+    # Render the upload form
+    return render(request, 'profile/upload.html', {'username': username})
+
+
         
-        # Create a serializer for the incoming data
-        serializer = InvestorsProfileSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            # Save the profile data, excluding the file fields
-            profile = serializer.save(user=profile.user)  # Use existing user
-
-            # Handle the file fields and save them to the profile instance
-            if 'profilepic' in request.FILES:
-                profile.profilepic = request.FILES['profilepic']
-            if 'aadhar_card_attachment' in request.FILES:
-                profile.aadhar_card_attachment = request.FILES['aadhar_card_attachment']
-            if 'election_id_attachment' in request.FILES:
-                profile.election_id_attachment = request.FILES['election_id_attachment']
-            if 'passport_attachment' in request.FILES:
-                profile.passport_attachment = request.FILES['passport_attachment']
-            if 'pan_card_attachment' in request.FILES:
-                profile.pan_card_attachment = request.FILES['pan_card_attachment']
-            if 'bank_account_passbook_attachment' in request.FILES:
-                profile.bank_account_passbook_attachment = request.FILES['bank_account_passbook_attachment']
-
-            # Save the updated profile instance with the files
-            profile.save()
-
-            return Response({"message": "File uploaded successfully!"}, status=200)
-        
-        return Response(serializer.errors, status=400)
-
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_investor_profile(request):
