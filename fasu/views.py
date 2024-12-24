@@ -250,24 +250,24 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
 
 #     return JsonResponse({"error": "Invalid request method"}, status=405)
 
-# @api_view(['GET'])
-# def profile_view(request, username):
-#     try:
-#         # Fetch user and associated profile
-#         user = User.objects.get(username=username)
-#         profile = InvestorProfile.objects.get(user=user)
+@api_view(['GET'])
+def profile_view(request, username):
+    try:
+        # Fetch user and associated profile
+        user = User.objects.get(username=username)
+        profile = InvestorProfile.objects.get(user=user)
 
-#         # Use the serializer to serialize the data
-#         serializer = InvestorsProfileSerializer(profile)
+        # Use the serializer to serialize the data
+        serializer = InvestorsProfileSerializer(profile)
 
-#         return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-#     except User.DoesNotExist:
-#         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-#     except InvestorProfile.DoesNotExist:
-#         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
-#     except Exception as e:
-#         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    except InvestorProfile.DoesNotExist:
+        return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
