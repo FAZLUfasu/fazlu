@@ -229,26 +229,26 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
 
 
 
-# @csrf_exempt
-# def update_profile(request, username):
-#     # Log the incoming request method
-#     print(f"Received request method: {request.method}")
-#     print(f"Received request headers: {request.headers}")
+@csrf_exempt
+def update_profile(request, username):
+    # Log the incoming request method
+    print(f"Received request method: {request.method}")
+    print(f"Received request headers: {request.headers}")
 
-#     if request.method == "PUT":
-#         # Extract file from the request
-#         file = request.FILES.get('attachment')
-#         label = request.POST.get('label')
+    if request.method == "PUT":
+        # Extract file from the request
+        file = request.FILES.get('attachment')
+        label = request.POST.get('label')
 
-#         if not file or not label:
-#             return JsonResponse({"error": "File and label are required"}, status=400)
+        if not file or not label:
+            return JsonResponse({"error": "File and label are required"}, status=400)
 
-#         # Save the file
-#         file_path = default_storage.save(f"uploads/{username}/{label}/{file.name}", file)
+        # Save the file
+        file_path = default_storage.save(f"uploads/{username}/{label}/{file.name}", file)
 
-#         return JsonResponse({"file_url": file_path}, status=200)
+        return JsonResponse({"file_url": file_path}, status=200)
 
-#     return JsonResponse({"error": "Invalid request method"}, status=405)
+    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 @api_view(['GET'])
 def profile_view(request, username):
@@ -318,26 +318,7 @@ def profile_view(request, username):
 
 
         
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-# def create_investor_profile(request):
-#     try:
-#         user = request.user
-#         if InvestorProfile.objects.filter(user=user).exists():
-#             return Response({"error": "Investor profile already exists for this user"}, status=400)
 
-#         # Create a profile instance and save the file fields
-#         profile_data = request.data
-#         profile_data['user'] = user.id  # Ensure the user is linked to the profile
-#         profile_serializer = InvestorsProfileSerializer(data=profile_data, context={'request': request})
-
-#         if profile_serializer.is_valid():
-#             profile_serializer.save()
-#             return Response({"success": "Investor profile created successfully", "profile": profile_serializer.data}, status=201)
-#         return Response({"error": profile_serializer.errors}, status=400)
-
-#     except Exception as e:
-#         return Response({"error": str(e)}, status=500)
     
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
