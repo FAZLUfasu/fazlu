@@ -222,8 +222,17 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-
-
+class file_upload(APIView):
+    serializer_class = InvestorsProfileSerializer
+    def post(self,request, username):
+        request.user=InvestorProfile.objects.all()
+        serializer =self.serializer_class(request.user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    
 @api_view(['GET'])
 def profile_view(request, username):
     try:
@@ -265,7 +274,7 @@ def profile_view(request, username):
 
 
 
-@api_view(['PUT', 'PATCH' ,'POST'])
+@api_view(['PUT', 'PATCH' ,])
 def update_investor_profile(request, username):
     try:
         # Fetch the user and profile
@@ -287,6 +296,28 @@ def update_investor_profile(request, username):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import FileSystemStorage
+
+@csrf_exempt
+def update_profile(request, username):
+    if request.method == 'PUT':
+        file = request.FILES.get('attachment')
+        if file:
+            fs = FileSystemStorage()
+            # Save the file with a timestamp or specific path
+            filename = fs.save(file.name, file)
+            uploaded_file_url = fs.url(filename)  # Get the URL of the file
+            # Update the user's profile with the file URL
+            profile = InvestorProfile.objects.get(user__username=username)
+            profile.attachment = filename
+            profile.save()
+
+            return JsonResponse({'message': 'File uploaded successfully', 'file_url': uploaded_file_url})
+        else:
+            return JsonResponse({'error': 'No file provided'}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
         
