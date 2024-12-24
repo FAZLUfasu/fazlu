@@ -17,6 +17,7 @@ from rest_framework import viewsets
 from django.shortcuts import render, redirect
 
 from fasu.forms import InvestorProfileForm
+
 from .serializers import  BackgroundImageSerializer, DividendSerializer, LocationSerializer, UpdateInvestorProfileSerializer, UserSerializer, VideoNotificationSerializer
 from django.contrib.auth.views import PasswordResetView
 from .serializers import AboutUsPageSerializer, ImagesSerializer, JoinSerializer, MyImageSerializer, MyProjectsSerializer, NewsUpdateSerializer, NotificationSerializer,ProjectpageSerializer, SummarySerializer, UserSerializer, WhatsappchatSerializer
@@ -372,8 +373,20 @@ def profile_attachment_upload(request, username):
 
     # If no files are uploaded, render the upload form
     return render(request, 'profile/upload.html', {'username': username})
+from django.core.files.storage import FileSystemStorage
 
+def upload_aadhar_card(request, username):
+    if request.method == 'POST' and request.FILES['file']:
+        aadhar_file = request.FILES['file']
 
+        # Define the file path in the `aadhar_card_attachments` folder
+        fs = FileSystemStorage(location=os.path.join('media/aadhar_card_attachments'))
+        filename = fs.save(aadhar_file.name, aadhar_file)
+        file_url = fs.url(filename)
+
+        return JsonResponse({'status': 'success', 'file_url': file_url})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'No file uploaded.'})
 
         
 @api_view(['POST'])
