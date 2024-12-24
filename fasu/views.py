@@ -268,36 +268,54 @@ def profile_view(request, username):
         return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 
-
-
+    
+from django.conf import settings
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from django.conf import settings
 from .models import InvestorProfile
+
 @api_view(['POST'])
-def upload_file(request):
+def upload_file(request, username):
+    # Check if a file is included in the request
     if request.FILES.get('file'):
         file = request.FILES['file']
         attachment_type = request.data.get('attachmentType', 'default')
+        
+        try:
+            # Fetch the InvestorProfile object using the username
+            profile = InvestorProfile.objects.get(user__username=username)
 
-        # Handle the file saving process (perhaps in a more flexible model)
-        file_path = file.name  # Get the file name
+            # Update the appropriate field based on the attachment type
+            if attachment_type == 'aadhar_card_attachments':
+                profile.aadhar_card_attachment = file
+            elif attachment_type == 'profile_pic':
+                profile.profile_pic = file
+            elif attachment_type == 'election_id_attachment':
+                profile.election_id_attachment = file
+            elif attachment_type == 'passport_attachment':
+                profile.passport_attachment = file
+            elif attachment_type == 'pan_card_attachment':
+                profile.pan_card_attachment = file
+            elif attachment_type == 'bank_account_passbook_attachment':
+                profile.bank_account_passbook_attachment = file
 
-        # Assuming you have a model `InvestorProfile`, save the file to the corresponding field
-        # You might want to dynamically save the file to the correct model field depending on `attachment_type`
-        profile = InvestorProfile.objects.create(
-            aadhar_card_attachment=file if attachment_type == 'aadhar_card_attachment' else None,
-            # You can handle more attachment types dynamically here if necessary
-        )
+            # Save the profile with the updated file field
+            profile.save()
 
-        # Construct the file URL dynamically
-        file_url = f"{settings.BASE_URL}/media/{file_path}"
+            # Construct the file URL dynamically based on the attachment type
+            base_url = settings.BASE_URL  # Example: 'https://unix-aquatics.com'
+            file_url = f"{base_url}/media/{attachment_type}/{file.name}"
 
-        # Return the file URL in the response
-        return Response({'fileUrl': file_url})
-    else:
-        return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'fileUrl': file_url})
+
+        except InvestorProfile.DoesNotExist:
+            return Response({'error': 'Profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 
@@ -330,7 +348,7 @@ from .models import User, InvestorProfile
 from .serializers import UpdateInvestorProfileSerializer
 from django.core.files.storage import default_storage
 
-@api_view(['PUT','POST', 'PATCH'])
+@api_view(['PUT','POS', 'PATCH'])
 def update_investor_profile(request, username):
     try:
         # Fetch the user and profile
