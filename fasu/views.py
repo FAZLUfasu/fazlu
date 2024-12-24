@@ -287,36 +287,45 @@ def update_investor_profile(request, username):
     
 
 
-    
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib import messages
-from .models import InvestorProfile
-from .forms import InvestorProfileForm
 
-@login_required
-def upload_investor_profile(request, username):
-    try:
-        # Get the user's investor profile by username
-        profile = get_object_or_404(InvestorProfile, user__username=username)
+@api_view(['POST'])
+class ProfileAttachmentUploadView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
 
-        if request.method == 'POST':
-            form = InvestorProfileForm(request.POST, request.FILES, instance=profile)
-            if form.is_valid():
-                form.save()  # Save the uploaded files and form data to the profile
-                messages.success(request, 'Your profile has been updated successfully!')
-                return redirect('profile')  # Redirect to a page, e.g., profile page
-            else:
-                messages.error(request, 'Error updating your profile. Please try again.')
-        else:
-            form = InvestorProfileForm(instance=profile)
+    def post(self, request, username, *args, **kwargs):
+        # Check if the profile exists
+        try:
+            profile = profile.objects.get(user__username=username)
+        except profile.DoesNotExist:
+            return Response({"error": "Profile not found."}, status=404)
+        
+        # Create a serializer for the incoming data
+        serializer = InvestorsProfileSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            # Save the profile data, excluding the file fields
+            profile = serializer.save(user=profile.user)  # Use existing user
 
-        return render(request, 'profile/update_profile.html', {'form': form})
+            # Handle the file fields and save them to the profile instance
+            if 'profilepic' in request.FILES:
+                profile.profilepic = request.FILES['profilepic']
+            if 'aadhar_card_attachment' in request.FILES:
+                profile.aadhar_card_attachment = request.FILES['aadhar_card_attachment']
+            if 'election_id_attachment' in request.FILES:
+                profile.election_id_attachment = request.FILES['election_id_attachment']
+            if 'passport_attachment' in request.FILES:
+                profile.passport_attachment = request.FILES['passport_attachment']
+            if 'pan_card_attachment' in request.FILES:
+                profile.pan_card_attachment = request.FILES['pan_card_attachment']
+            if 'bank_account_passbook_attachment' in request.FILES:
+                profile.bank_account_passbook_attachment = request.FILES['bank_account_passbook_attachment']
 
-    except InvestorProfile.DoesNotExist:
-        # Handle the case where the user's profile does not exist
-        messages.error(request, 'Investor profile not found.')
-        return redirect('profile')  # Redirect to profile page or another page
+            # Save the updated profile instance with the files
+            profile.save()
+
+            return Response({"message": "File uploaded successfully!"}, status=200)
+        
+        return Response(serializer.errors, status=400)
 
 
 @api_view(['POST'])
