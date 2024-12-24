@@ -221,30 +221,31 @@ class InvestorProfileAPIView(generics.ListCreateAPIView):
    
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import InvestorsProfileSerializer
-from .models import InvestorProfile
+    
 
-class file_upload(APIView):
-    serializer_class = InvestorsProfileSerializer
 
-    def post(request, username):
-        # Fetch the investor profile by the provided username
-        try:
-            user_profile = InvestorProfile.objects.get(user__username=username)  # Assuming there's a `user` field in the InvestorProfile model
-        except InvestorProfile.DoesNotExist:
-            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
 
-        # Pass the data along with the existing user profile for validation
-        serializer = username.serializer_class(user_profile, data=request.data)
+@csrf_exempt
+def update_profile(request, username):
+    if request.method == "PUT":
+        # Extract file from the request
+        file = request.FILES.get('attachment')
+        label = request.POST.get('label')
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        
-        return Response({'error': 'Invalid data'}, status=status.HTTP_400_BAD_REQUEST)
+        if not file or not label:
+            return JsonResponse({"error": "File and label are required"}, status=400)
+
+        # Save the file (example)
+        file_path = default_storage.save(f"uploads/{username}/{label}/{file.name}", file)
+
+        return JsonResponse({"file_url": file_path}, status=200)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+    
 
 @api_view(['GET'])
 def profile_view(request, username):
