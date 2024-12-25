@@ -1,4 +1,5 @@
 
+
 from django.contrib import admin
 from .models import AboutUs, BackgroundImage, ContactInfo, Dividend, InvestorProfile, Location, MyProjects, NewsUpdate, Notification,Summary, VideoNotification
 from django.contrib.auth.admin import UserAdmin
@@ -344,3 +345,20 @@ admin.site.register(Join)
 admin.site.register(Location)
 admin.site.register(Notification)
 admin.site.register(VideoNotification)
+
+# from django.contrib import admin
+
+
+# class MyModelAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'name', 'status')  # Example fields to display
+
+#     class Media:
+#         css = {
+#             'all': ('https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css',),
+#         }
+#         js = (
+#             'https://code.jquery.com/jquery-3.6.0.min.js',  # Add jQuery
+#             'https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js',  # Add DataTables
+#         )
+
+

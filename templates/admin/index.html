@@ -1,5 +1,14 @@
+
 {% block extrahead %}
 <style>
+    /* Body background color */
+    body {
+        background: linear-gradient(90deg, #0066ff, #00ccff, #0066ff);
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
     /****************************
         Navigation Bar Styles
     ****************************/
@@ -7,13 +16,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: linear-gradient(90deg, #0066ff, #00ccff);
+        background: linear-gradient(90deg, #00ccff, #0066ff, #00ccff);
         padding: 15px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         margin-bottom: 20px;
     }
-    
+
     .nav-button {
         background-color: white;
         color: #0066ff;
@@ -29,7 +38,7 @@
         position: relative;
         overflow: hidden;
     }
-    
+
     .nav-button:before {
         content: "";
         position: absolute;
@@ -41,23 +50,23 @@
         z-index: 1;
         transition: all 0.3s ease;
     }
-    
+
     .nav-button:hover:before {
         left: 0;
     }
-    
+
     .nav-button:hover {
         background-color: #0066ff;
         color: white;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         transform: translateY(-2px);
     }
-    
+
     .nav-button:active {
         transform: translateY(0);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
-    
+
     /****************************
         Section Content Styles
     ****************************/
@@ -82,7 +91,7 @@
         .navbar {
             flex-wrap: wrap;
         }
-    
+
         .nav-button {
             margin: 5px;
             padding: 8px 15px;
@@ -90,6 +99,7 @@
         }
     }
 </style>
+
 
 <script>
     // Function to toggle the display of sections
@@ -106,18 +116,56 @@
             selectedSection.classList.add('visible');
         }
     }
+
+    // Function to load content when a link is clicked
+    function loadContent(url) {
+        // Hide the image
+        document.getElementById('content-container').style.display = 'none';
+
+        // Display the dynamic content container
+        var contentContainer = document.getElementById('dynamic-content');
+        contentContainer.style.display = 'block';
+
+        // Load the content via AJAX
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                contentContainer.innerHTML = data;  // Insert the content into the container
+            })
+            .catch(error => {
+                contentContainer.innerHTML = '<p>Error loading content.</p>';  // Display error message
+            });
+    }
+    
 </script>
+
 {% endblock %}
 
 {% block nav-global %}
-<ul class="nav nav-pills">
-    {% load i18n static %}
-    <li><a href="{% url 'admin:index' %}">{% translate 'List view' %}</a></li>
-    <li><a href="https://unix-aquatics.com/cadmin/index" target="_blank">Table View</a></li>
-</ul>
+<div style="background-color: #f8f9fa; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <!-- Title -->
+        <h3 style="margin: 0; font-size: 18px;">UNIX AQUATICS</h3>
+
+        <!-- Links -->
+        <ul class="nav nav-pills" style="list-style: none; margin: 0; padding: 0; display: flex; gap: 10px;">
+            {% load i18n static %}
+            <li style="margin: 0;">
+                <a href="{% url 'admin:index' %}" style="text-decoration: none; color: #007bff;">
+                    {% translate 'List View' %}
+                </a>
+            </li>
+            <li style="margin: 0;">
+                <a href="https://unix-aquatics.com/cadmin/index" target="_blank" style="text-decoration: none; color: #007bff;">
+                    Table View
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 {% endblock %}
 
-
+<!-- Navigation buttons for the sections -->
 <div class="navbar">
     <button class="nav-button" onclick="toggleSection('updations')">UPDATIONS</button>
     <button class="nav-button" onclick="toggleSection('pages')">PAGES</button>
@@ -126,14 +174,15 @@
     <button class="nav-button" onclick="toggleSection('others')">OTHERS</button>
 </div>
 
+<!-- Sections for content (initially hidden) -->
 <div id="updations" class="section-content">
     <h3>Updations</h3>
     <ul>
-        <li><a href="{% url 'admin:fasu_backgroundimage_changelist' %}">Background Images</a></li>
-        <li><a href="{% url 'admin:fasu_video_changelist' %}">Videos</a></li>
-        <li><a href="{% url 'admin:fasu_images_changelist' %}">Images</a></li>
-        <li><a href="{% url 'admin:fasu_summary_changelist' %}">Summary</a></li>
-        <li><a href="{% url 'admin:fasu_newsupdate_changelist' %}">News Updates</a></li>
+        <li><a href="javascript:void(0)" onclick="loadContent('{% url 'admin:fasu_backgroundimage_changelist' %}')">Background Images</a></li>
+        <li><a href="javascript:void(0)" onclick="loadContent('{% url 'admin:fasu_video_changelist' %}')">Videos</a></li>
+        <li><a href="javascript:void(0)" onclick="loadContent('{% url 'admin:fasu_images_changelist' %}')">Images</a></li>
+        <li><a href="javascript:void(0)" onclick="loadContent('{% url 'admin:fasu_summary_changelist' %}')">Summary</a></li>
+        <li><a href="javascript:void(0)" onclick="loadContent('{% url 'admin:fasu_newsupdate_changelist' %}')">News Updates</a></li>
     </ul>
 </div>
 
@@ -175,3 +224,11 @@
 
 
 
+<!-- Image initially displayed -->
+<div id="content-container" style="text-align: center; margin-bottom: 20px;">
+    <img src="https://unix-aquatics.com/media/project_logos/logo_unix.jpg" alt="Unix Aquatics Logo" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+</div>
+
+
+<!-- Hidden div to show dynamic content -->
+<div id="dynamic-content" style="display: none; margin-top: 20px;"></div>
