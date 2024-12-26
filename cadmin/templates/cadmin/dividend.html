@@ -130,7 +130,7 @@
             <a href="https://unix-aquatics.com/admin" class="btn btn-danger">List view</a>
         </div>
     </header>
-
+    
     <section>
       <h1 style="text-align: center; margin-top: 20px;">Dividends</h1>
       <div style="width: 90%; margin: 0 auto;">
@@ -157,7 +157,7 @@
                       <td>{{ dividend.dividend_amount }}</td>
                       <td>
                           {% if dividend.transfer_proof %}
-                          <a href="{{ dividend.transfer_proof}}" target="_blank">View Proof</a>
+                          <a href="{{ dividend.transfer_proof.url }}" target="_blank">View Proof</a>
                           {% else %}
                           No Proof
                           {% endif %}
