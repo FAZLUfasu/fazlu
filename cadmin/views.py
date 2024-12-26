@@ -147,140 +147,106 @@ def team_members_view(request):
 
 
 
-# def index(request):
-#     # URLs for fetching data
-#     investor_profile_url = "https://unix-aquatics.com/app/investorprofile/"
-#     project_page_url = "https://unix-aquatics.com/app/Projectpage/"
-#     my_project_url="http://unix-aquatics.com/app/myprojects/"
-   
-#     team_url="https://unix-aquatics.com/app/teammember/"
-    
-#     # Initialize empty data containers
-#     profiles = []
-#     projects = []
-#     myprojects = []
-
-
-#     try:
-#         # Fetch investor profile data
-#         investor_response = requests.get(investor_profile_url)
-#         if investor_response.status_code == 200:
-#             profiles = investor_response.json()  # Parse JSON response
-#         else:
-#             profiles = []  # Fallback if API returns an error
-
-
-#         # Fetch project page data
-#         project_response = requests.get(project_page_url)
-#         if project_response.status_code == 200:
-#             projects = project_response.json()  # Parse JSON response
-#         else:
-#             projects = []  # Fallback if API returns an error
-
-
-#         myproject_response = requests.get(my_project_url)
-#         if myproject_response.status_code == 200:
-#             myprojects = myproject_response.json() 
-#         else:
-#             myprojects = []  # Fallback if API returns an error
-
-
-#         team_response = requests.get(team_url)
-#         if team_response.status_code == 200:
-#             team_members = team_response.json()  # Parse JSON response
-#         else:
-#             team_members= []  # Fallback if API returns an error
-
-
-
-#     except requests.RequestException as e:
-#         print(f"Error fetching data: {e}")
-#         profiles = []  # Fallback in case of a network error
-#         projects = []  # Fallback in case of a network error
-#         myprojects = []
-#         team_members= []
-
-#     # Pass both profiles and projects to the template
-#     return render(request, 'cadmin/index.html', {
-#         'profiles': profiles,
-#         'projects': projects,
-#         'myprojects': myprojects,
-#         'team_members' : team_members
-#     })
-
-
-
 def index(request):
     # URLs for fetching data
     investor_profile_url = "https://unix-aquatics.com/app/investorprofile/"
     project_page_url = "https://unix-aquatics.com/app/Projectpage/"
-    my_project_url = "https://unix-aquatics.com/app/myprojects/"
-    team_url = "https://unix-aquatics.com/app/teammember/"
-    dividend_url = "https://unix-aquatics.com/app/dividends/"  # Add endpoint for dividends
-
+    my_project_url="http://unix-aquatics.com/app/myprojects/"
+    team_url="https://unix-aquatics.com/app/teammember/"
+    
     # Initialize empty data containers
     profiles = []
     projects = []
     myprojects = []
-    team_members = []
-    dividends = []
 
     try:
         # Fetch investor profile data
         investor_response = requests.get(investor_profile_url)
         if investor_response.status_code == 200:
-            profiles = investor_response.json()
-        
+            profiles = investor_response.json()  # Parse JSON response
+        else:
+            profiles = []  # Fallback if API returns an error
+
+
         # Fetch project page data
         project_response = requests.get(project_page_url)
         if project_response.status_code == 200:
-            projects = project_response.json()
-        
-        # Fetch my projects data
+            projects = project_response.json()  # Parse JSON response
+        else:
+            projects = []  # Fallback if API returns an error
+
+
         myproject_response = requests.get(my_project_url)
         if myproject_response.status_code == 200:
-            myprojects = myproject_response.json()
-        
-        # Fetch team member data
+            myprojects = myproject_response.json() 
+        else:
+            myprojects = []  # Fallback if API returns an error
+
+
         team_response = requests.get(team_url)
         if team_response.status_code == 200:
-            team_members = team_response.json()
-        
-        # Fetch dividend data
-        dividend_response = requests.get(dividend_url)
-        if dividend_response.status_code == 200:
-            dividends = dividend_response.json()
-        
+            team_members = team_response.json()  # Parse JSON response
+        else:
+            team_members= []  # Fallback if API returns an error
+
+
+
     except requests.RequestException as e:
         print(f"Error fetching data: {e}")
-        # Fallback in case of a network error
-        profiles = []
-        projects = []
+        profiles = []  # Fallback in case of a network error
+        projects = []  # Fallback in case of a network error
         myprojects = []
-        team_members = []
-        dividends = []
+        team_members= []
 
-    # Pass data to the template
+    # Pass both profiles and projects to the template
     return render(request, 'cadmin/index.html', {
         'profiles': profiles,
         'projects': projects,
         'myprojects': myprojects,
-        'team_members': team_members,
-        'dividends': dividends,  # Include dividends in context
+        'team_members' : team_members
     })
 
 
 
+from django.shortcuts import render
+from fasu.models import Dividend
+from django.db.models import Sum
+
+
+
 def dividend_view(request):
-    url = "https://unix-aquatics.com/app/dividends/"  # URL for fetching dividend data
-    
-    try:
-        # Send a GET request to fetch the dividend data
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an exception for HTTP errors
-        dividends = response.json()  # Parse the JSON data into a Python object
-    except requests.exceptions.RequestException as e:
-        dividends = []  # Set an empty list in case of an error
-        print(f"Error fetching dividends: {e}")
-    
-    return render(request, 'cadmin/dividend.html', {'dividends': dividends})
+    # Get all dividends
+    dividends = Dividend.objects.all()
+
+    # Create dictionaries for project and user dividends
+    project_dividends = {}
+    user_dividends = {}
+
+    # Calculate the total dividends for each project and user
+    for dividend in dividends:
+        project = dividend.project
+        user = dividend.user
+
+        # Add the dividend to the total for the project
+        if project not in project_dividends:
+            project_dividends[project] = 0
+        project_dividends[project] += dividend.dividend_amount
+
+        # Add the dividend to the total for the user
+        if user not in user_dividends:
+            user_dividends[user] = 0
+        user_dividends[user] += dividend.dividend_amount
+
+    # Calculate net dividend for all projects
+    total_net_dividend = Dividend.objects.aggregate(total_net_dividend=Sum('dividend_amount'))['total_net_dividend'] or 0
+
+    # Prepare context data
+    context = {
+        'dividends': dividends,
+        'project_dividends': project_dividends,
+        'user_dividends': user_dividends,
+        'total_net_dividend': total_net_dividend,
+    }
+
+    # Render the template with context data
+    return render(request, 'cadmin/dividend.html', context)
