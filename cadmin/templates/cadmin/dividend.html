@@ -1,122 +1,116 @@
-{% load custom_filters %}
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dividend Details</title>
+    <title>Dividend Table</title>
     {% load static %}
-    
     <style>
-           
         * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-  
+
         body {
-          font-family: Arial, sans-serif;
-          background-color: #f4f4f4;
-          color: #333;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
         }
-  
-        /* Navbar container */
+
         .navbar {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          background-color: #007bff;
-          padding: 10px 20px;
-          position: sticky;
-          top: 0;
-          z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-  
-        /* Logo */
+
         .navbar .logo {
-          font-size: 1.5em;
-          color: white;
-          font-weight: bold;
-          text-transform: uppercase;
-          text-decoration: none;
+            font-size: 1.5em;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-decoration: none;
         }
-  
-        /* Navbar links */
+
         .navbar .nav-links {
-          display: flex;
-          gap: 15px;
+            display: flex;
+            gap: 15px;
         }
-  
+
         .navbar .nav-links a {
-          color: white;
-          text-decoration: none;
-          font-size: 1em;
-          transition: color 0.3s ease;
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s ease;
         }
-  
+
         .navbar .nav-links a:hover {
-          color: #ffcc00;
+            color: #ffcc00;
         }
-  
-        /* Hamburger menu (hidden by default) */
+
         .navbar .hamburger {
-          display: none;
-          flex-direction: column;
-          cursor: pointer;
-          gap: 5px;
-        }
-  
-        .navbar .hamburger div {
-          width: 25px;
-          height: 3px;
-          background-color: white;
-        }
-  
-        /* Responsive navbar */
-        @media (max-width: 768px) {
-          .navbar .nav-links {
             display: none;
             flex-direction: column;
-            background-color: #007bff;
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            padding: 10px;
-            border-radius: 5px;
-          }
-  
-          .navbar .nav-links.active {
-            display: flex;
-          }
-  
-          .navbar .hamburger {
-            display: flex;
-          }
-
+            cursor: pointer;
+            gap: 5px;
         }
+
+        .navbar .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+        }
+
+        @media (max-width: 768px) {
+            .navbar .nav-links {
+                display: none;
+                flex-direction: column;
+                background-color: #007bff;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                padding: 10px;
+                border-radius: 5px;
+            }
+
+            .navbar .nav-links.active {
+                display: flex;
+            }
+
+            .navbar .hamburger {
+                display: flex;
+            }
+        }
+
         table {
-           border-collapse: collapse;
-           width: 100%;
-       }
-       th, td {
-           border: 1px solid #333;
-           padding: 10px;
-           text-align: left;
-       }
-       th {
-           background-color: #343a40;
-           color: white;
-       }
-       tr:nth-child(even) {
-           background-color: #f2f2f2;
-       }
-       tr:hover {
-           background-color: #ddd;
-       }
-      </style>
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -137,46 +131,40 @@
         </div>
     </header>
 
-    <!-- Dividend Details Section -->
     <section class="dividend-section">
-        <h2>Dividend Overview</h2>
+        <h2>Dividends</h2>
         <table class="dividend-table">
             <thead>
                 <tr>
-                    <th>User Name</th>
-                    <th>User's Project</th>
-                    <th>Dividend Amount</th>
+                    <th>Project</th>
+                    <th>User</th>
                     <th>Dividend Date</th>
-                    <th>Total Dividend for User's Project</th>
-                    <th>Total Dividend for User</th>
-                    <th>Net Dividend for All Projects</th>
+                    <th>Dividend Amount</th>
+                    <th>Transfer Proof</th>
                 </tr>
             </thead>
             <tbody>
                 {% for dividend in dividends %}
                 <tr>
-                    <td>{{ dividend.user.username }}</td>
                     <td>{{ dividend.project.project }}</td>
+                    <td>{{ dividend.user.username }}</td>
+                    <td>{{ dividend.dividend_date|date:"Y-m-d" }}</td>
                     <td>{{ dividend.dividend_amount }}</td>
-                    <td>{{ dividend.dividend_date }}</td>
-                    <td>{{ project_dividends|get_item:dividend.project.id }}</td>
-                    <td>{{ user_dividends|get_item:dividend.user.id }}</td>
-                    <td>{{ total_net_dividend }}</td>
+                    <td>
+                        {% if dividend.transfer_proof %}
+                        <a href="{{ dividend.transfer_proof.url }}" target="_blank">View Proof</a>
+                        {% else %}
+                        Not Provided
+                        {% endif %}
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="7">No dividend data available.</td>
+                    <td colspan="5">No dividends found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </section>
-
-    <script>
-        function toggleNav() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
-        }
-    </script>
 </body>
 </html>

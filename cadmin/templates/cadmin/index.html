@@ -365,51 +365,42 @@
    
 
 
-
-{% comment %}     
-    <!-- Dividend Details Section -->
     <section class="dividend-section">
-        <h2>Dividend Overview</h2>
+        <h2>Dividends</h2>
         <table class="dividend-table">
             <thead>
                 <tr>
-                    <th>User Name</th>
-                    <th>User's Project</th>
-                    <th>Dividend Amount</th>
+                    <th>Project</th>
+                    <th>User</th>
                     <th>Dividend Date</th>
-                    <th>Total Dividend for User's Project</th>
-                    <th>Total Dividend for User</th>
-                    <th>Net Dividend for All Projects</th>
+                    <th>Dividend Amount</th>
+                    <th>Transfer Proof</th>
                 </tr>
             </thead>
             <tbody>
                 {% for dividend in dividends %}
                 <tr>
-                    <td>{{ dividend.user.username }}</td>
                     <td>{{ dividend.project.project }}</td>
+                    <td>{{ dividend.user.username }}</td>
+                    <td>{{ dividend.dividend_date|date:"Y-m-d" }}</td>
                     <td>{{ dividend.dividend_amount }}</td>
-                    <td>{{ dividend.dividend_date }}</td>
                     <td>
-                        {{ project_dividends|get_item:dividend.project.id }}
-                    </td>
-                    <td>
-                        {{ user_dividends|get_item:dividend.user.id }}
-                    </td>
-                    <td>
-                        {{ total_net_dividend }}
+                        {% if dividend.transfer_proof %}
+                        <a href="{{ dividend.transfer_proof.url }}" target="_blank">View Proof</a>
+                        {% else %}
+                        Not Provided
+                        {% endif %}
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="7">No dividend data available.</td>
+                    <td colspan="5">No dividends found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </section> {% endcomment %}
+    </section>
 
-
- 
 
 
 
