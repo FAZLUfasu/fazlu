@@ -859,37 +859,62 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
+# @api_view(['GET'])
+# def get_user_details(request):
+#     # Get username from query params
+#     username = request.GET.get('username', None)
+
+#     if username is None:
+#         return Response({"error": "Username not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+#     try:
+#         # Fetch user based on username
+#         user = User.objects.get(username=username)
+
+#         # Return user details (you can customize what data you want to send)
+#         user_data = {
+#             "user_id": user.id,
+#             "username": user.username,
+#             "email": user.email,
+#             "first_name": user.first_name,
+#             "last_name": user.last_name,
+#             "date_joined": user.date_joined,
+#             "is_active": user.is_active,
+#             "is_staff": user.is_staff,
+#         }
+
+#         return Response(user_data, status=status.HTTP_200_OK)
+
+#     except User.DoesNotExist:
+#         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+
 @api_view(['GET'])
 def get_user_details(request):
-    # Get username from query params
-    username = request.GET.get('username', None)
-
-    if username is None:
-        return Response({"error": "Username not provided"}, status=status.HTTP_400_BAD_REQUEST)
-
     try:
-        # Fetch user based on username
-        user = User.objects.get(username=username)
+        # Fetch all users
+        users = User.objects.all()
 
-        # Return user details (you can customize what data you want to send)
-        user_data = {
-            "user_id": user.id,
-            "username": user.username,
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "date_joined": user.date_joined,
-            "is_active": user.is_active,
-            "is_staff": user.is_staff,
-        }
+        # Serialize user details
+        user_data = [
+            {
+                "user_id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "date_joined": user.date_joined,
+                "is_active": user.is_active,
+                "is_staff": user.is_staff,
+            }
+            for user in users
+        ]
 
         return Response(user_data, status=status.HTTP_200_OK)
 
-    except User.DoesNotExist:
-        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-    
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    
 
 from rest_framework.decorators import action
 
