@@ -152,12 +152,14 @@ def index(request):
     investor_profile_url = "https://unix-aquatics.com/app/investorprofile/"
     project_page_url = "https://unix-aquatics.com/app/Projectpage/"
     my_project_url="http://unix-aquatics.com/app/myprojects/"
+   
     team_url="https://unix-aquatics.com/app/teammember/"
     
     # Initialize empty data containers
     profiles = []
     projects = []
     myprojects = []
+
 
     try:
         # Fetch investor profile data

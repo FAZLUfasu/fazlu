@@ -270,6 +270,29 @@ def profile_view(request, username):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView
+from .models import Dividend
+
+# List view to display all dividends
+class DividendListView(ListView):
+    model = Dividend
+    template_name = 'dividend_list.html'  # Template to render
+    context_object_name = 'dividends'
+    paginate_by = 10  # Optional: Enable pagination with 10 dividends per page
+
+    def get_queryset(self):
+        return Dividend.objects.select_related('project', 'user').order_by('-dividend_date')
+
+
+# Detail view to display a single dividend
+class DividendDetailView(DetailView):
+    model = Dividend
+    template_name = 'dividend_detail.html'  # Template to render
+    context_object_name = 'dividend'
+
+    def get_object(self):
+        return get_object_or_404(Dividend, pk=self.kwargs.get('pk'))
 
 
 from django.conf import settings

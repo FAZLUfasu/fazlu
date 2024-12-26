@@ -32,7 +32,8 @@ urlpatterns = ([
     path('profile/<str:username>/upload/', views.upload_file, name='investorprofile'),
     path('profile/<str:username>/delete/', views.delete_profile, name='delete_profile'),
     path('profile/<str:username>/update/', views.update_investor_profile, name='update-investor-profile'),
-  
+    path('dividends/', views.DividendListView.as_view(), name='dividend-list'),
+    path('dividends/<int:pk>/', views.DividendDetailView.as_view(), name='dividend-detail'),
     path('HomePageData/', views.HomePageDataAPIView.as_view(), name='HomePageData'),
     path('myprojects/', views.MyProjectsAPIView.as_view(), name='myproject-list-create'),
     path('Projectpage/', views.ProjectpageListAPIView.as_view(), name='Projectpage'),
