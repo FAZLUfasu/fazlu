@@ -272,7 +272,7 @@ def index(request):
 
 
 def dividend_view(request):
-    url = "https://unix-aquatics.com/cadmin/divident_table/"  # URL for fetching dividend data
+    url = "https://unix-aquatics.com/app/dividends/"  # URL for fetching dividend data
     
     try:
         # Send a GET request to fetch the dividend data
@@ -283,4 +283,4 @@ def dividend_view(request):
         dividends = []  # Set an empty list in case of an error
         print(f"Error fetching dividends: {e}")
     
-    return render(request, 'cadmin/dividend.html', {'dividends': dividends})
+    return render(request, 'cadmin/dividends.html', {'dividends': dividends})
