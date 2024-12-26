@@ -143,70 +143,24 @@ def team_members_view(request):
     return render(request, 'cadmin/teammembers.html', {'team_members': team_members})
 
 
+from django.shortcuts import render
+from django.contrib.auth.models import User
 
-
-
-
-# def index(request):
-#     # URLs for fetching data
-#     investor_profile_url = "https://unix-aquatics.com/app/investorprofile/"
-#     project_page_url = "https://unix-aquatics.com/app/Projectpage/"
-#     my_project_url="http://unix-aquatics.com/app/myprojects/"
-#     team_url="https://unix-aquatics.com/app/teammember/"
+def user_view(request):
+    try:
+        # Fetch all users from the User model
+        users = User.objects.all()  # You can filter the users as per your need
+    except Exception as e:
+        users = []  # In case of an error, set an empty list
+        print(f"Error fetching user data: {e}")
     
-#     # Initialize empty data containers
-#     profiles = []
-#     projects = []
-#     myprojects = []
-
-#     try:
-#         # Fetch investor profile data
-#         investor_response = requests.get(investor_profile_url)
-#         if investor_response.status_code == 200:
-#             profiles = investor_response.json()  # Parse JSON response
-#         else:
-#             profiles = []  # Fallback if API returns an error
-
-
-#         # Fetch project page data
-#         project_response = requests.get(project_page_url)
-#         if project_response.status_code == 200:
-#             projects = project_response.json()  # Parse JSON response
-#         else:
-#             projects = []  # Fallback if API returns an error
-
-
-#         myproject_response = requests.get(my_project_url)
-#         if myproject_response.status_code == 200:
-#             myprojects = myproject_response.json() 
-#         else:
-#             myprojects = []  # Fallback if API returns an error
-
-
-#         team_response = requests.get(team_url)
-#         if team_response.status_code == 200:
-#             team_members = team_response.json()  # Parse JSON response
-#         else:
-#             team_members= []  # Fallback if API returns an error
+    # Pass the user data to the template
+    return render(request, 'cadmin/user.html', {'users': users})
 
 
 
-#     except requests.RequestException as e:
-#         print(f"Error fetching data: {e}")
-#         profiles = []  # Fallback in case of a network error
-#         projects = []  # Fallback in case of a network error
-#         myprojects = []
-#         team_members= []
 
-#     # Pass both profiles and projects to the template
-#     return render(request, 'cadmin/index.html', {
-#         'profiles': profiles,
-#         'projects': projects,
-#         'myprojects': myprojects,
-#         'team_members' : team_members
-#     })
 
-from django.db.models import Sum
 
 def index(request):
     # URLs for fetching data
