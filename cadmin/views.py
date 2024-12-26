@@ -238,8 +238,6 @@ def user_view(request):
 
 from django.contrib.auth.models import User
 from django.shortcuts import render
-import requests
-from .models import Dividend  # Assuming Dividend model is already defined
 from django.db.models import Sum
 
 def index(request):
