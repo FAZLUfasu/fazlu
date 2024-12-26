@@ -283,4 +283,4 @@ def dividend_view(request):
         dividends = []  # Set an empty list in case of an error
         print(f"Error fetching dividends: {e}")
     
-    return render(request, 'cadmin/dividends.html', {'dividends': dividends})
+    return render(request, 'cadmin/dividend.html', {'dividends': dividends})
