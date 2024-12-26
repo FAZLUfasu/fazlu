@@ -150,11 +150,11 @@
         <!-- Links -->
         <ul class="nav nav-pills" style="list-style: none; margin: 0; padding: 0; display: flex; gap: 10px;">
             {% load i18n static %}
-            <li style="margin: 0;">
+            {% comment %} <li style="margin: 0;">
                 <a href="{% url 'admin:index' %}" style="text-decoration: none; color: #007bff;">
                     {% translate 'List View' %}
                 </a>
-            </li>
+            </li> {% endcomment %}
             <li style="margin: 0;">
                 <a href="https://unix-aquatics.com/cadmin/index" target="_blank" style="text-decoration: none; color: #007bff;">
                     Table View
