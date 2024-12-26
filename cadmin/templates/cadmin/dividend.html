@@ -130,41 +130,46 @@
             <a href="https://unix-aquatics.com/admin" class="btn btn-danger">List view</a>
         </div>
     </header>
-
-    <section class="dividend-section">
-        <h2>Dividends</h2>
-        <table class="dividend-table">
-            <thead>
-                <tr>
-                    <th>Project</th>
-                    <th>User</th>
-                    <th>Dividend Date</th>
-                    <th>Dividend Amount</th>
-                    <th>Transfer Proof</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for dividend in dividends %}
-                <tr>
-                    <td>{{ dividend.project.project }}</td>
-                    <td>{{ dividend.user.username }}</td>
-                    <td>{{ dividend.dividend_date|date:"Y-m-d" }}</td>
-                    <td>{{ dividend.dividend_amount }}</td>
-                    <td>
-                        {% if dividend.transfer_proof %}
-                        <a href="{{ dividend.transfer_proof.url }}" target="_blank">View Proof</a>
-                        {% else %}
-                        Not Provided
-                        {% endif %}
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5">No dividends found.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
+    <section>
+      <h1 style="text-align: center; margin-top: 20px;">Dividends</h1>
+      <div style="width: 90%; margin: 0 auto;">
+          <table>
+              <thead>
+                  <tr>
+                      <th>Select</th>
+                      <th>User</th>
+                      <th>Project</th>
+                      <th>Dividend Date</th>
+                      <th>Dividend Amount</th>
+                      <th>Transfer Proof</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for dividend in dividends %}
+                  <tr>
+                      <td class="action-checkbox">
+                          <input type="checkbox" name="_selected_action" value="{{ dividend.id }}">
+                      </td>
+                      <td><a href="/admin/fasu/dividend/{{ dividend.id }}/change/">{{ dividend.user }}</a></td>
+                      <td>{{ dividend.project }}</td>
+                      <td>{{ dividend.dividend_date }}</td>
+                      <td>{{ dividend.dividend_amount }}</td>
+                      <td>
+                          {% if dividend.transfer_proof %}
+                          <a href="{{ dividend.transfer_proof.url }}" target="_blank">View Proof</a>
+                          {% else %}
+                          No Proof
+                          {% endif %}
+                      </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                      <td colspan="6">No dividends found.</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+  </section>
 </body>
 </html>
