@@ -363,14 +363,12 @@
         </div>
     </section>
    
-
     <section>
         <h1 style="text-align: center; margin-top: 20px;">Dividends</h1>
         <div style="width: 90%; margin: 0 auto;">
             <table>
                 <thead>
                     <tr>
-                     
                         <th>User</th>
                         <th>Project</th>
                         <th>Dividend Date</th>
@@ -381,7 +379,6 @@
                 <tbody>
                     {% for dividend in dividends %}
                     <tr>
-                        
                         <td><a href="/admin/fasu/dividend/{{ dividend.id }}/change/">{{ dividend.user }}</a></td>
                         <td>{{ dividend.project }}</td>
                         <td>{{ dividend.dividend_date }}</td>
@@ -396,14 +393,14 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6">No dividends found.</td>
+                        <td colspan="5">No dividends found.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </section>
-
+    
 
     <section class="team-section">
         <h2>Team Members</h2>
