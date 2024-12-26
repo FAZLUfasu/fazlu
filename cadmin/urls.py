@@ -16,7 +16,7 @@ urlpatterns = [
 
 
 
-    path('user', views.user_view, name='user_view'),
+    path('user/', views.user_view, name='user_view'),
     path('my-project/', views.my_project_page_view, name='my_project_page'),
     path('project/', views.project_page_view, name='project_page'),
     path('team/', views.team_members_view, name='team_members'),

@@ -113,6 +113,8 @@
         </style>
     </head>
 <body>
+    
+<section>
     <h1>User List</h1>
     
     {% if users %}
@@ -125,21 +127,21 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Date Joined</th>
-                    <th>Active Status</th>
-                    <th>Staff Status</th>
+                    {% comment %} <th>Active Status</th>
+                    <th>Staff Status</th> {% endcomment %}
                 </tr>
             </thead>
             <tbody>
                 {% for user in users %}
                     <tr>
-                        <td>{{ user.user_id }}</td>
+                        <td>{{ user.id }}</td>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.first_name }}</td>
                         <td>{{ user.last_name }}</td>
                         <td>{{ user.date_joined }}</td>
-                        <td>{{ user.is_active }}</td>
-                        <td>{{ user.is_staff }}</td>
+                        {% comment %} <td>{{ user.is_active }}</td>
+                        <td>{{ user.is_staff }}</td> {% endcomment %}
                     </tr>
                 {% endfor %}
             </tbody>
@@ -147,5 +149,6 @@
     {% else %}
         <p>No user data found.</p>
     {% endif %}
+    </section>
 </body>
 </html>

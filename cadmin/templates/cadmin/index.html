@@ -141,7 +141,52 @@
              </div>
            </header>
 
-
+   
+           <section class="ftco-section">
+            
+            
+            {% if users %}
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <h2 class="heading-section">user</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Date Joined</th>
+                            {% comment %} <th>Active Status</th>
+                            <th>Staff Status</th> {% endcomment %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.first_name }}</td>
+                                <td>{{ user.last_name }}</td>
+                                <td>{{ user.date_joined }}</td>
+                                {% comment %} <td>{{ user.is_active }}</td>
+                                <td>{{ user.is_staff }}</td> {% endcomment %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No user data found.</p>
+            {% endif %}
+            </section>
 
     
     <section class="ftco-section">
