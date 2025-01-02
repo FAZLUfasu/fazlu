@@ -484,7 +484,7 @@ a:focus {
 
 .about_section {
 
-  background-color: #7c8dc3;
+  background: linear-gradient(130deg, #231a6f, #0f054c);
 
 
   color: #ffffff;

@@ -153,7 +153,7 @@ class BaseProject(models.Model):
     number_of_ponds = models.PositiveIntegerField(blank=True, null=True)
     water_capacity = models.FloatField(blank=True, null=True)
     annual_production_capacity = models.FloatField(blank=True, null=True)
-    capital = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    capital = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     number_of_shares = models.PositiveIntegerField(blank=True, null=True)
     price_per_share = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
