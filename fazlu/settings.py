@@ -27,10 +27,10 @@ SECRET_KEY = 'django-insecure-3old66y+#9@!zfa%pu@70jao5u+a5zxkwe)8xg39_i(jg!4$%a
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['unix-aquatics.com','www.unixaquatics,com','13.55.115.36','127.0.0.1']
+ALLOWED_HOSTS = ['unix-aquatics.com','www.unixaquatics,com','192.168.1.17','127.0.0.1']
 
 
-CSRF_TRUSTED_ORIGINS = ['https://unix-aquatics.com']
+CSRF_TRUSTED_ORIGINS = ['http://0.0.0.0:8000']
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -120,7 +120,7 @@ WSGI_APPLICATION = 'fazlu.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'investors',  # Replace with your database name
+        'NAME': 'aqua_db',  # Replace with your database name
         'USER': 'root',       # Replace with your MySQL username
         'PASSWORD': 'pass@123.com',  # Replace with your MySQL password
         'HOST': 'localhost',  # Replace with your MySQL host (usually 'localhost')
@@ -132,7 +132,7 @@ DATABASES = {
     }
 }
 LOGIN_URL = 'login' 
-FRONTEND_URL = "https://unix-aquatics.com"
+FRONTEND_URL = "http://0.0.0.0:8000"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -140,7 +140,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'unixaquaticsapp@gmail.com' 
 EMAIL_HOST_PASSWORD = 'ehpc vxpm rwxp oisc'
-SITE_URL = "https://unix-aquatics.com"
+SITE_URL = "http://0.0.0.0:8000"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -220,8 +220,8 @@ CORS_ALLOW_METHODS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://unix-aquatics.com",
-    "https://unix-aquatics.com",
+    "http://0.0.0.0:8000",
+    # "https://unix-aquatics.com",
 ]
 
 CHANNEL_LAYERS = {

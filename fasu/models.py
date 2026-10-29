@@ -147,9 +147,9 @@ class BaseProject(models.Model):
     start_date = models.DateField(blank=True, null=True)
     date_of_establishment = models.DateField(blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Latitude of the location")
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Longitude of the location")
-    location_url = models.URLField(blank=True, null=True) 
+    # latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Latitude of the location")
+    # longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Longitude of the location")
+    # location_url = models.URLField(blank=True, null=True) 
     number_of_ponds = models.PositiveIntegerField(blank=True, null=True)
     water_capacity = models.FloatField(blank=True, null=True)
     annual_production_capacity = models.FloatField(blank=True, null=True)
@@ -312,9 +312,9 @@ class ContactInfo(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=20)
     address = models.TextField()
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Latitude of the location")
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Longitude of the location")
-    location_url = models.URLField(blank=True, null=True) 
+    # latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Latitude of the location")
+    # longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, help_text="Longitude of the location")
+    # location_url = models.URLField(blank=True, null=True) 
 
     def __str__(self):
         return "ContactInfo"
